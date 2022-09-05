@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SchoolApp.Data.Entities
 {
-    public class Aluno :IEntity
+    public class Aluno : IEntity
     {
         public int Id { get; set; }
         public string Nome { get; set; }
@@ -18,6 +18,7 @@ namespace SchoolApp.Data.Entities
         public string Genero { get; set; }
 
         [Display(Name = "Image")]
+        public string ImageUrl { get; set; }
         public Guid ImageId { get; set; }
 
 
