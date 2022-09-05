@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLeasing.Web.Data;
 
 namespace SchoolApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220905125100_newturmaclassmigration")]
+    partial class newturmaclassmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,12 +206,7 @@ namespace SchoolApp.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("cod_turmaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("cod_turmaId");
 
                     b.ToTable("Disciplina");
                 });
@@ -252,7 +249,12 @@ namespace SchoolApp.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("cod_disciplinaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("cod_disciplinaId");
 
                     b.ToTable("turma");
                 });
@@ -275,16 +277,6 @@ namespace SchoolApp.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -323,6 +315,11 @@ namespace SchoolApp.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -425,15 +422,6 @@ namespace SchoolApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SchoolApp.Data.Entities.Disciplina", b =>
-                {
-                    b.HasOne("SchoolApp.Data.Entities.Turma", "cod_turma")
-                        .WithMany()
-                        .HasForeignKey("cod_turmaId");
-
-                    b.Navigation("cod_turma");
-                });
-
             modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
                 {
                     b.HasOne("SchoolApp.Data.Entities.Aluno", "cod_aluno")
@@ -445,6 +433,15 @@ namespace SchoolApp.Migrations
                         .HasForeignKey("cod_disciplinaId");
 
                     b.Navigation("cod_aluno");
+
+                    b.Navigation("cod_disciplina");
+                });
+
+            modelBuilder.Entity("SchoolApp.Data.Entities.Turma", b =>
+                {
+                    b.HasOne("SchoolApp.Data.Entities.Disciplina", "cod_disciplina")
+                        .WithMany()
+                        .HasForeignKey("cod_disciplinaId");
 
                     b.Navigation("cod_disciplina");
                 });

@@ -49,6 +49,7 @@ namespace SchoolApp
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IConverterHelper, ConvertHelper>();
             services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<ITurmasRepository, TurmasRepository>();
             
             services.AddControllersWithViews();
 
@@ -72,7 +73,7 @@ namespace SchoolApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

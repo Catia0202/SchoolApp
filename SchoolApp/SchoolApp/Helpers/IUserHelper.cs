@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SchoolApp.Data.Entities;
+using SchoolApp.Models;
 using System.Threading.Tasks;
 
 namespace SchoolApp.Helpers
@@ -9,5 +10,7 @@ namespace SchoolApp.Helpers
         Task<User> GetUserByEmailAsync(string email);
 
         Task<IdentityResult> AddUserAsync(User user, string passwords);
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+        Task LogoutAsync();
     }
 }
