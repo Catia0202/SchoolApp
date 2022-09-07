@@ -22,7 +22,7 @@ namespace SchoolApp.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -50,7 +50,7 @@ namespace SchoolApp.Controllers
 
         public async Task<IActionResult> Logout()
         {
-           await _userHelper.LogoutAsync();
+            await _userHelper.LogoutAsync();
             return RedirectToAction("Index", "Home");
         }
 
@@ -79,7 +79,7 @@ namespace SchoolApp.Controllers
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
 
-                    if(result != IdentityResult.Success)
+                    if (result != IdentityResult.Success)
                     {
                         ModelState.AddModelError(string.Empty, "Não foi possível criar o utilizador");
                         return View(model);
@@ -92,7 +92,7 @@ namespace SchoolApp.Controllers
                         UserName = model.Username
                     };
 
-                    var result2= await _userHelper.LoginAsync(loginViewModel);
+                    var result2 = await _userHelper.LoginAsync(loginViewModel);
                     if (result2.Succeeded)
                     {
                         return RedirectToAction("Index", "Home");
@@ -100,11 +100,82 @@ namespace SchoolApp.Controllers
 
 
                     ModelState.AddModelError(string.Empty, "Não foi possível logar");
-                   
+
                 }
-              
+
             }
             return View(model);
         }
+
+        public async Task<IActionResult> ChangeUser()
+        {
+            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+            var model = new ChangeUserViewModel();
+            if (user != null)
+            {
+                model.FirstName = user.FirstName;
+                model.LastName = user.LastName;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUser(ChangeUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                if (user != null)
+                {
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    var response = await _userHelper.UpdateUserAsync(user);
+                    if (response.Succeeded)
+                    {
+                        ViewBag.UserMessage = "User uptaded!";
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                    }
+                }
+            }
+            return View(model);
+        }
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+                if (user != null)
+                {
+                    var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return this.RedirectToAction("ChangeUser");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "User not found.");
+                }
+            }
+
+
+            return this.View(model);
+        }
+ 
     }
+
 }

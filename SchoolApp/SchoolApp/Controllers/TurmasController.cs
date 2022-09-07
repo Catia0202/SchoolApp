@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using MyLeasing.Web.Data;
 using SchoolApp.Data;
 using SchoolApp.Data.Entities;
+using SchoolApp.Helpers;
 
 namespace SchoolApp.Controllers
 {
     public class TurmasController : Controller
     {
         private readonly ITurmasRepository _turmasRepository;
+        private readonly IUserHelper _userHelper;
 
-        public TurmasController(ITurmasRepository turmasRepository)
+        public TurmasController(ITurmasRepository turmasRepository, IUserHelper userHelper)
         {
             _turmasRepository = turmasRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Turmas

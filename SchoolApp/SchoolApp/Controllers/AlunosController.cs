@@ -79,7 +79,7 @@ namespace SchoolApp.Controllers
                 var aluno = _converterHelper.ToAluno(model, path, true);
 
                 //TODO:Modificar para o user que tiver logado
-                aluno.User = await _userHelper.GetUserByEmailAsync("catia0@gmail.com");
+                aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _alunosRepository.CreateAsync(aluno);
                 return RedirectToAction(nameof(Index));
             }
@@ -151,7 +151,7 @@ namespace SchoolApp.Controllers
                     }
                     var aluno = _converterHelper.ToAluno(model, path, false);
                     //TODO:Modificar para o user que tiver logado
-                    aluno.User = await _userHelper.GetUserByEmailAsync("catia@gmail.com");
+                    aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _alunosRepository.UpdateAsync(aluno);
 
                 }
