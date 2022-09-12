@@ -21,18 +21,20 @@ namespace SchoolApp.Controllers
         private readonly IImageHelper _imagehelper;
         private readonly IUserHelper _userHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly ITurmasRepository _turmasRepository;
 
-        public AlunosController(IAlunosRepository alunosRepository, IImageHelper imagehelper, IUserHelper userHelper,  IConverterHelper converterHelper)
+        public AlunosController(IAlunosRepository alunosRepository, IImageHelper imagehelper, IUserHelper userHelper,  IConverterHelper converterHelper,ITurmasRepository turmasRepository)
         {
         
             _alunosRepository = alunosRepository;
             _imagehelper = imagehelper;
             _userHelper = userHelper;
             _converterHelper = converterHelper;
+           _turmasRepository = turmasRepository;
         }
 
         // GET: Alunos
-        public IActionResult Index()
+        public IActionResult Index() 
         {
             return View(_alunosRepository.GetAll().OrderBy(P => P.Nome));
         }
@@ -71,20 +73,26 @@ namespace SchoolApp.Controllers
             if (ModelState.IsValid)
             {
                 var path = string.Empty;
+              
 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     path = await _imagehelper.UploadImageAsync(model.ImageFile, "alunos");
                 }
 
+             
 
                 var aluno = _converterHelper.ToAluno(model, path, true);
+              
 
                 //TODO:Modificar para o user que tiver logado
                 aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _alunosRepository.CreateAsync(aluno);
                 return RedirectToAction(nameof(Index));
+             
             }
+
+           
             return View(model);
         }
         private Aluno toAluno(AlunoViewModel model, string path)
@@ -200,7 +208,16 @@ namespace SchoolApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //private bool AlunoExists(int id)
+        public IActionResult AddTurma()
+        {
+            var model = new AddTurmaViewModel
+            {
+
+                Turmas = _turmasRepository.GetComboTurmas()
+            };
+            return View(model);
+        }
+        ////private bool AlunoExists(int id)
         //{
         //    return _context.Aluno.Any(e => e.Id == id);
         //}
