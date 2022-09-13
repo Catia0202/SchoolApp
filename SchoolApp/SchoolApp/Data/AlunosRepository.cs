@@ -2,6 +2,7 @@
 using MyLeasing.Web.Data;
 using SchoolApp.Data.Entities;
 using SchoolApp.Helpers;
+using SchoolApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,9 +26,9 @@ namespace SchoolApp.Data
         //    {
         //        return null;
         //    }
-       
+
         //        return _context.Aluno.Include(o => o.turma).OrderBy(o => o.turma.Nome);
-            
+
 
         //}
     }

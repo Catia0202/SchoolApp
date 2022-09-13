@@ -8,7 +8,7 @@ namespace SchoolApp.Helpers
     {
         Aluno ToAluno(AlunoViewModel model, string path, bool isNew);
 
-        AlunoViewModel ToAlunoViewModel(Aluno owner);
+        AlunoViewModel ToAlunoViewModel(Aluno aluno);
 
       
     }

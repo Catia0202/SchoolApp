@@ -33,6 +33,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
+             <th>
+                @Html.DisplayNameFor(model => model.turma.Nome)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -61,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
 <td>
-                @Html.DisplayFor(modelItem => item.turma)
+                @Html.DisplayFor(modelItem => item.turma.Nome)
             </td>
             
             <td>

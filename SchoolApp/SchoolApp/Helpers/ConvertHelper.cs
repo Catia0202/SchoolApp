@@ -18,7 +18,8 @@ namespace SchoolApp.Helpers
                 Genero =model.Genero,
                 Morada = model.Morada,
                 Telemovel = model.Telemovel,
-                User = model.User
+                User = model.User,
+                turmaid = model.turmaid
             };
         }
 
@@ -34,7 +35,8 @@ namespace SchoolApp.Helpers
                 Genero = aluno.Genero,
                 Morada = aluno.Morada,
                 Telemovel = aluno.Telemovel,
-                User = aluno.User
+                User = aluno.User,
+                turmaid= aluno.turmaid
             };
         }
 

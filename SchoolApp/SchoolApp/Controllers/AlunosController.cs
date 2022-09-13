@@ -60,7 +60,12 @@ namespace SchoolApp.Controllers
         [Authorize(Roles ="Admin")] //para varios role's fica  [Authorize(Roles ="Admin,Customer,SuperUser")]
         public IActionResult Create()
         {
-            return View();
+            var model = new AlunoViewModel
+            {
+
+                Turmas = _turmasRepository.GetComboTurmas()
+            };
+            return View(model);
         }
 
         // POST: Alunos/Create
@@ -74,7 +79,7 @@ namespace SchoolApp.Controllers
             {
                 var path = string.Empty;
               
-
+                model.Turmas = _turmasRepository.GetComboTurmas();
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     path = await _imagehelper.UploadImageAsync(model.ImageFile, "alunos");
@@ -91,10 +96,23 @@ namespace SchoolApp.Controllers
                 return RedirectToAction(nameof(Index));
              
             }
+         
 
-           
             return View(model);
         }
+
+        //private async Task AddalunoToturma(Aluno aluno, string turma)
+        //{
+        //    await _userHelper.AddUserToRoleAsync(user, role);
+
+        //    var isUserInRole = await _userHelper.IsUserInRoleAsync(user, role);
+
+        //    if (!isUserInRole)
+        //    {
+        //        await _userHelper.AddUserToRoleAsync(user, role);
+        //    }
+        //}
+
         private Aluno toAluno(AlunoViewModel model, string path)
         {
             return new Aluno
@@ -107,7 +125,9 @@ namespace SchoolApp.Controllers
                 Genero = model.Genero,
                 Morada = model.Morada,
                 Telemovel = model.Telemovel,
-                User = model.User
+                User = model.User,
+                turmaid = model.turmaid
+                
 
             };
         }
@@ -208,15 +228,15 @@ namespace SchoolApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult AddTurma()
-        {
-            var model = new AddTurmaViewModel
-            {
+        //public IActionResult AddTurma()
+        //{
+        //    var model = new AddTurmaViewModel
+        //    {
 
-                Turmas = _turmasRepository.GetComboTurmas()
-            };
-            return View(model);
-        }
+        //        Turmas = _turmasRepository.GetComboTurmas()
+        //    };
+        //    return View("Create",model);
+        //}
         ////private bool AlunoExists(int id)
         //{
         //    return _context.Aluno.Any(e => e.Id == id);

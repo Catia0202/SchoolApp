@@ -11,12 +11,12 @@ namespace SchoolApp.Models
         [Display(Name = "Image")]
         public IFormFile ImageFile { get; set; }
 
-        //[Display(Name = "Turma")]
-        //[Range(1, int.MaxValue, ErrorMessage = "Tem que selecionar o aluno numa turma")]
+        [Display(Name = "Turma")]
+        [Range(1, int.MaxValue, ErrorMessage = "Tem que selecionar o aluno numa turma")]
 
-        //public int TurmaId { get; set; }
+        public int TurmaId { get; set; }
 
 
-        //public IEnumerable<SelectListItem> Turmas { get; set; }
+        public IEnumerable<SelectListItem> Turmas { get; set; }
     }
 }

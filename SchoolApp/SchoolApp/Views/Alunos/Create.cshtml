@@ -13,10 +13,15 @@
     
         <div class="col-md-4">
            
-         <a asp-action="AddTurma">AddTurma</a>
+         
               
         <form asp-action="Create" enctype="multipart/form-data">
-           
+             <div class="form-group">
+                <label asp-for="TurmaId" class="control-label"></label>
+                <select asp-for="TurmaId" asp-items="Model.Turmas" class="form-control"></select>
+                <span asp-validation-for="TurmaId" class="text-danger"></span>
+            </div>
+
        
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>

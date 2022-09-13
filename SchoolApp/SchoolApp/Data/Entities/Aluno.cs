@@ -22,6 +22,7 @@ namespace SchoolApp.Data.Entities
         //[ForeignKey("turma")]
         public Turma turma { get; set; }
 
+        public int turmaid { get; set; }
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
         public Guid ImageId { get; set; }
