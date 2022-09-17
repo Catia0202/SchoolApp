@@ -36,22 +36,39 @@ namespace SchoolApp.Controllers
         // GET: Alunos
         public IActionResult Index() 
         {
-            return View(_alunosRepository.GetAll().OrderBy(P => P.Nome));
+            var model = Enumerable.Empty<AlunoViewModel>();
+            var alunos = _alunosRepository.GetAll();
+            if (alunos.Any())
+            {
+                model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);
+            }
+            else
+            {
+                ViewBag.message ="Não foram encontrados alunos";
+            }
+            return View(model);
+        
         }
 
         // GET: Alunos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
 
-            var aluno = await _alunosRepository.GetByIdAsync(id.Value);
+            var aluno = await _alunosRepository.GetAlunoByIdWithTurmaAsync(id);
+  
             if (aluno == null)
             {
                 return NotFound();
             }
+
+           
+
+
+
 
             return View(aluno);
         }
@@ -101,17 +118,6 @@ namespace SchoolApp.Controllers
             return View(model);
         }
 
-        //private async Task AddalunoToturma(Aluno aluno, string turma)
-        //{
-        //    await _userHelper.AddUserToRoleAsync(user, role);
-
-        //    var isUserInRole = await _userHelper.IsUserInRoleAsync(user, role);
-
-        //    if (!isUserInRole)
-        //    {
-        //        await _userHelper.AddUserToRoleAsync(user, role);
-        //    }
-        //}
 
         private Aluno toAluno(AlunoViewModel model, string path)
         {
@@ -126,25 +132,28 @@ namespace SchoolApp.Controllers
                 Morada = model.Morada,
                 Telemovel = model.Telemovel,
                 User = model.User,
-                turmaid = model.turmaid
+                turmaid = model.turmaid,
+                turma=model.turma
                 
 
             };
         }
         // GET: Alunos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
 
-            var aluno = await _alunosRepository.GetByIdAsync(id.Value);
+            var aluno = await _alunosRepository.GetAlunoByIdWithTurmaAsync(id);
             if (aluno == null)
             {
                 return NotFound();
             }
+
             var model = _converterHelper.ToAlunoViewModel(aluno);
+            model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model);
         }
         private AlunoViewModel ToAlunoViewModel(Aluno aluno)
@@ -159,7 +168,8 @@ namespace SchoolApp.Controllers
                 Genero = aluno.Genero,
                 Morada = aluno.Morada,
                 Telemovel = aluno.Telemovel,
-                User = aluno.User
+                User = aluno.User,
+                turmaid =aluno.turmaid
             };
         }
         // POST: Alunos/Edit/5
@@ -177,11 +187,12 @@ namespace SchoolApp.Controllers
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
                         path = await _imagehelper.UploadImageAsync(model.ImageFile, "alunos");
-
                     }
                     var aluno = _converterHelper.ToAluno(model, path, false);
+                      
                     //TODO:Modificar para o user que tiver logado
                     aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                    model.Turmas = _turmasRepository.GetComboTurmas();
                     await _alunosRepository.UpdateAsync(aluno);
 
                 }
@@ -198,6 +209,7 @@ namespace SchoolApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model);
         }
 
@@ -228,15 +240,6 @@ namespace SchoolApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //public IActionResult AddTurma()
-        //{
-        //    var model = new AddTurmaViewModel
-        //    {
-
-        //        Turmas = _turmasRepository.GetComboTurmas()
-        //    };
-        //    return View("Create",model);
-        //}
         ////private bool AlunoExists(int id)
         //{
         //    return _context.Aluno.Any(e => e.Id == id);

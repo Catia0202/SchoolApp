@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SchoolApp.Data.Entities.Aluno>
+﻿@model IEnumerable<SchoolApp.Models.AlunoViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -63,7 +63,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ImageUrl)
             </td>
-<td>
+            <td>
                 @Html.DisplayFor(modelItem => item.turma.Nome)
             </td>
             

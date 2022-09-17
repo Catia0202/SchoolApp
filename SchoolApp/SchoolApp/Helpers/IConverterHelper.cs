@@ -1,6 +1,7 @@
 ﻿using SchoolApp.Data.Entities;
 using SchoolApp.Models;
 using System;
+using System.Linq;
 
 namespace SchoolApp.Helpers
 {
@@ -10,6 +11,6 @@ namespace SchoolApp.Helpers
 
         AlunoViewModel ToAlunoViewModel(Aluno aluno);
 
-      
+        IQueryable<AlunoViewModel> AlunosToAlunoViewModels(IQueryable<Aluno> alunos);
     }
 }
