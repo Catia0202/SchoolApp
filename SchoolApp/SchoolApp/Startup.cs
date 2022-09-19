@@ -50,6 +50,7 @@ namespace SchoolApp
             services.AddScoped<IConverterHelper, ConvertHelper>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ITurmasRepository, TurmasRepository>();
+            services.AddScoped<IDisciplinasRepository,DisciplinasRepository>();
             
             services.AddControllersWithViews();
 

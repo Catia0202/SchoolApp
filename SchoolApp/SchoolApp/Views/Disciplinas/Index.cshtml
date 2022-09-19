@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SchoolApp.Data.Entities.Turma>
+﻿@model IEnumerable<SchoolApp.Data.Entities.Disciplina>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,15 +15,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
-            <th></th>
-              <th>
-                @Html.DisplayNameFor(model => model.Duracao)
+            <th>
+                @Html.DisplayNameFor(model => model.Descrição)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th></th>
         </tr>
-             
-          
-          
-    
     </thead>
     <tbody>
 @foreach (var item in Model) {
@@ -32,7 +31,10 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Duracao)
+                @Html.DisplayFor(modelItem => item.Descrição)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

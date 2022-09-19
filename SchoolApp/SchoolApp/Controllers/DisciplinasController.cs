@@ -12,24 +12,24 @@ using SchoolApp.Helpers;
 
 namespace SchoolApp.Controllers
 {
-    public class TurmasController : Controller
+    public class DisciplinasController : Controller
     {
-        private readonly ITurmasRepository _turmasRepository;
+        private readonly IDisciplinasRepository _disciplinasRepository;
         private readonly IUserHelper _userHelper;
 
-        public TurmasController(ITurmasRepository turmasRepository, IUserHelper userHelper)
+        public DisciplinasController(IDisciplinasRepository disciplinasRepository, IUserHelper userHelper)
         {
-            _turmasRepository = turmasRepository;
+            _disciplinasRepository = disciplinasRepository;
             _userHelper = userHelper;
         }
 
-        // GET: Turmas
+        // GET: Disciplinas
         public IActionResult Index()
         {
-            return View(_turmasRepository.GetAll().OrderBy(P => P.Nome));
+            return View(_disciplinasRepository.GetAll().OrderBy(P => P.Nome));
         }
 
-        // GET: Turmas/Details/5
+        // GET: Disciplinas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,40 +37,38 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
 
-            var turma = await _turmasRepository.GetByIdAsync(id.Value);
-            if (turma == null)
+            var disciplina = await _disciplinasRepository.GetByIdAsync(id.Value);
+            if (disciplina == null)
             {
                 return NotFound();
             }
 
-            return View(turma);
+            return View(disciplina);
         }
 
-        // GET: Turmas/Create
+        // GET: Disciplinas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Turmas/Create
+        // POST: Disciplinas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Duracao")] Turma turma)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Descrição,Duration")] Disciplina disciplina)
         {
             if (ModelState.IsValid)
             {
 
-                await _turmasRepository.CreateAsync(turma);
+                await _disciplinasRepository.CreateAsync(disciplina);
                 return RedirectToAction(nameof(Index));
             }
-            return View(turma);
+            return View(disciplina);
         }
 
-       
-
-        // GET: Turmas/Edit/5
+        // GET: Disciplinas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +76,22 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
 
-            var turma = await _turmasRepository.GetByIdAsync(id.Value);
-            if (turma == null)
+            var disciplina = await _disciplinasRepository.GetByIdAsync(id.Value);
+            if (disciplina == null)
             {
                 return NotFound();
             }
-            return View(turma);
+            return View(disciplina);
         }
 
-        // POST: Turmas/Edit/5
+        // POST: Disciplinas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Duracao")] Turma turma)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descrição,Duration")] Disciplina disciplina)
         {
-            if (id != turma.Id)
+            if (id != disciplina.Id)
             {
                 return NotFound();
             }
@@ -102,7 +100,7 @@ namespace SchoolApp.Controllers
             {
                 try
                 {
-                    await _turmasRepository.UpdateAsync(turma);
+                    await _disciplinasRepository.UpdateAsync(disciplina);
 
                 }
                 catch (DbUpdateConcurrencyException)
@@ -112,10 +110,10 @@ namespace SchoolApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(turma);
+            return View(disciplina);
         }
 
-        // GET: Turmas/Delete/5
+        // GET: Disciplinas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,28 +121,28 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
 
-            var turma = await _turmasRepository.GetByIdAsync(id.Value);
-            if (turma == null)
+            var disciplina = await _disciplinasRepository.GetByIdAsync(id.Value);
+            if (disciplina == null)
             {
                 return NotFound();
             }
-            return View(turma);
+            return View(disciplina);
         }
 
-        // POST: Turmas/Delete/5
+        // POST: Disciplinas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var turma = await _turmasRepository.GetByIdAsync(id);
-            await _turmasRepository.DeleteAsync(turma);
+            var disciplina = await _disciplinasRepository.GetByIdAsync(id);
+            await _disciplinasRepository.DeleteAsync(disciplina);
 
             return RedirectToAction(nameof(Index));
         }
 
-        //private bool TurmaExists(int id)
+        //private bool DisciplinaExists(int id)
         //{
-        //    return _context.turma.Any(e => e.Id == id);
+        //    return _context.Disciplina.Any(e => e.Id == id);
         //}
     }
 }

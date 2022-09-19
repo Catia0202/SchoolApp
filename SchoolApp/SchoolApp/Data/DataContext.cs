@@ -16,6 +16,7 @@ namespace MyLeasing.Web.Data
 
         public DbSet<Turma> turma { get; set; }
 
+        public DbSet<TurmaDisciplina> turmaDisciplina { get; set; }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
