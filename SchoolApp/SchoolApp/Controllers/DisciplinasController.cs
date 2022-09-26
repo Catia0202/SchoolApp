@@ -71,17 +71,7 @@ namespace SchoolApp.Controllers
         // GET: Disciplinas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var disciplina = await _disciplinasRepository.GetByIdAsync(id.Value);
-            if (disciplina == null)
-            {
-                return NotFound();
-            }
-            return View(disciplina);
+       -
         }
 
         // POST: Disciplinas/Edit/5

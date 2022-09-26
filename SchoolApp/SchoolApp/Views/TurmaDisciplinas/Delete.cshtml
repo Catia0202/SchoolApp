@@ -1,0 +1,28 @@
+﻿@model SchoolApp.Data.Entities.TurmaDisciplina
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Tem a certeza que quer retirar esta disciplina da turma?</h3>
+<div>
+    <h4>TurmaDisciplina</h4>
+    <hr />
+    <dl class="row">
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Disciplina)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Disciplina.Nome)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

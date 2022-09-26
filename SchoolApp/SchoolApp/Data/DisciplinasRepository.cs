@@ -16,21 +16,46 @@ namespace SchoolApp.Data
             _context = context;
         }
 
-        //public IEnumerable<SelectListItem> GetListDisciplinasNaTurma(int turmaId)
+        public List<SelectListItem> GetListDisciplinas()
+        {
+            var list = _context.Disciplina.ToList();
+            List<SelectListItem> lista = new List<SelectListItem>();
+            foreach (var item in list)
+            {
+                lista.Add(new SelectListItem
+                {
+                    Text = item.Nome,
+                    Value = item.Id.ToString()
+
+                });
+            }
+
+           
+            
+           
+
+
+            
+       
+            return lista;
+        }
+
+        //public object GetListDisciplinas()
         //{
-        //    var list = _context.turmaDisciplina.Include(x => x.Disciplina).Where(x => x.TurmaId == turmaId).Select(p => new SelectListItem
+        //    var list = _context.Disciplina.Select(p => new List<Disciplina>
         //    {
-        //        Text = p.Disciplina.Nome,
-        //        Value = p.Id.ToString()
+        //       new Disciplina
+        //       {
+        //           Nome = p.Nome,
+        //           Descrição = p.Descrição,
+        //           Id = p.Id,
+        //           Duration = p.Duration
+
+        //       }
+
         //    }).ToList();
-
-        //    list.Insert(0, new SelectListItem
-        //    {
-        //        Text = "(Selecione uma disciplina...)",
-        //        Value = "0"
-        //    });
         //    return list;
-        //}
 
+        //}
     }
 }

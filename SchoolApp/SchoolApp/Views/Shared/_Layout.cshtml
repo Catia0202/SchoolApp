@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SchoolApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap-multiselect/css/bootstrap-multiselect.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/jquery/dist/jquery.js" />
 </head>
 <body>
     <header>
@@ -35,6 +36,10 @@
                          
                            <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Disciplinas" asp-action="Index">Disciplinas</a>
+                            </li>
+
+                             <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TurmaDisciplinas" asp-action="Create">teste</a>
                             </li>
                         @if(this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                         {
@@ -72,6 +77,8 @@
                         </ul>
                    
                 </div>
+                
+
             </div>
         </nav>
     </header>
@@ -88,7 +95,9 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
+       <script src="~/lib/bootstrap-multiselect/js/bootstrap-multiselect.min.js"></script>
+ @*   <script src="~/js/site.js" asp-append-version="true"></script>*@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

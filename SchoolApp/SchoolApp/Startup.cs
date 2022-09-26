@@ -45,12 +45,15 @@ namespace SchoolApp
             });
 
             services.AddTransient<SeedDb>();
+            services.AddScoped<ITurmaDisciplinarRepository, TurmaDisciplinaRepository>();
             services.AddScoped<IAlunosRepository, AlunosRepository>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IConverterHelper, ConvertHelper>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ITurmasRepository, TurmasRepository>();
             services.AddScoped<IDisciplinasRepository,DisciplinasRepository>();
+            
+           
             
             services.AddControllersWithViews();
 

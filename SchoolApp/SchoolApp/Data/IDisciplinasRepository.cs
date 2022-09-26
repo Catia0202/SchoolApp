@@ -7,6 +7,8 @@ namespace SchoolApp.Data
 {
     public interface IDisciplinasRepository : IGenericRepository<Disciplina>
     {
-        //IEnumerable<SelectListItem> GetListDisciplinasNaTurma(int turmaId);
+      public List<SelectListItem> GetListDisciplinas();
+
+
     }
 }
