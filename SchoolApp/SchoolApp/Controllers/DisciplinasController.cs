@@ -75,7 +75,7 @@ namespace SchoolApp.Controllers
             {
                 return NotFound();
             }
-            var turma = await _turmasRepository.GetByIdAsync(id.Value);
+            var turma = await _disciplinasRepository.GetByIdAsync(id.Value);
             if (turma == null)
             {
                 return NotFound();
