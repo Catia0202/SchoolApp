@@ -10,6 +10,9 @@ namespace SchoolApp.Models
     {
         public List<SelectListItem> listdisciplinas { get; set; }
 
+        public string disciplinax;
+
+        public string turmas;
         public int[] disciplinaids { get; set; }
 
     }

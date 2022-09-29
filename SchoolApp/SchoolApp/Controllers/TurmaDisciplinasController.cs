@@ -26,10 +26,17 @@ namespace SchoolApp.Controllers
         }
 
         // GET: TurmaDisciplinas
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int id)
         {
-            var dataContext = _context.turmaDisciplina.Include(t => t.Disciplina).Include(t => t.turma);
-            return View(await dataContext.ToListAsync());
+           
+          var dataContext = _context.turmaDisciplina.Include(t => t.Disciplina).Include(t => t.turma).Where(t => t.TurmaId == id);
+            if(id != 0)
+            {
+                ViewBag.data = id;
+            }
+   
+            
+            return View(dataContext);
         }
 
         // GET: TurmaDisciplinas/Details/5

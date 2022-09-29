@@ -3,8 +3,18 @@
 @{
     ViewData["Title"] = "Index";
 }
+ 
+     @*  <partial name="~/Views/TurmaDisciplinas/Create.cshtml" />*@
 
+   
 <h1>Index</h1>
+
+@if (@ViewBag.data != null)
+{
+    <a asp-action="Create" asp-route-id="@ViewBag.data">Create</a>
+}
+
+  
 <table class="table">
     <thead>
         <tr>
@@ -22,7 +32,6 @@
     </thead>
     <tbody>
 
-     
 
 
 @foreach (var item in Model){
