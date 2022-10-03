@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SchoolApp.Data.Entities
 {
-    public class Nota
+    public class Nota : IEntity
     {
         public int Id { get; set; }
         public int NotaAluno { get; set; }
@@ -13,6 +13,8 @@ namespace SchoolApp.Data.Entities
         public int id_aluno { get; set; }
         public Aluno aluno { get; set; }
 
+        public int id_turma { get; set; }
+        public Turma Turma { get; set; }
         public int id_disciplina { get; set; }
         public Disciplina disciplina { get; set; }
 

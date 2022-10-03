@@ -52,6 +52,7 @@ namespace SchoolApp
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<ITurmasRepository, TurmasRepository>();
             services.AddScoped<IDisciplinasRepository,DisciplinasRepository>();
+            services.AddScoped<INotaRepository, NotaRepository>();
             
            
             

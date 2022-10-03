@@ -37,7 +37,7 @@ namespace SchoolApp.Controllers
         public IActionResult Index() 
         {
             var model = Enumerable.Empty<AlunoViewModel>();
-            var alunos = _alunosRepository.GetAll();
+            var alunos = _alunosRepository.GetAll().Include(p => p.turma);
             if (alunos.Any())
             {
                 model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);

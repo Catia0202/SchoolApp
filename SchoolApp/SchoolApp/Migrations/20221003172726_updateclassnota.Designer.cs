@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLeasing.Web.Data;
 
 namespace SchoolApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221003172726_updateclassnota")]
+    partial class updateclassnota
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,9 +235,6 @@ namespace SchoolApp.Migrations
                     b.Property<int>("NotaAluno")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TurmaId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("alunoId")
                         .HasColumnType("int");
 
@@ -248,12 +247,7 @@ namespace SchoolApp.Migrations
                     b.Property<int>("id_disciplina")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_turma")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TurmaId");
 
                     b.HasIndex("alunoId");
 
@@ -485,10 +479,6 @@ namespace SchoolApp.Migrations
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
                 {
-                    b.HasOne("SchoolApp.Data.Entities.Turma", "Turma")
-                        .WithMany()
-                        .HasForeignKey("TurmaId");
-
                     b.HasOne("SchoolApp.Data.Entities.Aluno", "aluno")
                         .WithMany()
                         .HasForeignKey("alunoId");
@@ -500,8 +490,6 @@ namespace SchoolApp.Migrations
                     b.Navigation("aluno");
 
                     b.Navigation("disciplina");
-
-                    b.Navigation("Turma");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Turma", b =>
