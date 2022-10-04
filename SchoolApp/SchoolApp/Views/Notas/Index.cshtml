@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SchoolApp.Data.Entities.Nota>
+﻿@model IEnumerable<SchoolApp.Models.NotaViewModel>
+
 
 @{
     ViewData["Title"] = "Index";
@@ -29,16 +30,16 @@
                 @Html.DisplayNameFor(model => model.aluno.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Turma.Nome)
+                @Html.DisplayNameFor(model => model.Turma)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.disciplina.Nome)
+                @Html.DisplayNameFor(model => model.disciplina)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Data)
             </th>
             <th></th>
-        </tr>
+        </tr>--
     </thead>
     <tbody>
 @foreach (var item in Model) {

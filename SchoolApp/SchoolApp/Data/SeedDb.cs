@@ -25,7 +25,8 @@ namespace MyLeasing.Web.Data
         {
             await _context.Database.EnsureCreatedAsync();
             await _userHelper.CheckRoleAsync("Admin");
-            await _userHelper.CheckRoleAsync("Customer");
+            await _userHelper.CheckRoleAsync("Funcionario");
+            await _userHelper.CheckRoleAsync("Aluno");
 
             var user = await _userHelper.GetUserByEmailAsync("catiasantos0202@gmail.com");
             if(user == null)

@@ -13,7 +13,7 @@ namespace MyLeasing.Web.Data
         public DbSet<falta> falta { get; set; }
 
         public DbSet<Nota> Nota { get; set; }
-
+         
         public DbSet<Turma> turma { get; set; }
 
         public DbSet<TurmaDisciplina> turmaDisciplina { get; set; }

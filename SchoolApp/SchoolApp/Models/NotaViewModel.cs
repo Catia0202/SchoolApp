@@ -11,10 +11,16 @@ namespace SchoolApp.Models
 
         public IEnumerable<SelectListItem> Turmas { get; set; }
 
-        public int DisciplinaID { get; set; }
+        public int DisciplinaId { get; set; }
 
 
         public IEnumerable<SelectListItem> Disciplinas { get; set; }
 
+        public int AlunoId { get; set; }
+
+
+        public IEnumerable<SelectListItem> Alunos { get; set; }
+
+     
     }
 }

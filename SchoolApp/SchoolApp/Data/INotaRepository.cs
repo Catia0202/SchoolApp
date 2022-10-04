@@ -10,6 +10,7 @@ namespace SchoolApp.Data
     {
         Task<Nota> GetNota(int turmaid, int disciplinaid);
 
+          
         IQueryable<NotaViewModel> NotasToNotasViewModels(IQueryable<Nota> notas);
     }
 }

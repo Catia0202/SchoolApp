@@ -16,26 +16,39 @@ namespace SchoolApp.Controllers
     {
         
         private readonly INotaRepository _notaRepository;
+        private readonly IAlunosRepository _alunosRepository;
+        private readonly ITurmasRepository _turmasRepository;
+        private readonly IDisciplinasRepository _disciplinasRepository;
 
-        public NotasController(INotaRepository notaRepository )
+        public NotasController(INotaRepository notaRepository, IAlunosRepository alunosRepository, IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository)
         {
-            
+         
             _notaRepository = notaRepository;
+            _alunosRepository = alunosRepository;
+            _turmasRepository = turmasRepository;
+            _disciplinasRepository = disciplinasRepository;
         }
 
         // GET: Notas
         public IActionResult Index(string search)
         {
+
+            
             var model = Enumerable.Empty<NotaViewModel>();
-            var notas = _notaRepository.GetAll().Include(p=> p.Turma).Include(p => p.disciplina).Include(p=> p.aluno);
+            var notas = _notaRepository.GetAll().Include(p => p.Turma);
+
+            
+          
 
             if (notas.Any())
             {
                 model = (_notaRepository.NotasToNotasViewModels(notas).OrderBy(x => x.aluno.Nome));
+               
             }
             else
             {
-                ViewBag.message = "Não foram encontrados alunos";
+                ViewBag.message = "Não foram encontradas notas";
+
             }
             return View(model);
             //if (!String.IsNullOrEmpty(search))
@@ -43,7 +56,7 @@ namespace SchoolApp.Controllers
             //    notas = (IOrderedQueryable<Nota>)notas.Where(a => a.Id == int.Parse(search));
 
             //}
-           
+
         }
 
         //    // GET: Notas/Details/5
@@ -67,7 +80,14 @@ namespace SchoolApp.Controllers
         // GET: Notas/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new NotaViewModel
+            {
+                Alunos = _alunosRepository.GetListAlunos(),
+                Turmas = _turmasRepository.GetComboTurmas(),
+                Disciplinas = _disciplinasRepository.GetListDisciplinas()
+            };
+
+            return View(model);
         }
 
         // POST: Notas/Create
@@ -75,15 +95,33 @@ namespace SchoolApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NotaAluno,Anotação,id_aluno,id_turma,id_disciplina,Data")] Nota nota)
+        public async Task<IActionResult> Create(NotaViewModel model)
         {
             if (ModelState.IsValid)
             {
+                model.Turmas = _turmasRepository.GetComboTurmas();
+                model.Alunos = _alunosRepository.GetListAlunos();
+                model.Disciplinas = _disciplinasRepository.GetListDisciplinas();
                
+               
+                Nota nota = new Nota()
+                {
+
+                    Id = model.Id,
+                    Anotação = model.Anotação,
+                    id_aluno = model.AlunoId,
+                    NotaAluno = model.NotaAluno,
+                    Data = model.Data,
+                    id_disciplina = model.DisciplinaId,
+                    id_turma = model.TurmaId
+                };
+
+
                 await _notaRepository.CreateAsync(nota);
+   
                 return RedirectToAction(nameof(Index));
             }
-            return View(nota);
+            return View(model);
         }
 
         //    // GET: Notas/Edit/5

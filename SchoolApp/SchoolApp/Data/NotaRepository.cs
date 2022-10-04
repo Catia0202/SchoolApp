@@ -40,6 +40,7 @@ namespace SchoolApp.Data
                 id_disciplina = nota.id_disciplina,
                 id_turma = nota.id_turma,
                 Turma = nota.Turma
+            
 
 
             }); ;

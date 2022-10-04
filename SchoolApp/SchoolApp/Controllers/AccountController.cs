@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Data.Entities;
 using SchoolApp.Helpers;
 using SchoolApp.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,11 +63,13 @@ namespace SchoolApp.Controllers
         }
 
         [HttpPost]
+        //[Authorize("Admin")]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                
                 if (user == null)
                 {
                     user = new User
@@ -75,9 +79,12 @@ namespace SchoolApp.Controllers
                         UserName = model.Username,
                         Email = model.Username,
                         Password = model.Password
+
                     };
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
+                    await _userHelper.AddUserToRoleAsync(user, model.Role);
+
 
                     if (result != IdentityResult.Success)
                     {
