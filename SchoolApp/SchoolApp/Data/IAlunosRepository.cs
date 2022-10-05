@@ -10,6 +10,8 @@ namespace SchoolApp.Data
     public interface IAlunosRepository : IGenericRepository<Aluno>
     {
        Task<AlunoViewModel> GetAlunoByIdWithTurmaAsync(int id);
+
+        public IQueryable GetAllWithUsers();
         public List<SelectListItem> GetListAlunos();
     }
 }

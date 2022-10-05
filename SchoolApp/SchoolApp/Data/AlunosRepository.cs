@@ -21,6 +21,11 @@ namespace SchoolApp.Data
             _userHelper = userHelper;
         }
 
+        public IQueryable GetAllWithUsers()
+        {
+            return _context.Aluno.Include(p => p.User);
+        }
+
         public async Task<AlunoViewModel> GetAlunoByIdWithTurmaAsync(int id)
         {
             var aluno = await _context.Aluno.Include(x => x.turma).Where(x => x.Id == id).FirstOrDefaultAsync();

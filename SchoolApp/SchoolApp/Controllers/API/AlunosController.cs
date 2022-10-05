@@ -6,19 +6,21 @@ namespace SchoolApp.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlunosAPIController : Controller
+    public class AlunosController : Controller
     {
         private readonly IAlunosRepository _alunosRepository;
+      
 
-        public AlunosAPIController(IAlunosRepository alunosRepository)
+        public AlunosController(IAlunosRepository alunosRepository)
         {
            _alunosRepository = alunosRepository;
+          
         }
 
         [HttpGet]
         public IActionResult GetAlunos()
         {
-            return Ok(_alunosRepository.GetAll());
+            return Ok(_alunosRepository.GetAllWithUsers());
         }
     }
 }
