@@ -60,7 +60,7 @@ namespace SchoolApp.Controllers
         }
 
         // GET: TurmaDisciplinas/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
            TurmaDisciplinaViewModel  disciplinas = new TurmaDisciplinaViewModel();
             disciplinas.listdisciplinas = _disciplinasRepository.GetListDisciplinas();

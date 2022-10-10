@@ -1,0 +1,50 @@
+﻿@model SchoolApp.Models.TodasFaltasdoAlunoViewModel
+
+@{
+    ViewData["Title"] = "IndexFaltasAluno";
+}
+
+<h1>IndexNotasAluno</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+          
+            <th>
+                @Html.DisplayNameFor(model => model.Faltas.FirstOrDefault().NomeDisciplina)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Faltas.FirstOrDefault().Duracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Faltas.FirstOrDefault().Data)
+            </th>
+         
+         
+           
+       
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Faltas) {
+        <tr>
+              <td>
+                @Html.DisplayFor(modelItem => item.NomeDisciplina)
+            </td>
+               <td>
+                @Html.DisplayFor(modelItem => item.Duracao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+         
+     
+      
+           
+        </tr>
+}
+    </tbody>
+</table>
+

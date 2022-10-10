@@ -22,8 +22,9 @@ namespace SchoolApp.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly ITurmasRepository _turmasRepository;
+        private readonly IDisciplinasRepository _disciplinasRepository;
 
-        public AlunosController(IAlunosRepository alunosRepository, IImageHelper imagehelper, IUserHelper userHelper,  IConverterHelper converterHelper,ITurmasRepository turmasRepository)
+        public AlunosController(IAlunosRepository alunosRepository, IImageHelper imagehelper, IUserHelper userHelper,  IConverterHelper converterHelper,ITurmasRepository turmasRepository, IDisciplinasRepository disciplinasRepository)
         {
         
             _alunosRepository = alunosRepository;
@@ -31,21 +32,30 @@ namespace SchoolApp.Controllers
             _userHelper = userHelper;
             _converterHelper = converterHelper;
            _turmasRepository = turmasRepository;
+           _disciplinasRepository = disciplinasRepository;
         }
 
         // GET: Alunos
         public IActionResult Index() 
         {
             var model = Enumerable.Empty<AlunoViewModel>();
-            var alunos = _alunosRepository.GetAll().Include(p => p.turma);
-            if (alunos.Any())
-            {
-                model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);
-            }
-            else
-            {
-                ViewBag.message ="Não foram encontrados alunos";
-            }
+         
+              
+           
+                var alunos = _alunosRepository.GetAll().Include(p => p.turma);
+                if (alunos.Any())
+                {
+                    model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);
+                }
+                else
+                {
+                    ViewBag.message = "Não foram encontrados alunos";
+                }
+            
+
+
+          
+           
             return View(model);
         
         }
@@ -240,6 +250,26 @@ namespace SchoolApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult IndexAlunosDaTurma(int id, int id2)
+        {
+            var model = Enumerable.Empty<AlunoViewModel>();
+            if (id != 0)
+            {
+                ViewBag.data = id2;
+                var alunos = _alunosRepository.GetAll().Include(p => p.turma).Where(p => p.turmaid == id);
+                if (alunos.Any())
+                {
+                    model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);
+                }
+                else
+                {
+                    ViewBag.message = "Não foram encontrados alunos";
+                }
+
+
+            }
+            return View(model);
+        }
         ////private bool AlunoExists(int id)
         //{
         //    return _context.Aluno.Any(e => e.Id == id);

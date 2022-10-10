@@ -1,0 +1,195 @@
+﻿@model SchoolApp.Models.NotaAlunoTurmaDisciplinaViewModel
+@{
+    ViewData["Title"] = "Adicionar Nota Todos alunos";
+}
+  
+<br>
+<br>
+<h3 class="text-center">New Evaluation</h3>
+<br>
+     <form method="post">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <input type="hidden" asp-for="TurmaId" />
+                    <input type="hidden" asp-for="disciplinaId" />
+                      
+                    <input asp-for="turmaNome" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+              
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <input asp-for="disciplinaNome" class="form-control font-weight-bold" style="height: 3rem;" disabled="disabled" />
+                        </div>
+                  </div>
+                    <br>
+                    <table class="table table-hover table-responsive" id="AbsencesTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().foto)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().nome)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().nota)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().Data)
+                                </th>
+                                    <th>
+                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().novanota)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Alunos != null)
+                            {
+                                @for (int i = 0; i < Model.Alunos.Count(); i++)
+                                {
+                                    <tr>
+                                        <td class="align-middle">
+                                            <input type="hidden" asp-for="@Model.Alunos[i].alunoid" />
+                                            <img src="@Url.Content(@Model.Alunos[i].foto)" alt="Image" class="rounded-circle" style="width: 44px; height: 44px;  max-height: 100%; width: auto;" />
+                                        </td>
+                                        <td class="align-middle">
+                                            @Html.DisplayFor(modelItem => Model.Alunos[i].nome)
+                                        </td>
+                                        <td class="align-middle">
+                                            <input type="hidden" asp-for="@Model.Alunos[i].nota" />
+                                            @Html.DisplayFor(modelItem => Model.Alunos[i].nota)
+                                        </td>
+                                        <td class="align-middle">
+                                <input type="date" asp-for="Data" class="form-control bg-light" style="height: 3rem;" value="">
+                             
+                    
+                                        </td>
+                                        <td class="align-middle col-md-3">
+                                            <input asp-for="@Model.Alunos[i].novanota" class="form-control bg-light" min="0" max="20" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <br>
+                    <div class="form-group text-center">
+                        <input type="submit" value="Register" class="btn btn-secondary" />
+                    </div>
+                    <div class="text-danger text-center mr-4" asp-validation-summary="ModelOnly"></div>
+                </div>
+            </div>
+        </form>
+  @*      <div class="col-md-2 offset-md-5 nav-item text-center">
+            <a asp-controller="Evaluations" asp-action="RegisterEvaluationDisciplines" asp-route-Id="@Model.ClassId" asp-route-disciplineId="@Model.DisciplineId" class="nav-link text-dark">Back</a>
+        </div>*@
+@*        <div class="col-md-2 offset-md-5 nav-item text-center">
+            <a asp-controller="Evaluations" asp-action="RegisterEvaluationDisciplines" asp-route-Id="@Model.ClassId" asp-route-disciplineId="@Model.DisciplineId" class="nav-link text-dark">Back</a>
+        </div>*@
+
+<br>
+<div class="text-success text-center">
+    <p>
+        @Html.Raw(ViewBag.Message)
+    </p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<br />
+<form asp-action="CreateAlunoNota">
+<div class="row">
+      
+            <input type="hidden" asp-for="TurmaId" />
+            <input type="hidden" asp-for="disciplinaId" />
+          
+            <input asp-for="turmaNome" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+            <input asp-for="disciplinaNome" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+            <br>
+           <div class="row"> 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                 @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().foto)
+                            </th>
+                            <th>
+                                 @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().nome)
+                            </th>
+                            <th>
+                                 @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().Data)
+                            </th>
+                            <th>
+                                 @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().nota)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if(Model.Alunos!= null)
+                    {
+                      @foreach (var item in Model.Alunos)
+                    {
+                       <tr>
+                           <td>
+                                   <input type="hidden" asp-for="@item.alunoid"/>
+                              @Html.DisplayFor(modelitem => item.foto)
+                           </td>
+                           <td>
+                           
+                              @Html.DisplayFor(modelitem => item.nome)
+                           </td>
+                           <td>
+
+                              <span asp-validation-for="Data" class="text-danger small"></span>
+                              <input type="text" asp-for="Data" class="form-control bg-light" style="height: 3rem;">
+                           </td>
+                           <td>
+                               <input type="hidden" asp-for="@item.nota" />
+                                <input asp-for="@item.nota" class="form-control bg-grey" min="0" max="20" />
+                           </td>
+                       </tr>
+
+
+
+                    }  
+                    }
+                    
+                    </tbody> 
+                    </table>
+                    <br />
+           </div>
+               <div class = "form-group text-center">
+                    <input type="submit" value="Adicionar Nota" class="btn btn-primary" />
+                </div>
+           </div>
+                </form>
+
+                      <div class="form-group text-center">
+   <a asp-controller="Notas" asp-action=" CreateDisciplinaNota" asp-route-idturma="@Model.TurmaId"class="btn btn-secondary">Voltar</a>
+   </div>*@
+ 

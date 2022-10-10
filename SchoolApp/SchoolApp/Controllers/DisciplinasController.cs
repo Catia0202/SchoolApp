@@ -57,7 +57,7 @@ namespace SchoolApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Descrição,Duration")] Disciplina disciplina)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Descrição,Duracao")] Disciplina disciplina)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace SchoolApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descrição,Duration")] Disciplina disciplina)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descrição,Duracao")] Disciplina disciplina)
         {
             if (id != disciplina.Id)
             {
@@ -138,6 +138,11 @@ namespace SchoolApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+   
+
+
+
 
         //private bool DisciplinaExists(int id)
         //{

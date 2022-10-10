@@ -1,0 +1,54 @@
+﻿@model IList<SchoolApp.Models.FaltaAlunoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("search")  
+        <input type="submit" value="search" /></p>
+}
+<form method="post">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Foto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Turmas)
+            </th>
+     
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr> <td>
+                @Html.DisplayFor(modelItem => item.Foto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Turmas.FirstOrDefault().Text)
+            </td>
+            <td>
+                  <input type="hidden" asp-for="@item.alunoId" asp-for="@item.TurmaId"/>
+                  <input type="submit" asp-controller="Faltas" asp-action="Index" asp-route-AlunoId="@item.alunoId" asp-route-turmaid="@item.TurmaId" value="View" class="btn btn-secondary btn-sm" />
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</form>
+  <div class="form-group text-center">
+            <a asp-action="CreateTurmaFaltas" class="btn btn-secondary">Adicionar Notas</a>
+        </div>

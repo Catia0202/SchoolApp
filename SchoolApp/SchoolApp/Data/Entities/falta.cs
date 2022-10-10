@@ -1,13 +1,23 @@
-﻿namespace SchoolApp.Data.Entities
+﻿using System;
+
+
+namespace SchoolApp.Data.Entities
 {
-    public class falta
+    public class Falta :IEntity
     {
         public int Id { get; set; }
-        public string Dia { get; set; }
+        public DateTime Data{ get; set; }
 
-        public string Hora { get; set; }
+        
 
-        public Aluno cod_aluno { get; set; }
-        public Disciplina cod_disciplina { get; set; }
+        public int alunoid { get; set; }    
+        public Aluno aluno { get; set; }
+
+
+        public int disciplinaid { get; set; }
+        public Disciplina disciplina { get; set; }
+
+        public int duracao { get; set; }
+
     }
 }

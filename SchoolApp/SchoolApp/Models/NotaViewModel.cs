@@ -1,25 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolApp.Data.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace SchoolApp.Models
 {
-    public class NotaViewModel : Nota
+    public class NotaViewModel 
     {
-        public int TurmaId { get; set; }
 
-
-        public IEnumerable<SelectListItem> Turmas { get; set; }
 
         public int DisciplinaId { get; set; }
 
+        public string NomeDisciplina { get; set; }
 
-        public IEnumerable<SelectListItem> Disciplinas { get; set; }
-
-        public int AlunoId { get; set; }
+        public DateTime Data { get; set; }
 
 
-        public IEnumerable<SelectListItem> Alunos { get; set; }
+        public int Nota { get; set; }
+        
 
      
     }

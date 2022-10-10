@@ -16,6 +16,22 @@ namespace SchoolApp.Data
             _context = context;
         }
 
+        public IEnumerable<SelectListItem> GetComboDisciplinasporTurmaAsync(int turmaid)
+        {
+            var list = _context.turmaDisciplina.Include(p => p.Disciplina).Where(a => a.TurmaId == turmaid).Select(p => new SelectListItem
+            {
+                Text = p.Disciplina.Nome,
+                Value = p.Disciplina.Id.ToString()
+            }).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Selecione uma Disciplina...)",
+                Value = "0"
+            });
+            return list;
+        }
+
         public List<SelectListItem> GetListDisciplinas()
         {
             var list = _context.Disciplina.ToList();
@@ -40,6 +56,8 @@ namespace SchoolApp.Data
             return lista;
         }
 
+
+ 
         //public object GetListDisciplinas()
         //{
         //    var list = _context.Disciplina.Select(p => new List<Disciplina>

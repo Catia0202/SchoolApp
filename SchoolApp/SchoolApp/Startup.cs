@@ -73,7 +73,7 @@ namespace SchoolApp
             services.AddScoped<ITurmasRepository, TurmasRepository>();
             services.AddScoped<IDisciplinasRepository,DisciplinasRepository>();
             services.AddScoped<INotaRepository, NotaRepository>();
-            
+            services.AddScoped<IFaltaRepository, FaltaRepository>();
            
             
             services.AddControllersWithViews();

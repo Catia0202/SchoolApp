@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Disciplina)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Disciplina.Duration)
+                @Html.DisplayNameFor(model => model.Disciplina.Duracao)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Disciplina.Descrição)
@@ -41,13 +41,15 @@
                 @Html.DisplayFor(modelItem => item.Disciplina.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Disciplina.Duration)
+                @Html.DisplayFor(modelItem => item.Disciplina.Duracao)
             </td>
                  <td>
                 @Html.DisplayFor(modelItem => item.Disciplina.Descrição)
             </td>
             <td>
              <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+              <a asp-controller="Alunos" asp-action="IndexAlunosDaTurma" asp-route-id="@item.TurmaId" asp-route-id2="@item.DisciplinaId" class="btn btn-secondary btn-sm">Alunos</a> 
+        
          </td>
         </tr>
 }

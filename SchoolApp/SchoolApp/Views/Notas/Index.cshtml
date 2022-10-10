@@ -1,73 +1,64 @@
-﻿@model IEnumerable<SchoolApp.Models.NotaViewModel>
+﻿@model IList<SchoolApp.Models.NotaAlunoViewModel>
 
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
+
+
 @using (Html.BeginForm())
 {
     <p>
         Find by name: @Html.TextBox("search")  
         <input type="submit" value="search" /></p>
 }
-
+<form method="post">
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NotaAluno)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Foto)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Anotação)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.aluno.Nome)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Turmas)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Turma)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.disciplina)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data)
-            </th>
+     
             <th></th>
-        </tr>--
+        </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NotaAluno)
+        <tr> <td>
+                @Html.DisplayFor(modelItem => item.Foto)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Anotação)
+                @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.aluno.Nome)
+           
+                @Html.DisplayFor(modelItem => item.Turmas.FirstOrDefault().Text)
+
             </td>
+           
+            
             <td>
-                @Html.DisplayFor(modelItem => item.Turma.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.disciplina.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                  <input type="hidden" asp-for="@item.alunoId" asp-for="@item.TurmaId"/>
+
+                  <input type="submit" asp-controller="Notas" asp-action="Index" asp-route-AlunoId="@item.alunoId" asp-route-turmaid="@item.TurmaId" value="View" class="btn btn-secondary btn-sm" />
+             
+               
             </td>
         </tr>
 }
     </tbody>
 </table>
+</form>
+  <div class="form-group text-center">
+            <a asp-action="CreateTurmaNota" class="btn btn-secondary">Adicionar Notas</a>
+        </div>

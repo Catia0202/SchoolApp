@@ -206,7 +206,7 @@ namespace SchoolApp.Migrations
                     b.Property<string>("Descrição")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Duration")
+                    b.Property<int>("Duracao")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -217,7 +217,35 @@ namespace SchoolApp.Migrations
                     b.ToTable("Disciplina");
                 });
 
-            modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
+            modelBuilder.Entity("SchoolApp.Data.Entities.Falta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("alunoid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("disciplinaid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("duracao")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("alunoid");
+
+                    b.HasIndex("disciplinaid");
+
+                    b.ToTable("falta");
+                });
+
+            modelBuilder.Entity("SchoolApp.Data.Entities.Nota2", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -233,31 +261,31 @@ namespace SchoolApp.Migrations
                     b.Property<int>("NotaAluno")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TurmaId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("alunoId")
                         .HasColumnType("int");
 
                     b.Property<int?>("disciplinaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_aluno")
+                    b.Property<int>("idaluno")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_disciplina")
+                    b.Property<int>("iddisciplina")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_turma")
+                    b.Property<int>("idturma")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("turmaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TurmaId");
-
                     b.HasIndex("alunoId");
 
                     b.HasIndex("disciplinaId");
+
+                    b.HasIndex("turmaId");
 
                     b.ToTable("Nota");
                 });
@@ -387,34 +415,6 @@ namespace SchoolApp.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SchoolApp.Data.Entities.falta", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Dia")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Hora")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("cod_alunoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("cod_disciplinaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("cod_alunoId");
-
-                    b.HasIndex("cod_disciplinaId");
-
-                    b.ToTable("falta");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -483,12 +483,27 @@ namespace SchoolApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
+            modelBuilder.Entity("SchoolApp.Data.Entities.Falta", b =>
                 {
-                    b.HasOne("SchoolApp.Data.Entities.Turma", "Turma")
+                    b.HasOne("SchoolApp.Data.Entities.Aluno", "aluno")
                         .WithMany()
-                        .HasForeignKey("TurmaId");
+                        .HasForeignKey("alunoid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.HasOne("SchoolApp.Data.Entities.Disciplina", "disciplina")
+                        .WithMany()
+                        .HasForeignKey("disciplinaid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("aluno");
+
+                    b.Navigation("disciplina");
+                });
+
+            modelBuilder.Entity("SchoolApp.Data.Entities.Nota2", b =>
+                {
                     b.HasOne("SchoolApp.Data.Entities.Aluno", "aluno")
                         .WithMany()
                         .HasForeignKey("alunoId");
@@ -497,11 +512,15 @@ namespace SchoolApp.Migrations
                         .WithMany()
                         .HasForeignKey("disciplinaId");
 
+                    b.HasOne("SchoolApp.Data.Entities.Turma", "turma")
+                        .WithMany()
+                        .HasForeignKey("turmaId");
+
                     b.Navigation("aluno");
 
                     b.Navigation("disciplina");
 
-                    b.Navigation("Turma");
+                    b.Navigation("turma");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Turma", b =>
@@ -530,21 +549,6 @@ namespace SchoolApp.Migrations
                     b.Navigation("Disciplina");
 
                     b.Navigation("turma");
-                });
-
-            modelBuilder.Entity("SchoolApp.Data.Entities.falta", b =>
-                {
-                    b.HasOne("SchoolApp.Data.Entities.Aluno", "cod_aluno")
-                        .WithMany()
-                        .HasForeignKey("cod_alunoId");
-
-                    b.HasOne("SchoolApp.Data.Entities.Disciplina", "cod_disciplina")
-                        .WithMany()
-                        .HasForeignKey("cod_disciplinaId");
-
-                    b.Navigation("cod_aluno");
-
-                    b.Navigation("cod_disciplina");
                 });
 #pragma warning restore 612, 618
         }

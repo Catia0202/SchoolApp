@@ -1,0 +1,96 @@
+﻿@model SchoolApp.Models.FaltaAlunoTurmaDisciplinaViewModel
+
+@{
+    ViewData["Title"] = "Nova Falta";
+}
+
+        <form asp-action="CreateAlunoFaltas">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <input type="hidden" asp-for="turmaid" />
+                    <input type="hidden" asp-for="disciplinaid" />
+                    <input type ="hidden" asp-for="duracao" />
+                    <input asp-for="nometurma" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+                   
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-md-9">
+                            <input asp-for="nomedisciplina" class="form-control font-weight-bold" style="height: 3rem;" disabled="disabled" />
+                        </div>
+                    </div>
+                    <br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FaltaAlunos.FirstOrDefault().foto)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FaltaAlunos.FirstOrDefault().nome)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FaltaAlunos.FirstOrDefault().horasfalta)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FaltaAlunos.FirstOrDefault().percentagem)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FaltaAlunos.FirstOrDefault().duracao)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Data)
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.FaltaAlunos != null)
+                            {
+                                @for (int i = 0; i < Model.FaltaAlunos.Count(); i++)
+                                {
+                                    <tr>
+                                        <td class="align-middle">
+                                            <input type="hidden" asp-for="@Model.FaltaAlunos[i].alunoid" />
+                                            <img src="@Url.Content(@Model.FaltaAlunos[i].foto)" style="width: 44px; height: 44px;  max-height: 100%; width: auto;" />
+                                        </td>
+                                        <td class="align-middle col-md-4">
+                                            @Html.DisplayFor(modelItem => Model.FaltaAlunos[i].nome)
+                                        </td>
+                                        <td class="align-middle">
+                                            <input type="hidden" asp-for="@Model.FaltaAlunos[i].horasfalta" />
+                                            @Html.DisplayFor(modelItem => Model.FaltaAlunos[i].horasfalta)
+                                        </td>
+                                        <td class="align-middle">
+                                            @Html.DisplayFor(modelItem => Model.FaltaAlunos[i].percentagem)%
+                                        </td>
+                                        <td class="align-middle col-md-2">
+                                            <input asp-for="@Model.FaltaAlunos[i].duracao" class="form-control bg-light" min="0" max="100" />
+                                        </td>
+                                        <td class="align-middle col-md-2">
+                                           <input type="datetime" asp-for="Data" class="form-control bg-light" style="height: 3rem;" value="">
+                                           <span asp-validation-for="Data" class="text-danger small"></span>
+                                        </td>
+                                        <td class="align-middle">
+                                            @if (Model.FaltaAlunos[i].excluido == true)
+                                            {
+                                               <a>Excluído por faltas</a> 
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <br>
+                    <div class="form-group text-center">
+                        <input type="submit" value="Register"  asp-route-nometurma="@Model.nometurma" class="btn btn-secondary" />
+                    </div>
+                    <div class="text-danger text-center mr-4" asp-validation-summary="ModelOnly"></div>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-2 offset-md-5 nav-item text-center">
+            <a asp-controller="Faltas" asp-action="CreateAlunoFaltas" asp-route-turmaid="@Model.turmaid" asp-route-disciplinaid="@Model.disciplinaid" class="nav-link text-dark">Back</a>
+        </div>
+

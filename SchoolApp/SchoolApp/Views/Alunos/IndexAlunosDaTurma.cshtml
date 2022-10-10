@@ -1,0 +1,73 @@
+﻿@model IEnumerable<SchoolApp.Models.AlunoViewModel>
+
+@{
+    ViewData["Title"] = "IndexAlunosDaTurma";
+}
+
+<h1>Alunos: </h1>
+
+<table class="table">
+    <thead>
+        <tr>
+     
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telemovel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data_Nascimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Morada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+        
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telemovel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data_Nascimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Morada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageUrl)
+            </td>
+         
+            
+            <td>
+                @Html.ActionLink("Ver Notas", "Index", "Notas", new { @id1 = @item.Id, @id2 = @item.turmaid, @id3 = @ViewBag.data}, new { @class = "btn btn-xs btn-success" })
+
+                @*<a asp-controller="Notas" asp-action="Index"  asp-route-id1="@item.Id" asp-route-id2="@item.TurmaId"  class="btn btn-secondary btn-sm">Notas</a> *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

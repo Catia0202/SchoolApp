@@ -10,7 +10,7 @@ namespace MyLeasing.Web.Data
 
         public DbSet<Disciplina> Disciplina { get; set; }
 
-        public DbSet<falta> falta { get; set; }
+        public DbSet<Falta> falta { get; set; }
 
         public DbSet<Nota> Nota { get; set; }
          

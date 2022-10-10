@@ -1,4 +1,5 @@
-﻿using SchoolApp.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using SchoolApp.Data.Entities;
 using SchoolApp.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,15 @@ namespace SchoolApp.Data
 {
     public interface INotaRepository : IGenericRepository<Nota>
     {
-        Task<Nota> GetNota(int turmaid, int disciplinaid);
+        Task<IList<NotaAlunoViewModel>> GetNotasAlunoAsync();
+        IEnumerable<SelectListItem> GetComboTurmasporAlunoAsync(int alunoid);
 
-          
-        IQueryable<NotaViewModel> NotasToNotasViewModels(IQueryable<Nota> notas);
+        Task<IEnumerable<NotaViewModel>> GetNotasAlunoDaTurma(int alunoid, int turmaid);
+
+        Task<IQueryable<NotaAlunoCreateViewModel>> GetNotasAlunoDaTurmaDisciplina(int alunoid, int turmaid);
+
+        Task<Nota> GetNotaByDados(int alunoid,int turmaid, int disciplinaid);
+
+
     }
 }

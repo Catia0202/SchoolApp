@@ -9,6 +9,6 @@ namespace SchoolApp.Data
     {
       public List<SelectListItem> GetListDisciplinas();
 
-
+        IEnumerable<SelectListItem> GetComboDisciplinasporTurmaAsync(int turmaid);
     }
 }
