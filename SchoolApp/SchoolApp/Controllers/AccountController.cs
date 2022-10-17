@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MyLeasing.Web.Data;
 using SchoolApp.Data.Entities;
 using SchoolApp.Helpers;
 using SchoolApp.Models;
@@ -21,12 +22,14 @@ namespace SchoolApp.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IConfiguration _configuration;
         private readonly IMailHelper _mailHelper;
+        private readonly DataContext _context;
 
-        public AccountController(IUserHelper userHelper, IConfiguration configuration, IMailHelper mailHelper )
+        public AccountController(IUserHelper userHelper, IConfiguration configuration, IMailHelper mailHelper, DataContext context )
         {
             _userHelper = userHelper;
             _configuration = configuration;
            _mailHelper = mailHelper;
+           _context = context;
         }
 
 
@@ -73,7 +76,7 @@ namespace SchoolApp.Controllers
         }
 
         [HttpPost]
-        //[Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -130,6 +133,13 @@ namespace SchoolApp.Controllers
 
             }
             return View(model);
+        }
+        [Authorize(Roles = "Admin")]
+        public IActionResult IndexAllUsers()
+        {
+            var users = _context.Users.ToList();
+
+            return View(users);
         }
 
         public async Task<IActionResult> ChangeUser()

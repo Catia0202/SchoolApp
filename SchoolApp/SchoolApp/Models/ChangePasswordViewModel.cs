@@ -15,5 +15,7 @@ namespace SchoolApp.Models
         [Required]
         [Compare("NewPassword")]
         public string Confirm { get; set; }
+
+        
     }
 }

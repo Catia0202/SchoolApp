@@ -52,6 +52,7 @@ namespace SchoolApp.Helpers
 
         public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
         {
+           
             return await  _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
