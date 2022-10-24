@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ namespace SchoolApp.Controllers
         }
 
         // GET: Notas
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Index()
         {
            
@@ -72,7 +74,7 @@ namespace SchoolApp.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> IndexNotasAluno(int AlunoId, int turmaid)
         {
             if (AlunoId == 0)
@@ -97,7 +99,7 @@ namespace SchoolApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Funcionario")]
         public IActionResult CreateTurmaNota(int turmaid)
         {
             var model = new NotaTurmaViewModel
@@ -118,7 +120,7 @@ namespace SchoolApp.Controllers
             model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model);
         }
-    
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> CreateDisciplinaNota(int turmaid, int disciplinaid)
         {
             if(turmaid== 0)
@@ -137,7 +139,7 @@ namespace SchoolApp.Controllers
             };
             return View(model);
         }
-
+    
         [HttpPost]
         public IActionResult CreateDisciplinaNota(NotaDisciplinaViewModel model)
         {
@@ -149,7 +151,7 @@ namespace SchoolApp.Controllers
             return View(model);
         }
 
-     
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> CreateAlunoNota(NotaDisciplinaViewModel model2)
         {
             if (ModelState.IsValid)

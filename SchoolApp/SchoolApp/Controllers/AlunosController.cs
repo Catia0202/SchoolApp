@@ -84,7 +84,7 @@ namespace SchoolApp.Controllers
         }
 
         // GET: Alunos/Create
-        [Authorize(Roles ="Admin")] //para varios role's fica  [Authorize(Roles ="Admin,Customer,SuperUser")]
+        [Authorize(Roles ="Funcionario")] //para varios role's fica  [Authorize(Roles ="Admin,Customer,SuperUser")]
         public IActionResult Create()
         {
             var model = new AlunoViewModel
@@ -149,6 +149,7 @@ namespace SchoolApp.Controllers
             };
         }
         // GET: Alunos/Edit/5
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Edit(int id)
         {
             if (id == 0)
@@ -224,6 +225,7 @@ namespace SchoolApp.Controllers
         }
 
         // GET: Alunos/Delete/5
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
