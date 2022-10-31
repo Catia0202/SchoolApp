@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -115,10 +116,30 @@ namespace SchoolApp.Controllers
              
 
                 var aluno = _converterHelper.ToAluno(model, path, true);
-              
 
-                //TODO:Modificar para o user que tiver logado
-                aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        FirstName = aluno.Nome,
+                        LastName = aluno.Nome + "Last",
+                        Email = aluno.Email,
+                        UserName = aluno.Email,
+                        Password = aluno.Id + aluno.Nome
+
+
+                    };
+                    var result = await _userHelper.AddUserAsync(user, user.Password);
+                    if (result != IdentityResult.Success)
+                    {
+                        throw new InvalidOperationException("Could not create the user in seeder");
+                    }
+                    await _userHelper.AddUserToRoleAsync(user, "Aluno");
+                }
+
+                    //TODO:Modificar para o user que tiver logado
+                    aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _alunosRepository.CreateAsync(aluno);
                 return RedirectToAction(nameof(Index));
              
