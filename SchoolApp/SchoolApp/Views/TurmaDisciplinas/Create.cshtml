@@ -1,9 +1,10 @@
 ﻿@model SchoolApp.Models.TurmaDisciplinaViewModel
 
 @{
- 
+
     ViewData["Title"] = "Create";
-     
+    Layout = null;
+
 }
    <link rel="stylesheet" href="~/lib/bootstrap-multiselect/css/bootstrap-multiselect.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -27,6 +28,7 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+             <h2 style="color:red">@ViewBag.errormessage</h2>
         </form>
 
 

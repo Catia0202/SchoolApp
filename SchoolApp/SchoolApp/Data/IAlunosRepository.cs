@@ -13,5 +13,7 @@ namespace SchoolApp.Data
 
         public IQueryable GetAllWithUsers();
         public List<SelectListItem> GetListAlunos();
+
+        Task<IQueryable<AvaliacaoAlunoDisciplinaViewModel>> GetAvaliacaoAlunoEmDisciplinaAsync(int alunoid, int turmaid);
     }
 }

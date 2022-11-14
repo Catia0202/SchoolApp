@@ -16,13 +16,17 @@ namespace SchoolApp.Controllers
     {
         private readonly DataContext _context;
         private readonly IDisciplinasRepository _disciplinasRepository;
+        private readonly ITurmasRepository _turmasRepository;
         private readonly ITurmaDisciplinarRepository _turmaDisciplinarepository;
+        private readonly IConfiguracaoRepository _configuracaoRepository;
 
-        public TurmaDisciplinasController(DataContext context, IDisciplinasRepository disciplinasRepository, ITurmaDisciplinarRepository turmaDisciplinaRepository)
+        public TurmaDisciplinasController(DataContext context, IDisciplinasRepository disciplinasRepository,ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinaRepository, IConfiguracaoRepository configuracaoRepository)
         {
             _context = context;
             _disciplinasRepository = disciplinasRepository;
+            _turmasRepository = turmasRepository;
             _turmaDisciplinarepository = turmaDisciplinaRepository;
+            _configuracaoRepository = configuracaoRepository;
         }
 
         // GET: TurmaDisciplinas
@@ -60,7 +64,7 @@ namespace SchoolApp.Controllers
         }
 
         // GET: TurmaDisciplinas/Create
-        public IActionResult Create(int id)
+        public IActionResult Create()
         {
            TurmaDisciplinaViewModel  disciplinas = new TurmaDisciplinaViewModel();
             disciplinas.listdisciplinas = _disciplinasRepository.GetListDisciplinas();
@@ -78,29 +82,53 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> Create(TurmaDisciplinaViewModel model, int id)
         {
 
-            var turma = await _turmaDisciplinarepository.GetByIdAsync(id);
+            var turma = await _turmasRepository.GetByIdAsync(id);
             model.listdisciplinas = _disciplinasRepository.GetListDisciplinas();
-
+            var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
+            int horastotais = 0;
+            int disciplinasjanaturma = _turmaDisciplinarepository.GetAll().Where(p => p.TurmaId == id).Count(); 
             List<SelectListItem> selectListItems = model.listdisciplinas.Where(p => model.disciplinaids.Contains(int.Parse(p.Value))).ToList();
+            var disciplinasselecionadas = selectListItems.Count();
+            foreach(var item in selectListItems)
+            {
+                var disciplinaselecionada = _disciplinasRepository.GetByIdAsync(int.Parse(item.Value));
+                horastotais = horastotais + disciplinaselecionada.Result.Duracao;
+            }
+            
             foreach (var selectListItem in selectListItems)
             {
                 selectListItem.Selected = true;
                 ViewBag.message += "\\n" + selectListItem.Text;
-         
+                
             
                     var turmadisciplina = await _turmaDisciplinarepository.GetTurmaDisciplinaAsync(id, int.Parse(selectListItem.Value));
+                  
 
-                    if(turmadisciplina == null && selectListItem.Selected == true)
+                
+                if(adminconfig.Result.MaximoDisciplinasPorTurma > disciplinasselecionadas && adminconfig.Result.MaximoDisciplinasPorTurma > disciplinasjanaturma)
+                {
+                    if (horastotais <= turma.Duracao)
                     {
-                         await _turmaDisciplinarepository.CreateAsync(new TurmaDisciplina
-                         {
-                        DisciplinaId = int.Parse(selectListItem.Value),
-                        TurmaId =  id
-                         });
+                        if (turmadisciplina == null && selectListItem.Selected == true)
+                        {
+                            await _turmaDisciplinarepository.CreateAsync(new TurmaDisciplina
+                            {
+                                DisciplinaId = int.Parse(selectListItem.Value),
+                                TurmaId = id
+                            });
+                        }
+
                     }
-
-          
-
+                    else
+                    {
+                        ViewBag.errormessage = "Não foi possível adicionar essas disciplinas ao Curso devido à soma das horas das Disciplinas ser maior que a Duração do Curso";
+                    }
+                }
+                else
+                {
+                    ViewBag.errormessage = "Não foi possível adicionar essas disciplinas ao Curso devido a ter excedido o número de disciplinas neste curso";
+                }
+               
 
             };
             return View(model);

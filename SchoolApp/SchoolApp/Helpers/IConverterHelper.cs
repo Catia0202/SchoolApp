@@ -9,7 +9,7 @@ namespace SchoolApp.Helpers
     {
         Aluno ToAluno(AlunoViewModel model, string path, bool isNew);
 
-        AlunoViewModel ToAlunoViewModel(Aluno aluno);
+        AlunoViewModel ToAlunoViewModel(Aluno aluno, User user);
 
         IQueryable<AlunoViewModel> AlunosToAlunoViewModels(IQueryable<Aluno> alunos);
     }

@@ -7,6 +7,9 @@ namespace SchoolApp.Data.Entities
         public int Id { get; set; }
         public string Nome { get; set; }
 
+        public string Fotourl { get; set; }
+
+        public string Descricao { get; set; }
         public User User { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]

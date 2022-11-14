@@ -76,7 +76,7 @@ namespace SchoolApp.Controllers
 
             var aluno = await _alunosRepository.GetByIdAsync(AlunoId);
             var turma = await _turmasRepository.GetByIdAsync(turmaid);
-
+       
 
 
             var model = new TodasFaltasdoAlunoViewModel
@@ -84,9 +84,9 @@ namespace SchoolApp.Controllers
                 Nome = aluno.Nome,
                 foto = aluno.ImageUrl,
                 Turma = turma.Nome,
-                Faltas = await _faltaRepository.GetFaltasAlunoDaTurma(aluno.Id)
+                Faltas = await _faltaRepository.GetFaltasAlunoDaTurma(aluno.Id, turmaid)
             };
-
+            ///resolver depoisss
 
 
             return View(model);
@@ -161,7 +161,7 @@ namespace SchoolApp.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("CreateTurmaNota", "Notas");
+            return RedirectToAction("CreateTurmaFaltas", "Faltas");
         }
 
         [HttpPost]
@@ -228,7 +228,7 @@ namespace SchoolApp.Controllers
 
 
 
-                return RedirectToAction("CreateAlunoFaltas", "Notas", modelparaview);
+                return RedirectToAction("CreateAlunoFaltas", "Faltas", modelparaview);
             }
             return View(model);
         }

@@ -11,15 +11,18 @@
                     <input type="hidden" asp-for="disciplinaid" />
                     <input type ="hidden" asp-for="duracao" />
                     <input asp-for="nometurma" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
-                   
                     <br>
                     <div class="row">
                         <div class="form-group col-md-9">
                             <input asp-for="nomedisciplina" class="form-control font-weight-bold" style="height: 3rem;" disabled="disabled" />
                         </div>
+                              <div class="form-group col-md-4">
+                                  <input type="date" asp-for="Data" id="date" class="form-control bg-light" style="height: 3rem;">
+                                  <span asp-validation-for="Data" class="text-danger small"></span>
+                              </div>
                     </div>
                     <br>
-                    <table>
+                    <table  class="table table-hover table-responsive">
                         <thead>
                             <tr>
                                 <th>
@@ -37,10 +40,9 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.FaltaAlunos.FirstOrDefault().duracao)
                                 </th>
+                            
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Data)
-                                </th>
-                                <th>
+                                    Situação:
                                 </th>
                             </tr>
                         </thead>
@@ -64,18 +66,21 @@
                                         <td class="align-middle">
                                             @Html.DisplayFor(modelItem => Model.FaltaAlunos[i].percentagem)%
                                         </td>
-                                        <td class="align-middle col-md-2">
+                                        <td class="align-middle">
                                             <input asp-for="@Model.FaltaAlunos[i].duracao" class="form-control bg-light" min="0" max="100" />
                                         </td>
-                                        <td class="align-middle col-md-2">
-                                           <input type="datetime" asp-for="Data" class="form-control bg-light" style="height: 3rem;" value="">
-                                           <span asp-validation-for="Data" class="text-danger small"></span>
-                                        </td>
+                                     
                                         <td class="align-middle">
                                             @if (Model.FaltaAlunos[i].excluido == true)
                                             {
-                                               <a>Excluído por faltas</a> 
+                                                <a>Excluído por faltas</a>
+                                            }else
+
+                                            {
+                                                <a>-</a>
                                             }
+
+                                            
                                         </td>
                                     </tr>
                                 }
@@ -94,3 +99,25 @@
             <a asp-controller="Faltas" asp-action="CreateAlunoFaltas" asp-route-turmaid="@Model.turmaid" asp-route-disciplinaid="@Model.disciplinaid" class="nav-link text-dark">Back</a>
         </div>
 
+
+
+<script>
+    const dateInput = document.getElementById('date');
+
+
+dateInput.value = formatDate();
+
+console.log(formatDate());
+
+function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+}
+
+function formatDate(date = new Date()) {
+    return [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+    ].join('-');
+}
+</script>

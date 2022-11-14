@@ -16,7 +16,7 @@ namespace SchoolApp.Models
 
         public int TurmaId { get; set; }
 
-
+        public string Antigoemail { get; set; }
         public IEnumerable<SelectListItem> Turmas { get; set; }
     }
 }

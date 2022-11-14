@@ -14,8 +14,7 @@ namespace SchoolApp.Models
         [Required]
         public int disciplinaid { get; set; }
 
-
-   
+        public IList<NotaAlunoCreateViewModel> Alunos { get; set; }
         public IEnumerable<SelectListItem> Disciplinas { get; set; }
     }
 }

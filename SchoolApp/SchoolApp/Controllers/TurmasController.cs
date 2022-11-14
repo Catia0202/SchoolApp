@@ -9,17 +9,20 @@ using MyLeasing.Web.Data;
 using SchoolApp.Data;
 using SchoolApp.Data.Entities;
 using SchoolApp.Helpers;
+using SchoolApp.Models;
 
 namespace SchoolApp.Controllers
 {
     public class TurmasController : Controller
     {
         private readonly ITurmasRepository _turmasRepository;
+        private readonly IImageHelper _imagehelper;
         private readonly IUserHelper _userHelper;
 
-        public TurmasController(ITurmasRepository turmasRepository, IUserHelper userHelper)
+        public TurmasController(ITurmasRepository turmasRepository, IImageHelper imagehelper,IUserHelper userHelper)
         {
             _turmasRepository = turmasRepository;
+            _imagehelper = imagehelper;
             _userHelper = userHelper;
         }
 
@@ -57,15 +60,31 @@ namespace SchoolApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Duracao")] Turma turma)
+        public async Task<IActionResult> Create(TurmaViewModel model)
         {
+            var path = string.Empty;
+
+           
+            if (model.ImageFile != null && model.ImageFile.Length > 0)
+            {
+                path = await _imagehelper.UploadImageAsync(model.ImageFile, "turmas");
+            }
             if (ModelState.IsValid)
             {
+                var turma = new Turma
+                {
+                    Id = model.Id,
+                    Descricao = model.Descricao,
+                    Fotourl = path,
+                    Duracao = model.Duracao,
+                    Nome = model.Nome
+
+                };
 
                 await _turmasRepository.CreateAsync(turma);
                 return RedirectToAction(nameof(Index));
             }
-            return View(turma);
+            return View(model);
         }
 
        
@@ -91,7 +110,7 @@ namespace SchoolApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Duracao")] Turma turma)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Duracao,Fotourl,Descricao")] Turma turma)
         {
             if (id != turma.Id)
             {

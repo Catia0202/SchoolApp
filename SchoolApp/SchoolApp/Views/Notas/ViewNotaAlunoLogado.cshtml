@@ -1,0 +1,48 @@
+﻿@model SchoolApp.Models.TodasNotasDoAlunoViewModel
+
+@{
+    ViewData["Title"] = "IndexNotasAluno";
+}
+
+<h1>IndexNotasAluno</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+          
+            <th>
+                @Html.DisplayNameFor(model => model.Notas.FirstOrDefault().NomeDisciplina)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Notas.FirstOrDefault().Nota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notas.FirstOrDefault().Data)
+            </th>
+         
+         
+           
+       
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Notas) {
+        <tr>
+             <td>
+                @Html.DisplayFor(modelItem => item.NomeDisciplina)
+            </td>
+               <td>
+                @Html.DisplayFor(modelItem => item.Nota)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+         
+      
+           
+        </tr>
+}
+    </tbody>
+</table>

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyLeasing.Web.Data;
 using SchoolApp.Data.Entities;
+using SchoolApp.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +33,26 @@ namespace SchoolApp.Data
             return list;
         }
 
+        public async Task<IQueryable<Disciplina>> GetIndexTurmasDisciplinasAsync(int turmaid)
+        {
+            var disciplinas = Enumerable.Empty<Disciplina>().AsQueryable();
+
+            await Task.Run(() =>
+            {
+
+                disciplinas = _context.turmaDisciplina.Include(p => p.Disciplina).Where(a => a.TurmaId == turmaid).Select(p => new Disciplina
+                {
+                    Nome = p.Disciplina.Nome,
+                    Descrição = p.Disciplina.Descrição,
+                    Duracao = p.Disciplina.Duracao
+                });
+              
+                });
+                return disciplinas;
+
+
+        }
+
         public List<SelectListItem> GetListDisciplinas()
         {
             var list = _context.Disciplina.ToList();
@@ -45,14 +66,6 @@ namespace SchoolApp.Data
 
                 });
             }
-
-           
-            
-           
-
-
-            
-       
             return lista;
         }
 

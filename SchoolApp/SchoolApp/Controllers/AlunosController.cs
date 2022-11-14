@@ -17,32 +17,34 @@ namespace SchoolApp.Controllers
 {
     public class AlunosController : Controller
     {
-      
+        private readonly UserManager<User> _userManager;
+        private readonly IMailHelper _mailHelper;
         private readonly IAlunosRepository _alunosRepository;
         private readonly IImageHelper _imagehelper;
         private readonly IUserHelper _userHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly ITurmasRepository _turmasRepository;
         private readonly IDisciplinasRepository _disciplinasRepository;
+        private readonly IConfiguracaoRepository _configuracaoRepository;
 
-        public AlunosController(IAlunosRepository alunosRepository, IImageHelper imagehelper, IUserHelper userHelper,  IConverterHelper converterHelper,ITurmasRepository turmasRepository, IDisciplinasRepository disciplinasRepository)
+        public AlunosController(UserManager<User> userManager,IMailHelper mailHelper,IAlunosRepository alunosRepository, IImageHelper imagehelper, IUserHelper userHelper,  IConverterHelper converterHelper,ITurmasRepository turmasRepository, IDisciplinasRepository disciplinasRepository, IConfiguracaoRepository configuracaoRepository)
         {
-        
+            _userManager = userManager;
+            _mailHelper = mailHelper;
             _alunosRepository = alunosRepository;
             _imagehelper = imagehelper;
             _userHelper = userHelper;
             _converterHelper = converterHelper;
-           _turmasRepository = turmasRepository;
-           _disciplinasRepository = disciplinasRepository;
+            _turmasRepository = turmasRepository;
+            _disciplinasRepository = disciplinasRepository;
+            _configuracaoRepository = configuracaoRepository;
         }
 
         // GET: Alunos
         public IActionResult Index() 
         {
             var model = Enumerable.Empty<AlunoViewModel>();
-         
-              
-           
+
                 var alunos = _alunosRepository.GetAll().Include(p => p.turma);
                 if (alunos.Any())
                 {
@@ -52,11 +54,6 @@ namespace SchoolApp.Controllers
                 {
                     ViewBag.message = "Não foram encontrados alunos";
                 }
-            
-
-
-          
-           
             return View(model);
         
         }
@@ -106,44 +103,73 @@ namespace SchoolApp.Controllers
             if (ModelState.IsValid)
             {
                 var path = string.Empty;
-              
+                var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
                 model.Turmas = _turmasRepository.GetComboTurmas();
+                
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
                     path = await _imagehelper.UploadImageAsync(model.ImageFile, "alunos");
                 }
-
-             
-
-                var aluno = _converterHelper.ToAluno(model, path, true);
-
-                var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
-                if (user == null)
+                int alunosjanaturma = _alunosRepository.GetAll().Where(p => p.turmaid == model.turmaid).Count();
+                //TODO:Modificar para o user que tiver logado
+         
+                if(adminconfig.Result.MaximoAlunosNaTurma > alunosjanaturma)
                 {
-                    user = new User
+                    var aluno = _converterHelper.ToAluno(model, path, true);
+
+                    await _alunosRepository.CreateAsync(aluno);
+                    var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
+                    if (user == null)
                     {
-                        FirstName = aluno.Nome,
-                        LastName = aluno.Nome + "Last",
-                        Email = aluno.Email,
-                        UserName = aluno.Email,
-                        Password = aluno.Id + aluno.Nome
+                        user = new User
+                        {
+
+                            FirstName = aluno.Nome,
+                            LastName = aluno.Nome + "Last",
+                            Email = aluno.Email,
+                            UserName = aluno.Email,
+                            Password = aluno.Id + aluno.Nome
+
+                        };
+
+                        var result = await _userHelper.AddUserAsync(user, user.Password);
+                        aluno.User = user;
+                        if (result != IdentityResult.Success)
+                        {
+                            throw new InvalidOperationException("Could not create the user in seeder");
+                        }
+                        await _userHelper.AddUserToRoleAsync(user, "Aluno");
+
+                        string tokenLink = Url.Action("ChangeInitPassword", "Account", new
+                        {
+                            userid = user.Id
+
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        Response response = _mailHelper.SendEmail(aluno.Email, "Passoword Change",
+                              $"<h1>Password Confirmation </h1" +
+                              $"To allow user," +
+                              $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email </a>");
 
 
-                    };
-                    var result = await _userHelper.AddUserAsync(user, user.Password);
-                    if (result != IdentityResult.Success)
-                    {
-                        throw new InvalidOperationException("Could not create the user in seeder");
+
+
+
+
+
+
                     }
-                    await _userHelper.AddUserToRoleAsync(user, "Aluno");
-                }
 
-                    //TODO:Modificar para o user que tiver logado
-                    aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                await _alunosRepository.CreateAsync(aluno);
-                return RedirectToAction(nameof(Index));
-             
+
+                    return RedirectToAction(nameof(Index));
+
+                }
+                else
+                {
+                    ViewBag.errormessage = "Não foi possível inserir o aluno neste curso pois exedeu o número máximo de alunos por Curso";
+                }
             }
+               
          
 
             return View(model);
@@ -183,27 +209,29 @@ namespace SchoolApp.Controllers
             {
                 return NotFound();
             }
-
-            var model = _converterHelper.ToAlunoViewModel(aluno);
+            var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
+            var model = _converterHelper.ToAlunoViewModel(aluno,user);
             model.Turmas = _turmasRepository.GetComboTurmas();
+            model.User = await _userHelper.GetUserByEmailAsync(aluno.Email);
+            model.Antigoemail = aluno.Email;
             return View(model);
         }
-        private AlunoViewModel ToAlunoViewModel(Aluno aluno)
-        {
-            return new AlunoViewModel
-            {
-                Id = aluno.Id,
-                ImageUrl = aluno.ImageUrl,
-                Nome = aluno.Nome,
-                Data_Nascimento = aluno.Data_Nascimento,
-                Email = aluno.Email,
-                Genero = aluno.Genero,
-                Morada = aluno.Morada,
-                Telemovel = aluno.Telemovel,
-                User = aluno.User,
-                turmaid =aluno.turmaid
-            };
-        }
+        //private AlunoViewModel ToAlunoViewModel(Aluno aluno)
+        //{
+        //    return new AlunoViewModel
+        //    {
+        //        Id = aluno.Id,
+        //        ImageUrl = aluno.ImageUrl,
+        //        Nome = aluno.Nome,
+        //        Data_Nascimento = aluno.Data_Nascimento,
+        //        Email = aluno.Email,
+        //        Genero = aluno.Genero,
+        //        Morada = aluno.Morada,
+        //        Telemovel = aluno.Telemovel,
+        //        User = aluno.User,
+        //        turmaid =aluno.turmaid
+        //    };
+        //}
         // POST: Alunos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -215,18 +243,42 @@ namespace SchoolApp.Controllers
             {
                 try
                 {
+                    var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
+                    int alunosjanaturma = _alunosRepository.GetAll().Where(p => p.turmaid == model.turmaid).Count();
                     var path = model.ImageUrl;
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
                         path = await _imagehelper.UploadImageAsync(model.ImageFile, "alunos");
                     }
-                    var aluno = _converterHelper.ToAluno(model, path, false);
-                      
-                    //TODO:Modificar para o user que tiver logado
-                    aluno.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                    model.Turmas = _turmasRepository.GetComboTurmas();
-                    await _alunosRepository.UpdateAsync(aluno);
 
+                    if (adminconfig.Result.MaximoAlunosNaTurma > alunosjanaturma)
+                    {
+
+                        var aluno = _converterHelper.ToAluno(model, path, false);
+
+
+                        var user = await _userHelper.GetUserByEmailAsync(model.Antigoemail);
+                        if (user != null)
+                        {
+                            user.Email = aluno.Email;
+                            user.FirstName = aluno.Nome;
+                            user.LastName = aluno.Nome + "Last";
+                            user.UserName = aluno.Email;
+
+                        }
+
+
+
+                        await _alunosRepository.UpdateAsync(aluno);
+                        await _userHelper.UpdateUserAsync(user);
+                        model.Turmas = _turmasRepository.GetComboTurmas();
+
+
+                    }
+                    else
+                    {
+                        ViewBag.errormessage = "Não foi possível inserir o aluno neste curso pois exedeu o número máximo de alunos por Curso";
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -241,6 +293,7 @@ namespace SchoolApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+         
             model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model);
         }
@@ -255,6 +308,7 @@ namespace SchoolApp.Controllers
             }
 
             var aluno = await _alunosRepository.GetByIdAsync(id.Value);
+            
             if (aluno == null)
             {
                 return NotFound();
@@ -268,8 +322,9 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var aluno = await _alunosRepository.GetByIdAsync(id);
+            var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
             await _alunosRepository.DeleteAsync(aluno);
-
+            await _userManager.DeleteAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
@@ -293,6 +348,23 @@ namespace SchoolApp.Controllers
             }
             return View(model);
         }
+        [Authorize(Roles ="Aluno")]
+        public async Task<IActionResult> AlunoAvaliacoes()
+        {
+            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+            var aluno = _alunosRepository.GetAll().Where(p => p.User.Id == user.Id).FirstOrDefault();
+
+            var turma = _turmasRepository.GetByIdAsync(aluno.turmaid);
+
+            var model = new AlunoAvaliacoesViewModel
+            {
+                NomeCurso = turma.Result.Nome,
+                AvaliacaoDisciplinas = await _alunosRepository.GetAvaliacaoAlunoEmDisciplinaAsync(aluno.Id, turma.Result.Id)
+            };
+            return View(model);
+        }
+
         ////private bool AlunoExists(int id)
         //{
         //    return _context.Aluno.Any(e => e.Id == id);

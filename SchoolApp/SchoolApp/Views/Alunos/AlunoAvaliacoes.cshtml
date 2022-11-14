@@ -1,0 +1,98 @@
+﻿@model SchoolApp.Models.AlunoAvaliacoesViewModel
+@{
+    ViewData["Title"] = "Avaliação do Aluno";
+}
+<br>
+<br>
+<h3 class="text-center">Evaluations</h3>
+<br>
+<br>
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <input asp-for="NomeCurso" class="form-control bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+                <br>
+                <br>
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AvaliacaoDisciplinas.FirstOrDefault().Nomedisciplina)
+                            </th>
+                            
+                            <th>
+                                @Html.DisplayNameFor(model => model.AvaliacaoDisciplinas.FirstOrDefault().Duracaodisciplina)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AvaliacaoDisciplinas.FirstOrDefault().Horasfalta)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AvaliacaoDisciplinas.FirstOrDefault().Percentagemfalta)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AvaliacaoDisciplinas.FirstOrDefault().DataNota)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AvaliacaoDisciplinas.FirstOrDefault().Nota)
+                            </th>
+                               <th>
+                                Estado:
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.AvaliacaoDisciplinas != null)
+                        {
+                            @foreach (var item in Model.AvaliacaoDisciplinas)
+                            {
+                                <tr >
+                                    <td class="align-middle ">
+                                        @Html.DisplayFor(modelItem => item.Nomedisciplina)
+                                    </td>
+                                    <td class="align-middle">
+                                        @Html.DisplayFor(modelItem => item.Duracaodisciplina)
+                                    </td>
+                                    <td class="align-middle">
+                                        @Html.DisplayFor(modelItem => item.Horasfalta)
+                                    </td>
+                                        
+                                    <td class="align-middle">
+                                        @Html.DisplayFor(modelItem => item.Percentagemfalta)
+                                    </td>
+                                    <td class="align-middle">
+                                        @Html.DisplayFor(modelItem => item.DataNota)
+                                    </td>
+                                    <td class="align-middle ">
+                                        @Html.DisplayFor(modelItem => item.Nota)
+                                    </td>
+                                    <td class="align-middle">
+                                        @if (item.ChumbouFaltas == true)
+                                        {
+                                            <a style="color: red;">Chumbou Por Faltas</a>
+                                        }
+                                        else if(item.Chumbounota ==true)
+                                        {
+                                            <a style="color: red;">Chumbou Por Nota Inferior a 10</a>
+                                        }else if (item.ChumbouFaltas == true && item.Chumbounota ==true)
+                                        {
+                                            <a style="color: red;">Chumbou Por Faltas e Nota</a>
+                                        }
+                                        else{
+
+                                            <a style="color: green;">Passou!</a>
+                                            }
+                                        </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-2 offset-md-5 nav-item text-center">
+            <a asp-controller="Evaluations" asp-action="StudentEvaluationsCourses" asp-route-userName="@this.User.Identity.Name" class="nav-link text-dark">Back</a>
+        </div>
+    </div>
+</div>

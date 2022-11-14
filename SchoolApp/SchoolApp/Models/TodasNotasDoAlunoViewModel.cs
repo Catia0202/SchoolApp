@@ -11,6 +11,8 @@ namespace SchoolApp.Models
 
         public string foto { get; set; }
 
+        public string nomedisciplina { get; set; }
         public IEnumerable<NotaViewModel> Notas { get; set; }
+        public bool aprovado { get; set; }
     }
 }

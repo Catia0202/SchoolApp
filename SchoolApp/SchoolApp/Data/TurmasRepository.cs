@@ -3,6 +3,7 @@ using MyLeasing.Web.Data;
 using SchoolApp.Data.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolApp.Data
 {
@@ -27,6 +28,24 @@ namespace SchoolApp.Data
                 Value = "0"
             });
             return list;
+        }
+
+        public async Task<IQueryable<Turma>> GetIndexTurmasAsync()
+        {
+           var turmas = Enumerable.Empty<Turma>().AsQueryable();
+
+            await Task.Run(() =>
+            {
+                turmas = _context.turma.OrderBy(x => x.Nome).Select(x => new Turma
+                {
+                    Id = x.Id,
+                    Descricao = x.Descricao,
+                    Fotourl = x.Fotourl,
+                    Duracao = x.Duracao,
+                    Nome = x.Nome
+                });
+            });
+            return turmas;
         }
     }
 }

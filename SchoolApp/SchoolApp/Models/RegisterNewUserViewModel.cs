@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SchoolApp.Models
@@ -26,5 +27,8 @@ namespace SchoolApp.Models
         public string Confirm { get; set; }
 
         public string Role { get; set; }
+
+        [Display(Name = "Profile Picture")]
+        public IFormFile ProfilePictureFile { get; set; }
     }
 }

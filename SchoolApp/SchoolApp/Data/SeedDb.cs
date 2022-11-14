@@ -28,29 +28,27 @@ namespace MyLeasing.Web.Data
             await _userHelper.CheckRoleAsync("Funcionario");
             await _userHelper.CheckRoleAsync("Aluno");
 
-            var user = await _userHelper.GetUserByEmailAsync("catiasantos0202@gmail.com");
+            var user = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
             if(user == null)
             {
                 user = new User
                 {
                     FirstName = "catias",
                     LastName = "santos",
-                    Email = "catiasantos0202@gmail.com",
-                    UserName="catiasantos0202@gmail.com",
-                    Password="123456"
+                    Email = "admin@gmail.com",
+                    UserName="admin@gmail.com",
+                    Password="123456",
+                    passwordchanged=true
                 
 
                 };
+                
                 var result = await _userHelper.AddUserAsync(user, "123456");
                 if(result != IdentityResult.Success)
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
-
-                var token  = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-
-                await _userHelper.ConfirmEmailAsync(user, token);
             }
             var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
             if (!isInRole)

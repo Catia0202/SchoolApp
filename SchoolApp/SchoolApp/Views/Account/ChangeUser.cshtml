@@ -5,8 +5,12 @@
 
 <h2>ChangeUser</h2>
 <div class="row">
-    <div class="col-md-4 offset-md-4">
-        <form method="post">
+    <div>
+           <img src="@Url.Content(@Model.profilepicturepath)" alt="Image" style="width: 200px; height: 200px;  max-height: 100%; width: auto; padding-left:20px;padding-top:40px;" />
+    </div>
+    <div class="col-md-4 offset-md-4" style="margin-left:20px;">
+
+        <form method="post"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly"></div>
 
             <div class="form-group">
@@ -20,7 +24,12 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-warning"></span>
             </div>
-
+            <div class="form-group">
+             
+                 <label asp-for="ProfilePictureFile" class="control-label"></label>
+                <input asp-for="ProfilePictureFile" class="form-control" type="file" />
+                <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value ="Update" class="btn btn-primary" />
                 <a asp-action="ChangePassword" class="btn btn-success">Change Password</a>

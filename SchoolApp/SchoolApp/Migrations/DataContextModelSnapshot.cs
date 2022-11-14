@@ -245,7 +245,7 @@ namespace SchoolApp.Migrations
                     b.ToTable("falta");
                 });
 
-            modelBuilder.Entity("SchoolApp.Data.Entities.Nota2", b =>
+            modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,8 +297,14 @@ namespace SchoolApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Descricao")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Duracao")
                         .HasColumnType("int");
+
+                    b.Property<string>("Fotourl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
@@ -392,6 +398,9 @@ namespace SchoolApp.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -401,6 +410,9 @@ namespace SchoolApp.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("passwordchanged")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -502,7 +514,7 @@ namespace SchoolApp.Migrations
                     b.Navigation("disciplina");
                 });
 
-            modelBuilder.Entity("SchoolApp.Data.Entities.Nota2", b =>
+            modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
                 {
                     b.HasOne("SchoolApp.Data.Entities.Aluno", "aluno")
                         .WithMany()

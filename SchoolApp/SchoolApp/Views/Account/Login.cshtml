@@ -1,6 +1,7 @@
 ﻿@model SchoolApp.Models.LoginViewModel
 @{
     ViewData["Title"] = "Login";
+    
 }
 
 <h2>Login</h2>
@@ -28,7 +29,8 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-success" />
-               
+                <button asp-action="RecoverPassword" class="btn btn-success" style="background-color: coral; border-color: coral;"> Recuperar Password</button>
+               <h2 style="color:red">@ViewBag.errorMessage</h2>
             </div>
            </form>    
           </div>

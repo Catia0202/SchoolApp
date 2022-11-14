@@ -19,13 +19,17 @@ namespace SchoolApp.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IImageHelper _imagehelper;
+        private readonly UserManager<User> _userManager;
         private readonly IUserHelper _userHelper;
         private readonly IConfiguration _configuration;
         private readonly IMailHelper _mailHelper;
         private readonly DataContext _context;
 
-        public AccountController(IUserHelper userHelper, IConfiguration configuration, IMailHelper mailHelper, DataContext context )
+        public AccountController(IImageHelper imageHelper,UserManager<User> userManager,IUserHelper userHelper, IConfiguration configuration, IMailHelper mailHelper, DataContext context )
         {
+            _imagehelper = imageHelper;
+            _userManager = userManager;
             _userHelper = userHelper;
             _configuration = configuration;
            _mailHelper = mailHelper;
@@ -47,12 +51,27 @@ namespace SchoolApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+
+                if (user != null)
+                {
+                    if (!user.passwordchanged)
+                    {
+                        ViewBag.errorMessage = "Foi enviado um email para mudar a sua palavra-passe, faça isso e tente novamente";
+                        return View();
+                    }
+                }
                 var result = await _userHelper.LoginAsync(model);
+           
                 if (result.Succeeded)
                 {
                     if (this.Request.Query.Keys.Contains("ReturnUrl"))
                     {
                         return Redirect(this.Request.Query["ReturnUrl"].First());
+                    }
+                   if (await _userHelper.IsUserInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("HomeAdmin", "Home");
                     }
                     return this.RedirectToAction("Index", "Home");
                 }
@@ -82,7 +101,11 @@ namespace SchoolApp.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
-                
+                var path = string.Empty;
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+                {
+                    path = await _imagehelper.UploadImageAsync(model.ProfilePictureFile, "alunos");
+                }
                 if (user == null)
                 {
                     user = new User
@@ -91,7 +114,9 @@ namespace SchoolApp.Controllers
                         LastName = model.LastName,
                         UserName = model.Username,
                         Email = model.Username,
-                        Password = model.Password
+                        Password = model.Password,
+                        ProfilePicture = path
+                        
 
                     };
 
@@ -99,35 +124,18 @@ namespace SchoolApp.Controllers
                     await _userHelper.AddUserToRoleAsync(user, model.Role);
 
 
-                    if (result != IdentityResult.Success)
-                    {
-                        ModelState.AddModelError(string.Empty, "Não foi possível criar o utilizador");
-                        return View(model);
-                    }
-
-                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    string tokenLink = Url.Action("ConfirmEmail", "Account", new
+                    string tokenLink = Url.Action("ChangeInitPassword", "Account", new
                     {
                         userid = user.Id,
-                        token = myToken
+                       
                     },protocol: HttpContext.Request.Scheme);
 
-                  Response response=  _mailHelper.SendEmail(model.Username, "Email confirmation",
-                        $"<h1> Email Confirmation </h1" +
+                  Response response=  _mailHelper.SendEmail(model.Username, "Passoword Change",
+                        $"<h1>Password Confirmation </h1" +
                         $"To allow user," +
                         $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email </a>");
 
 
-
-
-
-                    if (response.IsSuccess)
-                    {
-                        ViewBag.Message = "The instructions to allow your user has been sent to email";
-                    }
-
-
-                    ModelState.AddModelError(string.Empty, "Não foi possível logar");
 
                 }
 
@@ -146,10 +154,13 @@ namespace SchoolApp.Controllers
         {
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
             var model = new ChangeUserViewModel();
+           
             if (user != null)
             {
                 model.FirstName = user.FirstName;
                 model.LastName = user.LastName;
+                model.profilepicturepath = user.ProfilePicture;
+                
             }
             return View(model);
         }
@@ -160,10 +171,17 @@ namespace SchoolApp.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                var path = string.Empty;
+                if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+                {
+                    path = await _imagehelper.UploadImageAsync(model.ProfilePictureFile, "users");
+                }
                 if (user != null)
                 {
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
+                    user.ProfilePicture = path;
+                    model.profilepicturepath = path;
                     var response = await _userHelper.UpdateUserAsync(user);
                     if (response.Succeeded)
                     {
@@ -210,6 +228,93 @@ namespace SchoolApp.Controllers
 
             return this.View(model);
         }
+        public IActionResult ChangeInitPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeInitPassword(ChangeInitPasswordViewModel model,string userid)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByIdAsync(userid);
+                user.Password = model.NewPassword;
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user,model.NewPassword); //changepasswordasync not working????
+                user.passwordchanged = true;
+                
+                if (user != null)
+                {
+                    var result = await _userHelper.UpdateUserAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return this.RedirectToAction("ChangeInitPassword");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "User not found.");
+                }
+            }
+
+
+            return this.View(model);
+        }
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Email não registrado ");
+                    return View(model);
+                }
+
+                var myToken = await  _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var link = Url.Action
+                    (
+                        "ChangeInitPassword",
+                        "Account", 
+                        new {userid= user.Id ,token = myToken },
+                        protocol: HttpContext.Request.Scheme
+                    );
+
+                Response response = _mailHelper.SendEmail
+                    (
+                        model.Email,
+                        "Password Reset",
+                      
+                        $"Para resetar a sua palabra passe clique  <a href = \"{link}\">aqui</a" 
+                    );
+
+                if (response.IsSuccess)
+                {
+                    ViewBag.Message = "<span class=\"text-success\">Foi lhe enviado um email. Aceda ao email e siga as instruções</span>";
+                }
+
+                return View();
+            }
+
+            return View(model);
+        }
+
+
+
         [HttpPost]
         public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
         {
@@ -253,6 +358,7 @@ namespace SchoolApp.Controllers
             return BadRequest();
         }
 
+
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -266,7 +372,7 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
 
-
+          
             var result = await _userHelper.ConfirmEmailAsync(user, token);
 
             if (!result.Succeeded)

@@ -51,7 +51,7 @@ namespace SchoolApp.Helpers
             };
         }
 
-        public AlunoViewModel ToAlunoViewModel(Aluno aluno)
+        public AlunoViewModel ToAlunoViewModel(Aluno aluno, User user)
         {
             return new AlunoViewModel
             {
@@ -63,7 +63,7 @@ namespace SchoolApp.Helpers
                 Genero = aluno.Genero,
                 Morada = aluno.Morada,
                 Telemovel = aluno.Telemovel,
-                User = aluno.User,
+                User =user,
                 turmaid = aluno.turmaid,
                 turma = aluno.turma,
                 Turmas = _turmasRepository.GetComboTurmas()

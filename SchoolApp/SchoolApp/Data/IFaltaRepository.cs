@@ -12,7 +12,7 @@ namespace SchoolApp.Data
         Task<IList<FaltaAlunoViewModel>> GetFaltasAlunoAsync();
         IEnumerable<SelectListItem> GetComboTurmasporAlunoAsync(int alunoid);
 
-        Task<IEnumerable<FaltaViewModel>> GetFaltasAlunoDaTurma(int alunoid);
+        Task<IEnumerable<FaltaViewModel>> GetFaltasAlunoDaTurma(int alunoid,int disciplinaid);
 
         Task<IQueryable<FaltaAluno>> GetFaltasTurmaAluno(int turmaid, int disciplinaid);
     }

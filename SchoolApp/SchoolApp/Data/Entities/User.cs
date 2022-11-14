@@ -22,6 +22,11 @@ namespace SchoolApp.Data.Entities
         [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
         public override string Email { get; set; } //???
 
+        
+        public string ProfilePicture { get; set; }
+
+        public bool passwordchanged { get; set; }
+
     }
 }
 

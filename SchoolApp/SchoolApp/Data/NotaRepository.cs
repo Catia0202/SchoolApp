@@ -14,12 +14,14 @@ namespace SchoolApp.Data
         private readonly DataContext _context;
         private readonly IDisciplinasRepository _disciplinasRepository;
         private readonly ITurmasRepository _turmasRepository;
+        private readonly ITurmaDisciplinarRepository _turmaDisciplinarRepository;
 
-        public NotaRepository(DataContext context,IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository) : base(context)
+        public NotaRepository(DataContext context,IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinarRepository) : base(context)
         {
             _context = context;
             _disciplinasRepository = disciplinasRepository;
             _turmasRepository = turmasRepository;
+            _turmaDisciplinarRepository = turmaDisciplinarRepository;
         }
 
         public  IEnumerable<SelectListItem> GetComboTurmasporAlunoAsync(int alunoid)
@@ -71,21 +73,27 @@ namespace SchoolApp.Data
         public async Task<IEnumerable<NotaViewModel>> GetNotasAlunoDaTurma(int alunoid ,int turmaid)
         {
             var alunos = Enumerable.Empty<NotaViewModel>();
-            var disciplinas = _disciplinasRepository.GetAll().ToList();
+    
+            var disciplina = _turmaDisciplinarRepository.GetAll().Where(p => p.TurmaId == turmaid).ToList();
 
-     
+       
+
             await Task.Run(() =>
             {
+
+
                 alunos = _context.Nota.Include(p => p.disciplina).Where(p => p.idaluno == alunoid && p.idturma == turmaid).Select(p => new NotaViewModel
                 {
                     DisciplinaId = p.iddisciplina,
-                    NomeDisciplina = p.disciplina.Nome,
-                    Data = p.Data,
-                    Nota = p.NotaAluno,
-                   
+
+                    NomeDisciplina = _disciplinasRepository.GetAll().Where(x => x.Id == p.iddisciplina).Select(x => x.Nome).FirstOrDefault().ToString(),
+                    Data = (System.DateTime)p.Data,
+                    Nota = p.NotaAluno
 
 
-                });
+
+                }).ToList();
+
             });
             return alunos;
         }

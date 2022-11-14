@@ -14,11 +14,13 @@ namespace SchoolApp.Data
     {
         private readonly DataContext _context;
         private readonly IDisciplinasRepository _disciplinasRepository;
+        private readonly IConfiguracaoRepository _configuracaoRepository;
 
-        public FaltaRepository(DataContext context, IDisciplinasRepository disciplinasRepository):base(context)
+        public FaltaRepository(DataContext context, IDisciplinasRepository disciplinasRepository, IConfiguracaoRepository configuracaoRepository):base(context)
         {
             _context = context;
             _disciplinasRepository = disciplinasRepository;
+            _configuracaoRepository = configuracaoRepository;
         }
 
         public async Task<IList<FaltaAlunoViewModel>> GetFaltasAlunoAsync()
@@ -52,21 +54,62 @@ namespace SchoolApp.Data
 
         }
 
-        public async Task<IEnumerable<FaltaViewModel>> GetFaltasAlunoDaTurma(int alunoid)
+        public async Task<IEnumerable<FaltaViewModel>> GetFaltasAlunoDaTurma(int alunoid,int disciplinaid)
         {
             var alunos = Enumerable.Empty<FaltaViewModel>();
             var disciplinas = _disciplinasRepository.GetAll().ToList();
-
+            var configuracao = await _configuracaoRepository.GetAll().FirstOrDefaultAsync();
 
             await Task.Run(() =>
             {
-                alunos = _context.falta.Include(p => p.disciplina).Where(p => p.alunoid == alunoid).Select(p => new FaltaViewModel
-                {
-                    DisciplinaId = p.disciplinaid,
-                    NomeDisciplina = p.disciplina.Nome,
-                    Data = p.Data,
-                    Duracao = p.duracao
-                });
+                alunos = (from alunos in _context.Aluno
+                          where alunos.Id == alunoid
+                          orderby alunos.Nome
+                          select new
+                          {
+                              alunoid = alunos.Id,
+                              nome = alunos.Nome,
+                              foto = alunos.ImageUrl,
+                              horasdisciplinas = (
+                                  from disciplina in _context.Disciplina
+                                  where disciplina.Id == disciplinaid
+                                  select disciplina.Duracao 
+                             ).FirstOrDefault(),
+                              horasfalta = (
+                              from Falta in _context.falta
+                              where
+                                    Falta.alunoid == alunos.Id && Falta.disciplinaid == disciplinaid
+                              select Falta.duracao).Sum(),
+                              nomedisciplina =(
+                              from disciplina in _context.Disciplina
+                              where disciplina.Id == disciplinaid
+                              select disciplina.Nome
+                              )
+                          }).Select(p => new FaltaViewModel
+                          {
+                              
+                              alunoid = p.alunoid,
+                              nome = p.nome,
+                              foto = p.foto,
+                              horasfalta = p.horasfalta,
+                              percentagem = Percentagem(p.horasfalta, p.horasdisciplinas),
+                              excluido = Percentagem(p.horasfalta, p.horasdisciplinas) >= configuracao.PercentagemdeFaltas /100 ? true : false
+
+                          });
+
+
+                //alunos = _context.falta.Include(p => p.disciplina).Where(p => p.alunoid == alunoid).Select(p => new FaltaViewModel
+                //{
+                //    DisciplinaId = p.disciplinaid,
+                //    NomeDisciplina = p.disciplina.Nome,
+                //    Data = p.Data,
+                //    Duracao = p.duracao
+
+                //}).Select(p => new FaltaViewModel
+                //{
+                //    percentagem = Percentagem(p.horasfalta,p.horasdisciplina),
+                //    excluido = Percentagem(p.horasfalta, p.horasdisciplina) >= 10 ? true:false
+                //});
             });
             return alunos;
         }

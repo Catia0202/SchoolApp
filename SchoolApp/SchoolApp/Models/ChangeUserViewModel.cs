@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolApp.Models
 {
@@ -11,6 +12,11 @@ namespace SchoolApp.Models
 
         [Required]
         [Display(Name ="Last Name")]
-        public string LastName { get; set; }    
+        public string LastName { get; set; }
+
+        [Display(Name = "Profile Picture")]
+        public IFormFile ProfilePictureFile { get; set; }
+
+        public string profilepicturepath { get; set; }
     }
 }

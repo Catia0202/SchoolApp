@@ -20,15 +20,17 @@ namespace SchoolApp.Controllers
         private readonly INotaRepository _notaRepository;
         private readonly IAlunosRepository _alunosRepository;
         private readonly ITurmasRepository _turmasRepository;
+        private readonly ITurmaDisciplinarRepository _turmaDisciplinarRepository;
         private readonly IUserHelper _userHelper;
         private readonly IDisciplinasRepository _disciplinasRepository;
 
-        public NotasController(INotaRepository notaRepository, IAlunosRepository alunosRepository, IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, IUserHelper userHelper)
+        public NotasController(INotaRepository notaRepository, IAlunosRepository alunosRepository, IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinarRepository, IUserHelper userHelper)
         {
 
             _notaRepository = notaRepository;
             _alunosRepository = alunosRepository;
             _turmasRepository = turmasRepository;
+            _turmaDisciplinarRepository = turmaDisciplinarRepository;
             _userHelper = userHelper;
             _disciplinasRepository = disciplinasRepository;
         }
@@ -77,6 +79,7 @@ namespace SchoolApp.Controllers
         [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> IndexNotasAluno(int AlunoId, int turmaid)
         {
+      
             if (AlunoId == 0)
             {
                 return RedirectToAction("Index", "Notas");
@@ -84,17 +87,19 @@ namespace SchoolApp.Controllers
 
             var aluno = await _alunosRepository.GetByIdAsync(AlunoId);
             var turma = await _turmasRepository.GetByIdAsync(turmaid);
-           
+  
 
-            
-            var model = new TodasNotasDoAlunoViewModel
+            var model = new TodasNotasDoAlunoViewModel()
             {
                 Nome = aluno.Nome,
                 foto = aluno.ImageUrl,
-               Turma= turma.Nome,
+                Turma = turma.Nome,
+                
                 Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, turma.Id)
+                
+                
             };
-
+            
 
 
             return View(model);
@@ -193,7 +198,7 @@ namespace SchoolApp.Controllers
                             {
                                 await _notaRepository.CreateAsync(new Nota
                                 {
-                                    idaluno =alunos.Id,
+                                    idaluno =aluno.alunoid,
                                     idturma =model.TurmaId,
                                     iddisciplina = model.disciplinaId,
                                     Data = model.Data,
@@ -226,7 +231,11 @@ namespace SchoolApp.Controllers
                 {
                     disciplinaid = model.disciplinaId,
                     nometurma = model.turmaNome,
-                    turmaid = model.TurmaId
+                    turmaid = model.TurmaId,
+                    Alunos = model.Alunos
+                 
+                   
+                    
                 };
 
 
@@ -235,9 +244,30 @@ namespace SchoolApp.Controllers
             }
             return View(model);
         }
+        [Authorize(Roles = "Aluno")]
+        public async Task<IActionResult> ViewNotaAlunoLogado()
+        {
+            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
+            var aluno = _alunosRepository.GetAll().Where(p => p.User.Id == user.Id).FirstOrDefault();
 
+            var turma = _turmasRepository.GetByIdAsync(aluno.turmaid);
 
+            if(aluno != null)
+            {
+                var model = new TodasNotasDoAlunoViewModel
+                {
+                    Nome = aluno.Nome,
+                    foto = aluno.ImageUrl,
+                    Turma = turma.Result.Nome,
+                    Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, turma.Result.Id)
+                };
+                return View(model);
+            }
+            return View();
+
+            
+        }
 
     }
 }
