@@ -12,38 +12,38 @@ using SchoolApp.Models;
 
 namespace SchoolApp.Controllers
 {
-    public class TurmaDisciplinasController : Controller
+    public class CursoDisciplinasController : Controller
     {
         private readonly DataContext _context;
         private readonly IDisciplinasRepository _disciplinasRepository;
         private readonly ITurmasRepository _turmasRepository;
-        private readonly ITurmaDisciplinarRepository _turmaDisciplinarepository;
+        private readonly ICursoDisciplinarRepository _cursoDisciplinarepository;
         private readonly IConfiguracaoRepository _configuracaoRepository;
 
-        public TurmaDisciplinasController(DataContext context, IDisciplinasRepository disciplinasRepository,ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinaRepository, IConfiguracaoRepository configuracaoRepository)
+        public CursoDisciplinasController(DataContext context, IDisciplinasRepository disciplinasRepository,ITurmasRepository turmasRepository, ICursoDisciplinarRepository cursoDisciplinaRepository, IConfiguracaoRepository configuracaoRepository)
         {
             _context = context;
             _disciplinasRepository = disciplinasRepository;
             _turmasRepository = turmasRepository;
-            _turmaDisciplinarepository = turmaDisciplinaRepository;
+            _cursoDisciplinarepository = cursoDisciplinaRepository;
             _configuracaoRepository = configuracaoRepository;
         }
 
-        // GET: TurmaDisciplinas
+        
         public IActionResult Index(int id)
         {
            
-          var dataContext = _context.turmaDisciplina.Include(t => t.Disciplina).Include(t => t.turma).Where(t => t.TurmaId == id);
+          var cursoDisciplinas = _context.CursoDisciplinas.Include(t => t.Disciplina).Include(t => t.Curso).Where(t => t.CursoId == id);
             if(id != 0)
             {
                 ViewBag.data = id;
             }
    
             
-            return View(dataContext);
+            return View(cursoDisciplinas);
         }
 
-        // GET: TurmaDisciplinas/Details/5
+     
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,22 +51,22 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
 
-            var turmaDisciplina = await _context.turmaDisciplina
+            var cursoDisciplina = await _context.CursoDisciplinas
                 .Include(t => t.Disciplina)
-                .Include(t => t.turma)
+                .Include(t => t.Curso)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (turmaDisciplina == null)
+            if (cursoDisciplina == null)
             {
                 return NotFound();
             }
 
-            return View(turmaDisciplina);
+            return View(cursoDisciplina);
         }
 
-        // GET: TurmaDisciplinas/Create
+      
         public IActionResult Create()
         {
-           TurmaDisciplinaViewModel  disciplinas = new TurmaDisciplinaViewModel();
+           CursoDisciplinaViewModel  disciplinas = new CursoDisciplinaViewModel();
             disciplinas.listdisciplinas = _disciplinasRepository.GetListDisciplinas();
             ViewBag.DataSource = disciplinas;
             return View(disciplinas);
@@ -74,55 +74,47 @@ namespace SchoolApp.Controllers
          
         }
 
-        // POST: TurmaDisciplinas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TurmaDisciplinaViewModel model, int id)
+        public async Task<IActionResult> Create(CursoDisciplinaViewModel model, int id)
         {
-
-            var turma = await _turmasRepository.GetByIdAsync(id);
             model.listdisciplinas = _disciplinasRepository.GetListDisciplinas();
+         
             var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
-            int horastotais = 0;
-            int disciplinasjanaturma = _turmaDisciplinarepository.GetAll().Where(p => p.TurmaId == id).Count(); 
+          
             List<SelectListItem> selectListItems = model.listdisciplinas.Where(p => model.disciplinaids.Contains(int.Parse(p.Value))).ToList();
-            var disciplinasselecionadas = selectListItems.Count();
+            
             foreach(var item in selectListItems)
             {
                 var disciplinaselecionada = _disciplinasRepository.GetByIdAsync(int.Parse(item.Value));
-                horastotais = horastotais + disciplinaselecionada.Result.Duracao;
+                
             }
             
             foreach (var selectListItem in selectListItems)
             {
+                var disciplinasselecionadas = selectListItems.Count();
+                int disciplinasjanaturma = _cursoDisciplinarepository.GetAll().Where(p => p.CursoId == id).Count();
                 selectListItem.Selected = true;
                 ViewBag.message += "\\n" + selectListItem.Text;
                 
             
-                    var turmadisciplina = await _turmaDisciplinarepository.GetTurmaDisciplinaAsync(id, int.Parse(selectListItem.Value));
+                    var turmadisciplina = await _cursoDisciplinarepository.GetTurmaDisciplinaAsync(id, int.Parse(selectListItem.Value));
                   
 
                 
-                if(adminconfig.Result.MaximoDisciplinasPorTurma > disciplinasselecionadas && adminconfig.Result.MaximoDisciplinasPorTurma > disciplinasjanaturma)
+                if(adminconfig.Result.MaximoDisciplinasPorTurma > disciplinasselecionadas  && adminconfig.Result.MaximoDisciplinasPorTurma > disciplinasjanaturma)
                 {
-                    if (horastotais <= turma.Duracao)
-                    {
-                        if (turmadisciplina == null && selectListItem.Selected == true)
+                    if (turmadisciplina == null && selectListItem.Selected == true)
                         {
-                            await _turmaDisciplinarepository.CreateAsync(new TurmaDisciplina
+                            await _cursoDisciplinarepository.CreateAsync(new CursoDisciplina
                             {
                                 DisciplinaId = int.Parse(selectListItem.Value),
-                                TurmaId = id
+                                CursoId = id
                             });
                         }
 
-                    }
-                    else
-                    {
-                        ViewBag.errormessage = "Não foi possível adicionar essas disciplinas ao Curso devido à soma das horas das Disciplinas ser maior que a Duração do Curso";
-                    }
+                    
+                 
                 }
                 else
                 {
@@ -131,6 +123,8 @@ namespace SchoolApp.Controllers
                
 
             };
+
+           
             return View(model);
         }
     
@@ -198,9 +192,9 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
 
-            var turmaDisciplina = await _context.turmaDisciplina
+            var turmaDisciplina = await _context.CursoDisciplinas
                 .Include(t => t.Disciplina)
-                .Include(t => t.turma)
+                .Include(t => t.Curso)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (turmaDisciplina == null)
             {
@@ -215,15 +209,12 @@ namespace SchoolApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var turmaDisciplina = await _context.turmaDisciplina.FindAsync(id);
-            _context.turmaDisciplina.Remove(turmaDisciplina);
+            var turmaDisciplina = await _context.CursoDisciplinas.FindAsync(id);
+            _context.CursoDisciplinas.Remove(turmaDisciplina);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TurmaDisciplinaExists(int id)
-        {
-            return _context.turmaDisciplina.Any(e => e.Id == id);
-        }
+        
     }
 }

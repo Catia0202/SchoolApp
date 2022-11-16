@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SchoolApp.Data.Entities.TurmaDisciplina>
+﻿@model IEnumerable<SchoolApp.Data.Entities.CursoDisciplina>
 
 @{
     ViewData["Title"] = "Index";
@@ -48,7 +48,7 @@
             </td>
             <td>
              <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-              <a asp-controller="Alunos" asp-action="IndexAlunosDaTurma" asp-route-id="@item.TurmaId" asp-route-id2="@item.DisciplinaId" class="btn btn-secondary btn-sm">Alunos</a> 
+              <a asp-controller="Alunos" asp-action="IndexAlunosDaTurma" asp-route-id="@item.CursoId" asp-route-id2="@item.DisciplinaId" class="btn btn-secondary btn-sm">Alunos</a> 
         
          </td>
         </tr>

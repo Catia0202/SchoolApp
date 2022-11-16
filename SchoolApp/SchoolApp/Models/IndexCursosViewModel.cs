@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace SchoolApp.Models
 {
-    public class IndexTurmasViewModel
+    public class IndexCursosViewModel
     {
-        public IEnumerable<Turma> Turmas { get; set; }
+        public IEnumerable<Curso> Cursos { get; set; }
     }
 }

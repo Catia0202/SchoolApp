@@ -16,9 +16,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
-            <th></th>
+            
               <th>
-                @Html.DisplayNameFor(model => model.Duracao)
+                @Html.DisplayNameFor(model => model.Curso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFim)
             </th>
         </tr>
              
@@ -33,13 +39,19 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Duracao)
+                @Html.DisplayFor(modelItem => item.Curso.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFim)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                <a asp-controller="TurmaDisciplinas" asp-action="Index" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Disciplines</a> 
+                <a asp-controller="CursoDisciplinas" asp-action="Index" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Disciplines</a> 
             </td>
         </tr>
 }

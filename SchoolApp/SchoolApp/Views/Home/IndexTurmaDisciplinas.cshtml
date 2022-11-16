@@ -1,4 +1,4 @@
-﻿@model SchoolApp.Models.IndexTurmasDisciplinasViewModel
+﻿@*@model SchoolApp.Models.IndexTurmasDisciplinasViewModel
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,7 +80,7 @@
 
                           
                         <a class="courses-list-item position-relative d-block overflow-hidden mb-2" asp-action="IndexTurmaDisciplinas" asp-route-idturma="@item.Id">
-                            <img class="img-fluid" src="@Url.Content(item.Fotourl)" alt="">
+                            <img class="img-flu id" src="@Url.Content(item.Fotourl)" alt="">
                             <div class="courses-text">
                                 <h4 class="text-center text-white px-3">@Html.DisplayFor(modelItem => item.Nome)</h4>
                               
@@ -103,4 +103,4 @@
     <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="~/lib/owlcarousel/owl.carousel.js"></script>
 
-                 <script src="~/js/main.js"></script>
+                 <script src="~/js/main.js"></script>*@

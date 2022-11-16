@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SchoolApp.Data;
 using SchoolApp.Data.Entities;
 using SchoolApp.Helpers;
 using System;
@@ -12,11 +13,13 @@ namespace MyLeasing.Web.Data
     {
         private readonly DataContext _context;
         private readonly IUserHelper _userHelper;
+        private readonly IConfiguracaoRepository _configuracaoRepository;
         private Random _random;
-        public SeedDb(DataContext context, IUserHelper userHelper)
+        public SeedDb(DataContext context, IUserHelper userHelper, IConfiguracaoRepository configuracaoRepository)
         {
             _context = context;
             _userHelper = userHelper;
+            _configuracaoRepository = configuracaoRepository;
             _random = new Random();
         }
 
@@ -56,6 +59,18 @@ namespace MyLeasing.Web.Data
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
+            await AddAdminDefaultConfig();
+        }
+
+        public async Task AddAdminDefaultConfig()
+        {
+            Configuracao configuracao = new Configuracao
+            {
+                MaximoAlunosNaTurma = 2,
+                MaximoDisciplinasPorTurma = 2,
+                PercentagemdeFaltas = 10
+            };
+            await _configuracaoRepository.CreateAsync(configuracao);
         }
 
     }

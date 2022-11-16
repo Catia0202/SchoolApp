@@ -2,14 +2,14 @@
 
 namespace SchoolApp.Data.Entities
 {
-    public class TurmaDisciplina : IEntity 
+    public class CursoDisciplina : IEntity 
     {
         public int Id { get; set; }
 
         [Display(Name = "Curso")]
         [Required(ErrorMessage = "{0} is required")]
-        public int TurmaId { get; set; }
-        public Turma turma { get; set; }
+        public int CursoId { get; set; }
+        public Curso Curso { get; set; }
 
         [Display(Name = "Disciplina")]
         [Required(ErrorMessage = "{0} is required")]

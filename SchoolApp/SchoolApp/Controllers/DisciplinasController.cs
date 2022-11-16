@@ -134,7 +134,24 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var disciplina = await _disciplinasRepository.GetByIdAsync(id);
-            await _disciplinasRepository.DeleteAsync(disciplina);
+
+            try
+            {
+                await _disciplinasRepository.DeleteAsync(disciplina);
+                ViewBag.errormessage = "Disciplina deletada com sucesso!";
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+
+                    ViewBag.errormessage = "Esta disciplina não pode ser deletada pois está a ser utilizada";
+                }
+
+                return View();
+            }
+
+          
 
             return RedirectToAction(nameof(Index));
         }

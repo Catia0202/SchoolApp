@@ -20,36 +20,39 @@ namespace SchoolApp.Controllers
         private readonly DataContext _context;
         private readonly IConfiguracaoRepository _configuracaoRepository;
         private readonly ITurmasRepository _turmasRepository;
-        private readonly ITurmaDisciplinarRepository _turmaDisciplinarRepository;
+        private readonly ICursoDisciplinarRepository _turmaDisciplinarRepository;
         private readonly IDisciplinasRepository _disciplinasRepository;
+        private readonly IAlunosRepository _alunosRepository;
+        private readonly ICursoRepository _cursoRepository;
 
-        public HomeController(ILogger<HomeController> logger, DataContext context,IConfiguracaoRepository configuracaoRepository,ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinarRepository, IDisciplinasRepository disciplinasRepository)
-        {
+        public HomeController(ILogger<HomeController> logger, DataContext context, IConfiguracaoRepository configuracaoRepository,ITurmasRepository turmasRepository, ICursoDisciplinarRepository turmaDisciplinarRepository, IDisciplinasRepository disciplinasRepository, IAlunosRepository alunosRepository, ICursoRepository cursoRepository)        {
             _logger = logger;
             _context = context;
             _configuracaoRepository = configuracaoRepository;
             _turmasRepository = turmasRepository;
             _turmaDisciplinarRepository = turmaDisciplinarRepository;
             _disciplinasRepository = disciplinasRepository;
+            _alunosRepository = alunosRepository;
+            _cursoRepository = cursoRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
-            var model = new IndexTurmasViewModel
+            var model = new IndexCursosViewModel
             {
-                Turmas = await _turmasRepository.GetIndexTurmasAsync()
+               Cursos  =  _cursoRepository.GetAll()
             };
             return View(model);
         }
 
-        public async Task<IActionResult> IndexTurmaDisciplinas(int idturma)
+        public async Task<IActionResult> IndexTurmaDisciplinas(int idcurso)
         {
-            var turma = _context.turma.Where(turma => turma.Id == idturma).FirstOrDefault();
+            var curso = _context.Cursos.Where(p=> p.Id== idcurso).FirstOrDefault();
             var model = new IndexTurmasDisciplinasViewModel
             {
-                DisciplinasDaTurma = await _disciplinasRepository.GetIndexTurmasDisciplinasAsync(idturma),
-                Turma = turma,
-                Turmas = await _turmasRepository.GetIndexTurmasAsync()
+                DisciplinasDaTurma = await _disciplinasRepository.GetIndexTurmasDisciplinasAsync(idcurso),
+                Curso= curso,
+                Cursos = await _cursoRepository.GetIndexCursoAsync()
             };
 
 
@@ -70,9 +73,15 @@ namespace SchoolApp.Controllers
 
 
         [Authorize(Roles="Admin")]
-        public IActionResult HomeAdmin()
+        public IActionResult HomeAdmin(HomeAdminViewModel model)
         {
-
+            new HomeAdminViewModel
+            {
+                TotalAlunos = _alunosRepository.GetAll().Count(),
+                TotalDisciplinas = _disciplinasRepository.GetAll().Count(),
+                TotalTurmas=_turmasRepository.GetAll().Count(),
+                
+            };
             return View();
         }
         [Authorize(Roles = "Admin")]

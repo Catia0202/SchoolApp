@@ -6,16 +6,19 @@
 <br />
 <div class="row">
       <form asp-action="CreateDisciplinaNota">
-            <input type="hidden" asp-for="turmaid" />
-            <input type="hidden" asp-for="nometurma" />
-            <input asp-for="nometurma" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+            <input type="hidden" asp-for="Turmaid" />
+            <input type="hidden" asp-for="Nometurma" /><input type="hidden" asp-for="CursoId" />
+            <input type="hidden" asp-for="CursonNome" />
+  
+            <input asp-for="Nometurma" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+              <input asp-for="CursonNome" class="form-control" style="height: 3rem;" disabled="disabled" />
             <br>
 
 
       <div class="form-group text-center">
-                <label asp-for="disciplinaid" class="control-label" ></label>
-                <select asp-for="disciplinaid" asp-items="Model.Disciplinas" class="form-control"></select>
-                <span asp-validation-for="disciplinaid" class="text-danger"></span>
+                <label asp-for="Disciplinaid" class="control-label" ></label>
+                <select asp-for="Disciplinaid" asp-items="Model.Disciplinas" class="form-control"></select>
+                <span asp-validation-for="Disciplinaid" class="text-danger"></span>
               </div>
                  <div class="form-group">
                 <input type="submit" value="Continuar" class="btn btn-primary" />
@@ -27,5 +30,5 @@
        
     </div>
       <div class="form-group text-center">
-   <a asp-controller="Faltas" asp-action=" CreateTurmaFaltas" asp-route-idturma="@Model.turmaid"class="btn btn-secondary">Voltar</a>
+   <a asp-controller="Faltas" asp-action=" CreateTurmaFaltas" asp-route-idturma="@Model.CursoId"class="btn btn-secondary">Voltar</a>
    </div>

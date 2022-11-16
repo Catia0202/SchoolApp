@@ -26,7 +26,7 @@
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Turmas)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Cursos)
             </th>
      
             <th></th>
@@ -42,15 +42,15 @@
             </td>
             <td>
            
-                @Html.DisplayFor(modelItem => item.Turmas.FirstOrDefault().Text)
+                @Html.DisplayFor(modelItem => item.Cursos.FirstOrDefault().Text)
 
             </td>
            
             
             <td>
-                  <input type="hidden" asp-for="@item.alunoId" asp-for="@item.TurmaId"/>
+                  <input type="hidden" asp-for="@item.alunoId" asp-for="@item.CursoId"/>
 
-                  <input type="submit" asp-controller="Notas" asp-action="Index" asp-route-AlunoId="@item.alunoId" asp-route-turmaid="@item.TurmaId" value="View" class="btn btn-secondary btn-sm" />
+                  <input type="submit" asp-controller="Notas" asp-action="Index" asp-route-AlunoId="@item.alunoId" asp-route-turmaid="@item.CursoId" value="View" class="btn btn-secondary btn-sm" />
              
                
             </td>

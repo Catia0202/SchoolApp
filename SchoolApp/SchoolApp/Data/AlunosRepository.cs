@@ -24,12 +24,12 @@ namespace SchoolApp.Data
 
         public IQueryable GetAllWithUsers()
         {
-            return _context.Aluno.Include(p => p.User);
+            return _context.Alunos.Include(p => p.User);
         }
 
         public async Task<AlunoViewModel> GetAlunoByIdWithTurmaAsync(int id)
         {
-            var aluno = await _context.Aluno.Include(x => x.turma).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var aluno = await _context.Alunos.Include(x => x.turma).Where(x => x.Id == id).FirstOrDefaultAsync();
             if (aluno == null)
             {
                 return null;
@@ -59,19 +59,20 @@ namespace SchoolApp.Data
             {
                 avaliacao = (
                 from user in _context.Users
-                join aluno in _context.Aluno
+                join aluno in _context.Alunos
                 on user.Id equals aluno.User.Id
-                join nota in _context.Nota
+                join nota in _context.Notas
                 on aluno.Id equals nota.idaluno
-               
-                join turma in _context.turma
+                
+                join turma in _context.Turmas
                 on aluno.turmaid equals turma.Id
-             
-                join turmadisciplina in _context.turmaDisciplina
-                on turma.Id equals turmadisciplina.TurmaId
-                join disciplina in _context.Disciplina
-                on turmadisciplina.DisciplinaId equals disciplina.Id
-                join falta in _context.falta
+                join curso in _context.Cursos
+                on turma.CursoId equals curso.Id
+                join cursodisciplina in _context.CursoDisciplinas
+                on curso.Id equals cursodisciplina.CursoId
+                join disciplina in _context.Disciplinas
+                on cursodisciplina.DisciplinaId equals disciplina.Id
+                join falta in _context.Faltas
                 on disciplina.Id equals falta.disciplinaid
                 where aluno.Id == alunoid && turma.Id == turmaid
                 select new
@@ -80,15 +81,15 @@ namespace SchoolApp.Data
                     disciplinNome = disciplina.Nome,
                     disciplinDur = disciplina.Duracao,
                     horasfalta = (
-                    from falta in _context.falta
+                    from falta in _context.Faltas
                     where falta.alunoid == aluno.Id && falta.disciplinaid == disciplina.Id
                     select falta.duracao).Sum(),
                     horasdisciplina = (
-                    from disciplina in _context.Disciplina
+                    from disciplina in _context.Disciplinas
                     where disciplina.Id == disciplina.Id
                     select disciplina.Duracao).FirstOrDefault(),
                     nota = (
-                    from nota in _context.Nota
+                    from nota in _context.Notas
                     where nota.idaluno == aluno.Id  && nota.iddisciplina == disciplina.Id && nota.idturma == turma.Id
                     select new
                     {
@@ -139,7 +140,7 @@ namespace SchoolApp.Data
       
         public List<SelectListItem> GetListAlunos()
         {
-            var list = _context.Aluno.ToList();
+            var list = _context.Alunos.ToList();
             List<SelectListItem> lista = new List<SelectListItem>();
             foreach (var item in list)
             {

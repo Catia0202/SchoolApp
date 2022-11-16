@@ -14,9 +14,9 @@ namespace SchoolApp.Data
         private readonly DataContext _context;
         private readonly IDisciplinasRepository _disciplinasRepository;
         private readonly ITurmasRepository _turmasRepository;
-        private readonly ITurmaDisciplinarRepository _turmaDisciplinarRepository;
+        private readonly ICursoDisciplinarRepository _turmaDisciplinarRepository;
 
-        public NotaRepository(DataContext context,IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinarRepository) : base(context)
+        public NotaRepository(DataContext context,IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, ICursoDisciplinarRepository turmaDisciplinarRepository) : base(context)
         {
             _context = context;
             _disciplinasRepository = disciplinasRepository;
@@ -24,28 +24,36 @@ namespace SchoolApp.Data
             _turmaDisciplinarRepository = turmaDisciplinarRepository;
         }
 
-        public  IEnumerable<SelectListItem> GetComboTurmasporAlunoAsync(int alunoid)
+        public async Task<IEnumerable<SelectListItem>> GetComboTurmasporAlunoAsync(int alunoid)
         {
-            var list = new List<SelectListItem>();
+            var list = Enumerable.Empty<SelectListItem>();
 
-            var turma = _context.Aluno.Include(p => p.turma).Where(p => p.Id == alunoid).FirstOrDefault() ;
-
-       
-            list.Insert(0, new SelectListItem
+            await Task.Run(() =>
             {
-
-
-
-                Text = turma.Nome,
-                Value = turma.turmaid.ToString()
-            }); ;
-            return list;
+                list = (
+                from curso in _context.Cursos
+                join turma in _context.Turmas
+                on curso.Id equals turma.CursoId
+                join aluno in _context.Alunos
+                on turma.Id equals aluno.turmaid
+                where aluno.Id == aluno.Id
+                select new
+                {
+                    CursoId = curso.Id,
+                    Nome = curso.Nome
+                }).Select(x => new SelectListItem
+                {
+                    Value = x.CursoId.ToString(),
+                    Text = x.Nome
+                });
+            });
+             return list;
           
         }
 
         public async Task<Nota> GetNotaByDados(int alunoid, int turmaid, int disciplinaid)
         {
-            return await _context.Nota.Where(p => p.idaluno == alunoid && p.idturma == turmaid && p.iddisciplina == disciplinaid).FirstOrDefaultAsync();
+            return await _context.Notas.Where(p => p.idaluno == alunoid && p.idturma == turmaid && p.iddisciplina == disciplinaid).FirstOrDefaultAsync();
         }
 
         public async Task<IList<NotaAlunoViewModel>> GetNotasAlunoAsync()
@@ -53,8 +61,9 @@ namespace SchoolApp.Data
             var alunos = new List<NotaAlunoViewModel>();
             await Task.Run(() =>
             {
-                alunos =  _context.Aluno.Select(p => new NotaAlunoViewModel
+                alunos =  _context.Alunos.Select(p => new NotaAlunoViewModel
             {
+              
                 alunoId = p.Id,
                 Nome = p.Nome,
                 Foto = p.ImageUrl
@@ -67,14 +76,12 @@ namespace SchoolApp.Data
             return alunos;
         }
 
-         
-
-
-        public async Task<IEnumerable<NotaViewModel>> GetNotasAlunoDaTurma(int alunoid ,int turmaid)
+ 
+        public async Task<IEnumerable<NotaViewModel>> GetNotasAlunoDaTurma(int alunoid ,int cursoid)
         {
             var alunos = Enumerable.Empty<NotaViewModel>();
     
-            var disciplina = _turmaDisciplinarRepository.GetAll().Where(p => p.TurmaId == turmaid).ToList();
+            var disciplina = _turmaDisciplinarRepository.GetAll().Where(p => p.CursoId == cursoid).ToList();
 
        
 
@@ -82,10 +89,9 @@ namespace SchoolApp.Data
             {
 
 
-                alunos = _context.Nota.Include(p => p.disciplina).Where(p => p.idaluno == alunoid && p.idturma == turmaid).Select(p => new NotaViewModel
+                alunos = _context.Notas.Include(p => p.disciplina).Where(p => p.idaluno == alunoid && p.idturma == cursoid).Select(p => new NotaViewModel
                 {
                     DisciplinaId = p.iddisciplina,
-
                     NomeDisciplina = _disciplinasRepository.GetAll().Where(x => x.Id == p.iddisciplina).Select(x => x.Nome).FirstOrDefault().ToString(),
                     Data = (System.DateTime)p.Data,
                     Nota = p.NotaAluno
@@ -105,7 +111,7 @@ namespace SchoolApp.Data
 
             await Task.Run(() =>
             {
-                alunos = (from alunos in _context.Aluno
+                alunos = (from alunos in _context.Alunos
                           where alunos.turmaid == turmaid
                           orderby alunos.Nome
                           select new
@@ -114,7 +120,7 @@ namespace SchoolApp.Data
                               nome = alunos.Nome,
                               foto = alunos.ImageUrl,
                               Nota = (
-                              from notas in _context.Nota
+                              from notas in _context.Notas
                               where
                                     notas.idaluno == alunos.Id && notas.idturma == turmaid && notas.iddisciplina == disciplinaid
                               select new

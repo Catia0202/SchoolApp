@@ -64,7 +64,7 @@ namespace SchoolApp
             });
 
             services.AddTransient<SeedDb>();
-            services.AddScoped<ITurmaDisciplinarRepository, TurmaDisciplinaRepository>();
+            services.AddScoped<ICursoDisciplinarRepository, CursoDisciplinaRepository>();
             services.AddScoped<IAlunosRepository, AlunosRepository>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IConverterHelper, ConvertHelper>();
@@ -74,7 +74,8 @@ namespace SchoolApp
             services.AddScoped<IDisciplinasRepository,DisciplinasRepository>();
             services.AddScoped<INotaRepository, NotaRepository>();
             services.AddScoped<IFaltaRepository, FaltaRepository>();
-           
+            services.AddScoped<ICursoRepository, CursoRepository>();
+            services.AddScoped<IConfiguracaoRepository, ConfiguracaoRepository>();
             
             services.AddControllersWithViews();
 

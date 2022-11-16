@@ -6,6 +6,7 @@ namespace SchoolApp.Models
 {
     public class FaltaDisciplinaViewModel
     {
+
         [Required]
         public int turmaid { get; set; }
 
@@ -14,7 +15,10 @@ namespace SchoolApp.Models
         [Required]
         public int disciplinaid { get; set; }
 
-
+        [Required]
+        public int CursoId { get; set; }
+        [Required]
+        public string CursoNome { get; set; }
 
         public IEnumerable<SelectListItem> Disciplinas { get; set; }
     }

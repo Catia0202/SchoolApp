@@ -28,7 +28,7 @@ namespace SchoolApp.Data
             var alunos = new List<FaltaAlunoViewModel>();
             await Task.Run(() =>
             {
-                alunos = _context.Aluno.Select(p => new FaltaAlunoViewModel
+                alunos = _context.Alunos.Select(p => new FaltaAlunoViewModel
                 {
                     alunoId = p.Id,
                     Nome = p.Nome,
@@ -42,7 +42,7 @@ namespace SchoolApp.Data
         {
             var list = new List<SelectListItem>();
 
-            var turma = _context.Aluno.Include(p => p.turma).Where(p => p.Id == alunoid).FirstOrDefault();
+            var turma = _context.Alunos.Include(p => p.turma).Where(p => p.Id == alunoid).FirstOrDefault();
 
 
             list.Insert(0, new SelectListItem
@@ -62,7 +62,7 @@ namespace SchoolApp.Data
 
             await Task.Run(() =>
             {
-                alunos = (from alunos in _context.Aluno
+                alunos = (from alunos in _context.Alunos
                           where alunos.Id == alunoid
                           orderby alunos.Nome
                           select new
@@ -71,17 +71,17 @@ namespace SchoolApp.Data
                               nome = alunos.Nome,
                               foto = alunos.ImageUrl,
                               horasdisciplinas = (
-                                  from disciplina in _context.Disciplina
+                                  from disciplina in _context.Disciplinas
                                   where disciplina.Id == disciplinaid
                                   select disciplina.Duracao 
                              ).FirstOrDefault(),
                               horasfalta = (
-                              from Falta in _context.falta
+                              from Falta in _context.Faltas
                               where
                                     Falta.alunoid == alunos.Id && Falta.disciplinaid == disciplinaid
                               select Falta.duracao).Sum(),
                               nomedisciplina =(
-                              from disciplina in _context.Disciplina
+                              from disciplina in _context.Disciplinas
                               where disciplina.Id == disciplinaid
                               select disciplina.Nome
                               )
@@ -120,7 +120,7 @@ namespace SchoolApp.Data
 
             await Task.Run(() =>
             {   
-                alunos = (from alunos in _context.Aluno
+                alunos = (from alunos in _context.Alunos
                           where alunos.turmaid == turmaid
                           orderby alunos.Nome
                           select new
@@ -129,12 +129,12 @@ namespace SchoolApp.Data
                               nome = alunos.Nome,
                               foto = alunos.ImageUrl,
                               horasdisciplinas =(
-                                  from disciplina in _context.Disciplina
+                                  from disciplina in _context.Disciplinas
                                   where disciplina.Id == disciplinaid
                                   select disciplina.Duracao
                              ).FirstOrDefault(),
                               horasfalta = (
-                              from Falta in _context.falta
+                              from Falta in _context.Faltas
                               where
                                     Falta.alunoid == alunos.Id &&  Falta.disciplinaid == disciplinaid
                               select Falta.duracao).Sum()

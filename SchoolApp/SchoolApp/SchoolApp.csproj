@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\alunos\" />
+    <Folder Include="wwwroot\images\cursos\" />
     <Folder Include="wwwroot\images\users\" />
     <Folder Include="wwwroot\images\turmas\" />
   </ItemGroup>

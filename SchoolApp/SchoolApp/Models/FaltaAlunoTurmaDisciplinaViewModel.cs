@@ -12,6 +12,10 @@ namespace SchoolApp.Models
         [Required]
         public string nometurma { get; set; }
 
+        [Required]
+        public int CursoId { get; set; }
+        [Required]
+        public string CursoNome { get; set; }
        
         [Required]
         public int disciplinaid { get; set; }

@@ -10,7 +10,8 @@ namespace SchoolApp.Data
     public interface INotaRepository : IGenericRepository<Nota>
     {
         Task<IList<NotaAlunoViewModel>> GetNotasAlunoAsync();
-        IEnumerable<SelectListItem> GetComboTurmasporAlunoAsync(int alunoid);
+    
+        Task<IEnumerable<SelectListItem>> GetComboTurmasporAlunoAsync(int alunoid);
 
         Task<IEnumerable<NotaViewModel>> GetNotasAlunoDaTurma(int alunoid, int turmaid);
 

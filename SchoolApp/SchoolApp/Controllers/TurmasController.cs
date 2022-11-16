@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,41 +19,34 @@ namespace SchoolApp.Controllers
         private readonly ITurmasRepository _turmasRepository;
         private readonly IImageHelper _imagehelper;
         private readonly IUserHelper _userHelper;
+        private readonly ICursoRepository _cursoRepository;
 
-        public TurmasController(ITurmasRepository turmasRepository, IImageHelper imagehelper,IUserHelper userHelper)
+        public TurmasController(ITurmasRepository turmasRepository, IImageHelper imagehelper,IUserHelper userHelper, ICursoRepository cursoRepository)
         {
             _turmasRepository = turmasRepository;
             _imagehelper = imagehelper;
             _userHelper = userHelper;
+            _cursoRepository = cursoRepository;
         }
 
-        // GET: Turmas
+        [Authorize(Roles = "Funcionario")]
         public IActionResult Index()
         {
-            return View(_turmasRepository.GetAll().OrderBy(P => P.Nome));
+            var turmas = _turmasRepository.GetAll().Include(p=>p.Curso);
+            
+            return View(turmas);
         }
 
-        // GET: Turmas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+      
 
-            var turma = await _turmasRepository.GetByIdAsync(id.Value);
-            if (turma == null)
-            {
-                return NotFound();
-            }
-
-            return View(turma);
-        }
-
-        // GET: Turmas/Create
+        [Authorize(Roles = "Funcionario")]
         public IActionResult Create()
         {
-            return View();
+            var model = new TurmaViewModel
+            {
+                Cursos = _cursoRepository.GetComboCursos()
+            };
+            return View(model);
         }
 
         // POST: Turmas/Create
@@ -62,34 +56,48 @@ namespace SchoolApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TurmaViewModel model)
         {
-            var path = string.Empty;
-
-           
-            if (model.ImageFile != null && model.ImageFile.Length > 0)
-            {
-                path = await _imagehelper.UploadImageAsync(model.ImageFile, "turmas");
-            }
             if (ModelState.IsValid)
             {
-                var turma = new Turma
+                var path = string.Empty;
+
+
+               
+                 if(model.DataInicio.Date > model.DataFim.Date)
                 {
-                    Id = model.Id,
-                    Descricao = model.Descricao,
-                    Fotourl = path,
-                    Duracao = model.Duracao,
-                    Nome = model.Nome
-
-                };
-
-                await _turmasRepository.CreateAsync(turma);
-                return RedirectToAction(nameof(Index));
+                    ViewBag.message= "A data do Fim do curso deve ser depois da tada do Início do mesmo";
+                    model.Cursos = _cursoRepository.GetComboCursos();
+                    return View(model);
+                }
+                    var turma = new Turma
+                    {
+                        Nome = model.Nome,
+                        CursoId = model.CursoId,
+                        DataFim = model.DataFim,
+                        DataInicio = model.DataInicio
+                        
+                    };
+                try
+                {
+                    await _turmasRepository.CreateAsync(turma);
+                    ViewBag.message = "Turma foi criada com sucesso!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    ViewBag.message = "Ocurreu um Erro ";
+                    model.Cursos = _cursoRepository.GetComboCursos();
+                    return View(model); 
+                }
+                    
+                
             }
+            model.Cursos = _cursoRepository.GetComboCursos();
             return View(model);
         }
 
-       
 
-        // GET: Turmas/Edit/5
+
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -100,9 +108,20 @@ namespace SchoolApp.Controllers
             var turma = await _turmasRepository.GetByIdAsync(id.Value);
             if (turma == null)
             {
-                return NotFound();
+                return NotFound(); //VIEW ERRO
             }
-            return View(turma);
+            var model = new TurmaViewModel
+            {
+                Id = turma.Id,
+                Nome = turma.Nome,
+                CursoId = turma.CursoId,
+                Cursos = _cursoRepository.GetComboCursos(),
+                DataFim = turma.DataFim,
+                DataInicio = turma.DataInicio
+
+            };
+
+            return View(model);
         }
 
         // POST: Turmas/Edit/5
@@ -110,31 +129,44 @@ namespace SchoolApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Duracao,Fotourl,Descricao")] Turma turma)
+        public async Task<IActionResult> Edit(TurmaViewModel model)
         {
-            if (id != turma.Id)
-            {
-                return NotFound();
-            }
-
+            
             if (ModelState.IsValid)
             {
+                if (model.DataInicio.Date > model.DataFim.Date)
+                {
+                    ViewBag.message = "A data do Fim do curso deve ser depois da tada do Início do mesmo";
+                    model.Cursos = _cursoRepository.GetComboCursos();
+                    return View(model);
+                }
+                var turma = await _turmasRepository.GetByIdAsync(model.Id);
+
+                turma.Nome = model.Nome;
+                turma.CursoId = model.CursoId;
+                turma.DataFim = model.DataFim;
+                turma.DataInicio = model.DataInicio;
+
                 try
                 {
                     await _turmasRepository.UpdateAsync(turma);
-
+                    model.Cursos = _cursoRepository.GetComboCursos();
+                    ViewBag.message = "Turma foi atualizada com sucesso!";
+                    return View(model);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-
+                    ViewBag.message = "Ocurreu um Erro ";
+                    model.Cursos = _cursoRepository.GetComboCursos();
+                    return View(model); //view erro
                 }
-                return RedirectToAction(nameof(Index));
+            
             }
-
-            return View(turma);
+            model.Cursos = _cursoRepository.GetComboCursos();
+            return View(model);
         }
 
-        // GET: Turmas/Delete/5
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -156,7 +188,24 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turma = await _turmasRepository.GetByIdAsync(id);
-            await _turmasRepository.DeleteAsync(turma);
+            
+
+            try
+            {
+                await _turmasRepository.DeleteAsync(turma);
+                ViewBag.errormessage = "Turma deletada com sucesso!";
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    
+                    ViewBag.errormessage = "Esta turma não pode ser deletada pois está a ser utilizada";
+                }
+
+                return View();
+            }
+            
 
             return RedirectToAction(nameof(Index));
         }

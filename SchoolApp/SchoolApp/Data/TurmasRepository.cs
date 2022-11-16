@@ -18,7 +18,7 @@ namespace SchoolApp.Data
 
         public IEnumerable<SelectListItem> GetComboTurmas()
         {
-            var list = _context.turma.Select(p => new SelectListItem {
+            var list = _context.Turmas.Select(p => new SelectListItem {
                 Text = p.Nome,
                 Value = p.Id.ToString()
             }).ToList();
@@ -36,13 +36,14 @@ namespace SchoolApp.Data
 
             await Task.Run(() =>
             {
-                turmas = _context.turma.OrderBy(x => x.Nome).Select(x => new Turma
+                turmas = _context.Turmas.OrderBy(x => x.Nome).Select(x => new Turma
                 {
                     Id = x.Id,
-                    Descricao = x.Descricao,
-                    Fotourl = x.Fotourl,
-                    Duracao = x.Duracao,
-                    Nome = x.Nome
+                    CursoId =x.CursoId,
+                    Nome = x.Nome,
+                    DataInicio = x.DataInicio,
+                    DataFim = x.DataFim
+                    
                 });
             });
             return turmas;

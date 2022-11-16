@@ -7,7 +7,7 @@ namespace SchoolApp.Models
 
         public string Nome { get; set; }
         
-        public string Turma { get; set; }
+        public string Curso{ get; set; }
 
         public string foto { get; set; }
 

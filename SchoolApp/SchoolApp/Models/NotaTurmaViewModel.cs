@@ -9,7 +9,7 @@ namespace SchoolApp.Models
         [Display(Name = "Cursos")]
         [Required(ErrorMessage="{0} é necessário")]
         [Range(1, int.MaxValue, ErrorMessage ="Selecione um curso para continuar")]
-        public int turmaid { get; set; }
+        public int Turmaid{ get; set; }
 
         public IEnumerable<SelectListItem> Turmas { get; set; }
     }

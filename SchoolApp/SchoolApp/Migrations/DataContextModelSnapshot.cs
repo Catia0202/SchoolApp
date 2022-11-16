@@ -193,7 +193,76 @@ namespace SchoolApp.Migrations
 
                     b.HasIndex("turmaid");
 
-                    b.ToTable("Aluno");
+                    b.ToTable("Alunos");
+                });
+
+            modelBuilder.Entity("SchoolApp.Data.Entities.Configuracao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MaximoAlunosNaTurma")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaximoDisciplinasPorTurma")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PercentagemdeFaltas")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Configuracoes");
+                });
+
+            modelBuilder.Entity("SchoolApp.Data.Entities.Curso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Duracao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Fotourl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cursos");
+                });
+
+            modelBuilder.Entity("SchoolApp.Data.Entities.CursoDisciplina", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CursoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DisciplinaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CursoId");
+
+                    b.HasIndex("DisciplinaId");
+
+                    b.ToTable("CursoDisciplinas");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Disciplina", b =>
@@ -214,7 +283,7 @@ namespace SchoolApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Disciplina");
+                    b.ToTable("Disciplinas");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Falta", b =>
@@ -242,7 +311,7 @@ namespace SchoolApp.Migrations
 
                     b.HasIndex("disciplinaid");
 
-                    b.ToTable("falta");
+                    b.ToTable("Faltas");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Nota", b =>
@@ -287,7 +356,7 @@ namespace SchoolApp.Migrations
 
                     b.HasIndex("turmaId");
 
-                    b.ToTable("Nota");
+                    b.ToTable("Notas");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Turma", b =>
@@ -297,48 +366,24 @@ namespace SchoolApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Duracao")
+                    b.Property<int>("CursoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Fotourl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DataFim")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataInicio")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CursoId");
 
-                    b.ToTable("turma");
-                });
-
-            modelBuilder.Entity("SchoolApp.Data.Entities.TurmaDisciplina", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("DisciplinaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TurmaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DisciplinaId");
-
-                    b.HasIndex("TurmaId");
-
-                    b.ToTable("turmaDisciplina");
+                    b.ToTable("Turmas");
                 });
 
             modelBuilder.Entity("SchoolApp.Data.Entities.User", b =>
@@ -487,7 +532,7 @@ namespace SchoolApp.Migrations
                     b.HasOne("SchoolApp.Data.Entities.Turma", "turma")
                         .WithMany()
                         .HasForeignKey("turmaid")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("turma");
@@ -495,18 +540,37 @@ namespace SchoolApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SchoolApp.Data.Entities.CursoDisciplina", b =>
+                {
+                    b.HasOne("SchoolApp.Data.Entities.Curso", "Curso")
+                        .WithMany()
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SchoolApp.Data.Entities.Disciplina", "Disciplina")
+                        .WithMany()
+                        .HasForeignKey("DisciplinaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Curso");
+
+                    b.Navigation("Disciplina");
+                });
+
             modelBuilder.Entity("SchoolApp.Data.Entities.Falta", b =>
                 {
                     b.HasOne("SchoolApp.Data.Entities.Aluno", "aluno")
                         .WithMany()
                         .HasForeignKey("alunoid")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolApp.Data.Entities.Disciplina", "disciplina")
                         .WithMany()
                         .HasForeignKey("disciplinaid")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("aluno");
@@ -537,30 +601,13 @@ namespace SchoolApp.Migrations
 
             modelBuilder.Entity("SchoolApp.Data.Entities.Turma", b =>
                 {
-                    b.HasOne("SchoolApp.Data.Entities.User", "User")
+                    b.HasOne("SchoolApp.Data.Entities.Curso", "Curso")
                         .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SchoolApp.Data.Entities.TurmaDisciplina", b =>
-                {
-                    b.HasOne("SchoolApp.Data.Entities.Disciplina", "Disciplina")
-                        .WithMany()
-                        .HasForeignKey("DisciplinaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SchoolApp.Data.Entities.Turma", "turma")
-                        .WithMany()
-                        .HasForeignKey("TurmaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Disciplina");
-
-                    b.Navigation("turma");
+                    b.Navigation("Curso");
                 });
 #pragma warning restore 612, 618
         }

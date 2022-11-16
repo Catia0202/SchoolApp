@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace SchoolApp.Models
 {
 
-    public class TurmaDisciplinaViewModel : TurmaDisciplina
+    public class CursoDisciplinaViewModel : CursoDisciplina
     {
         public List<SelectListItem> listdisciplinas { get; set; }
 

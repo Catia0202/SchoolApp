@@ -17,8 +17,8 @@ namespace SchoolApp.Models
         [Required]
         public string Foto{ get; set; }
 
-        public int TurmaId { get; set; }
-        public IEnumerable<SelectListItem> Turmas { get; set; }
+        public int CursoId{ get; set; }
+        public IEnumerable<SelectListItem> Cursos { get; set; }
 
 
     }

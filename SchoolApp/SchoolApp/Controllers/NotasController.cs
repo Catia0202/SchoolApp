@@ -20,11 +20,12 @@ namespace SchoolApp.Controllers
         private readonly INotaRepository _notaRepository;
         private readonly IAlunosRepository _alunosRepository;
         private readonly ITurmasRepository _turmasRepository;
-        private readonly ITurmaDisciplinarRepository _turmaDisciplinarRepository;
+        private readonly ICursoDisciplinarRepository _turmaDisciplinarRepository;
         private readonly IUserHelper _userHelper;
+        private readonly ICursoRepository _cursoRepository;
         private readonly IDisciplinasRepository _disciplinasRepository;
 
-        public NotasController(INotaRepository notaRepository, IAlunosRepository alunosRepository, IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, ITurmaDisciplinarRepository turmaDisciplinarRepository, IUserHelper userHelper)
+        public NotasController(INotaRepository notaRepository, IAlunosRepository alunosRepository, IDisciplinasRepository disciplinasRepository, ITurmasRepository turmasRepository, ICursoDisciplinarRepository turmaDisciplinarRepository, IUserHelper userHelper, ICursoRepository cursoRepository)
         {
 
             _notaRepository = notaRepository;
@@ -32,6 +33,7 @@ namespace SchoolApp.Controllers
             _turmasRepository = turmasRepository;
             _turmaDisciplinarRepository = turmaDisciplinarRepository;
             _userHelper = userHelper;
+            _cursoRepository = cursoRepository;
             _disciplinasRepository = disciplinasRepository;
         }
 
@@ -45,7 +47,7 @@ namespace SchoolApp.Controllers
             {
                 foreach (var aluno in alunos)
                 {
-                    aluno.Turmas = _notaRepository.GetComboTurmasporAlunoAsync(aluno.alunoId);
+                    aluno.Cursos = await _notaRepository.GetComboTurmasporAlunoAsync(aluno.alunoId);
                 }
             }
 
@@ -53,31 +55,27 @@ namespace SchoolApp.Controllers
         }
         
         [HttpPost]
-        public IActionResult Index( int AlunoId)
+        public IActionResult Index(IEnumerable<NotaAlunoViewModel> model, int AlunoId)
         {
-            var model = new NotaAlunoViewModel();
+        
             if (ModelState.IsValid)
             {
-                var aluno = _alunosRepository.GetAll().Where(p => p.Id == AlunoId);
-
-                var turmaid = aluno.FirstOrDefault().turmaid;
-
-              
-               model = new NotaAlunoViewModel
+                int cursoid = 0;
+                foreach(var item in model)
                 {
-                    alunoId = aluno.FirstOrDefault().Id,
-                    Foto = aluno.FirstOrDefault().ImageUrl,
-                    Nome=aluno.FirstOrDefault().Nome,
-                    TurmaId = turmaid
-                };
-                return RedirectToAction("IndexNotasAluno", "Notas", new { AlunoId, turmaid });
+                    if(item.alunoId == AlunoId)
+                    {
+                        cursoid = item.CursoId;
+                    }
+                }
+                return RedirectToAction("IndexNotasAluno", "Notas", new { AlunoId, cursoid });
             } 
             
             return View(model);
         }
 
         [Authorize(Roles = "Funcionario")]
-        public async Task<IActionResult> IndexNotasAluno(int AlunoId, int turmaid)
+        public async Task<IActionResult> IndexNotasAluno(int AlunoId, int cursoid)
         {
       
             if (AlunoId == 0)
@@ -86,16 +84,17 @@ namespace SchoolApp.Controllers
             }
 
             var aluno = await _alunosRepository.GetByIdAsync(AlunoId);
-            var turma = await _turmasRepository.GetByIdAsync(turmaid);
+            var curso = await _cursoRepository.GetByIdAsync(cursoid);
+            
   
 
             var model = new TodasNotasDoAlunoViewModel()
             {
                 Nome = aluno.Nome,
                 foto = aluno.ImageUrl,
-                Turma = turma.Nome,
+                Curso = curso.Nome,
                 
-                Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, turma.Id)
+                Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, curso.Id)
                 
                 
             };
@@ -109,7 +108,7 @@ namespace SchoolApp.Controllers
         {
             var model = new NotaTurmaViewModel
             {
-                turmaid = turmaid,
+                Turmaid = turmaid,
                 Turmas = _turmasRepository.GetComboTurmas()
             };
             return View(model);
@@ -120,7 +119,7 @@ namespace SchoolApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("CreateDisciplinaNota", "Notas", new { turmaid = model.turmaid });
+                return RedirectToAction("CreateDisciplinaNota", "Notas", new { turmaid = model.Turmaid });
             }
             model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model);
@@ -134,25 +133,27 @@ namespace SchoolApp.Controllers
             }
 
             var turma = await _turmasRepository.GetByIdAsync(turmaid);
-
+            var curso = await _cursoRepository.GetByIdAsync(turma.CursoId);
             var model = new NotaDisciplinaViewModel
             {
-              turmaid= turma.Id,
-              nometurma = turma.Nome,
-                disciplinaid = disciplinaid,
-                Disciplinas =  _disciplinasRepository.GetComboDisciplinasporTurmaAsync(turma.Id)
+              CursoId = curso.Id,
+              CursonNome = curso.Nome,
+              Turmaid= turma.Id,
+              Nometurma = turma.Nome,
+              Disciplinaid = disciplinaid,
+              Disciplinas =await  _disciplinasRepository.GetComboDisciplinasporCursoAsync(curso.Id)
             };
             return View(model);
         }
     
         [HttpPost]
-        public IActionResult CreateDisciplinaNota(NotaDisciplinaViewModel model)
+        public async Task<IActionResult> CreateDisciplinaNota(NotaDisciplinaViewModel model)
         {
             if (ModelState.IsValid)
             {
                 return RedirectToAction("CreateAlunoNota", "Notas", model);
             }
-            model.Disciplinas = _disciplinasRepository.GetComboDisciplinasporTurmaAsync(model.turmaid);
+            model.Disciplinas = await _disciplinasRepository.GetComboDisciplinasporCursoAsync(model.CursoId);
             return View(model);
         }
 
@@ -161,16 +162,17 @@ namespace SchoolApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var disciplina = await _disciplinasRepository.GetByIdAsync(model2.disciplinaid);
+                var disciplina = await _disciplinasRepository.GetByIdAsync(model2.Disciplinaid);
 
                 var model = new NotaAlunoTurmaDisciplinaViewModel
                 {
-                    disciplinaId = model2.disciplinaid,
+                    disciplinaId = model2.Disciplinaid,
                     disciplinaNome = disciplina.Nome,
-                    TurmaId = model2.turmaid,
-                    turmaNome = model2.nometurma,
+                    CursoNome = model2.CursonNome,
+                    TurmaId = model2.Turmaid,
+                    turmaNome = model2.Nometurma,
                     Duracao = disciplina.Duracao,
-                    Alunos = (await _notaRepository.GetNotasAlunoDaTurmaDisciplina(model2.turmaid, model2.disciplinaid)).ToList()
+                    Alunos = (await _notaRepository.GetNotasAlunoDaTurmaDisciplina(model2.Turmaid, model2.Disciplinaid)).ToList()
                 };
                 return View(model);
             }
@@ -229,11 +231,12 @@ namespace SchoolApp.Controllers
 
                 var modelparaview = new NotaDisciplinaViewModel
                 {
-                    disciplinaid = model.disciplinaId,
-                    nometurma = model.turmaNome,
-                    turmaid = model.TurmaId,
+                    Disciplinaid = model.disciplinaId,
+                    Nometurma = model.turmaNome,
+                    Turmaid = model.TurmaId,
+                    CursonNome =model.CursoNome,
                     Alunos = model.Alunos
-                 
+                    
                    
                     
                 };
@@ -244,30 +247,30 @@ namespace SchoolApp.Controllers
             }
             return View(model);
         }
-        [Authorize(Roles = "Aluno")]
-        public async Task<IActionResult> ViewNotaAlunoLogado()
-        {
-            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+        //[Authorize(Roles = "Aluno")]
+        //public async Task<IActionResult> ViewNotaAlunoLogado()
+        //{
+        //    var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-            var aluno = _alunosRepository.GetAll().Where(p => p.User.Id == user.Id).FirstOrDefault();
+        //    var aluno = _alunosRepository.GetAll().Where(p => p.User.Id == user.Id).FirstOrDefault();
 
-            var turma = _turmasRepository.GetByIdAsync(aluno.turmaid);
+        //    var turma = _turmasRepository.GetByIdAsync(aluno.turmaid);
 
-            if(aluno != null)
-            {
-                var model = new TodasNotasDoAlunoViewModel
-                {
-                    Nome = aluno.Nome,
-                    foto = aluno.ImageUrl,
-                    Turma = turma.Result.Nome,
-                    Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, turma.Result.Id)
-                };
-                return View(model);
-            }
-            return View();
+        //    if(aluno != null)
+        //    {
+        //        var model = new TodasNotasDoAlunoViewModel
+        //        {
+        //            Nome = aluno.Nome,
+        //            foto = aluno.ImageUrl,
+        //            Turma = turma.Result.Nome,
+        //            Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, turma.Result.Id)
+        //        };
+        //        return View(model);
+        //    }
+        //    return View();
 
             
-        }
+        //}
 
     }
 }

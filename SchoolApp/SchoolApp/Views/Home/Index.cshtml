@@ -1,4 +1,4 @@
-﻿@model SchoolApp.Models.IndexTurmasViewModel
+﻿@model SchoolApp.Models.IndexCursosViewModel
 @{
     ViewData["Title"] = "Home Page";
    
@@ -53,7 +53,7 @@
                     <h1 class="display-4">Veja agora os nossos Cursos!</h1>
                 </div>
             </div>
-                     @if(Model.Turmas.Count() <= 0)
+                     @if(Model.Cursos.Count() <= 0)
         {
             <a style="text-align:center;">Ainda não existem cursos</a>
         }
@@ -61,9 +61,9 @@
   
         <div class="owl-carousel courses-carousel">
        
-         @if(Model.Turmas != null)
+         @if(Model.Cursos != null)
             {
-            @foreach(var item in Model.Turmas)
+            @foreach(var item in Model.Cursos)
             {
                    <div class="courses-item position-relative">
                 <img class="img-fluid" src="@Url.Content(item.Fotourl)" alt="">

@@ -10,7 +10,7 @@ namespace SchoolApp.Data
     {
       public List<SelectListItem> GetListDisciplinas();
 
-        IEnumerable<SelectListItem> GetComboDisciplinasporTurmaAsync(int turmaid);
+        Task<IEnumerable<SelectListItem>> GetComboDisciplinasporCursoAsync(int turmaid);
 
         Task<IQueryable<Disciplina>> GetIndexTurmasDisciplinasAsync(int turmaid);
     }

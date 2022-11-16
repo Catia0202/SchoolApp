@@ -40,7 +40,7 @@ namespace SchoolApp.Controllers
             _configuracaoRepository = configuracaoRepository;
         }
 
-        // GET: Alunos
+      
         public IActionResult Index() 
         {
             var model = Enumerable.Empty<AlunoViewModel>();
@@ -104,7 +104,7 @@ namespace SchoolApp.Controllers
             {
                 var path = string.Empty;
                 var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
-                model.Turmas = _turmasRepository.GetComboTurmas();
+                
                 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
@@ -169,9 +169,9 @@ namespace SchoolApp.Controllers
                     ViewBag.errormessage = "Não foi possível inserir o aluno neste curso pois exedeu o número máximo de alunos por Curso";
                 }
             }
-               
-         
 
+
+            model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model);
         }
 
@@ -323,9 +323,32 @@ namespace SchoolApp.Controllers
         {
             var aluno = await _alunosRepository.GetByIdAsync(id);
             var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
-            await _alunosRepository.DeleteAsync(aluno);
-            await _userManager.DeleteAsync(user);
+            var turma = await _turmasRepository.GetByIdAsync(id);
+
+
+            try
+            {
+                await _alunosRepository.DeleteAsync(aluno);
+                await _userManager.DeleteAsync(user);
+                ViewBag.errormessage = "Aluno e User associado deletados com sucesso!";
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+
+                    ViewBag.errormessage = "Esta Aluno não pode ser deletada pois está a ser utilizada";
+                }
+
+                return View();
+            }
+
+
             return RedirectToAction(nameof(Index));
+
+     
+    
+
         }
 
         public IActionResult IndexAlunosDaTurma(int id, int id2)

@@ -17,30 +17,34 @@ namespace SchoolApp.Data
             _context = context;
         }
 
-        public IEnumerable<SelectListItem> GetComboDisciplinasporTurmaAsync(int turmaid)
+        public async Task<IEnumerable<SelectListItem>> GetComboDisciplinasporCursoAsync(int cursoid)
         {
-            var list = _context.turmaDisciplina.Include(p => p.Disciplina).Where(a => a.TurmaId == turmaid).Select(p => new SelectListItem
+            var lista = new List<SelectListItem>();
+            await Task.Run(() =>
             {
-                Text = p.Disciplina.Nome,
-                Value = p.Disciplina.Id.ToString()
-            }).ToList();
-
-            list.Insert(0, new SelectListItem
-            {
-                Text = "(Selecione uma Disciplina...)",
-                Value = "0"
+                lista = _context.CursoDisciplinas.Include(x => x.Disciplina).Where(x => x.CursoId == cursoid)
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Disciplina.Nome,
+                    Value = x.Disciplina.Id.ToString()
+                }).ToList();
+                lista.Insert(0, new SelectListItem
+                {
+                    Text = "Selecione uma disciplina",
+                    Value = "0"
+                });
             });
-            return list;
+            return lista;
         }
 
-        public async Task<IQueryable<Disciplina>> GetIndexTurmasDisciplinasAsync(int turmaid)
+        public async Task<IQueryable<Disciplina>> GetIndexTurmasDisciplinasAsync(int cursoid)
         {
             var disciplinas = Enumerable.Empty<Disciplina>().AsQueryable();
 
             await Task.Run(() =>
             {
 
-                disciplinas = _context.turmaDisciplina.Include(p => p.Disciplina).Where(a => a.TurmaId == turmaid).Select(p => new Disciplina
+                disciplinas = _context.CursoDisciplinas.Include(p => p.Disciplina).Where(a => a.CursoId == cursoid).Select(p => new Disciplina
                 {
                     Nome = p.Disciplina.Nome,
                     Descrição = p.Disciplina.Descrição,
@@ -55,7 +59,7 @@ namespace SchoolApp.Data
 
         public List<SelectListItem> GetListDisciplinas()
         {
-            var list = _context.Disciplina.ToList();
+            var list = _context.Disciplinas.ToList();
             List<SelectListItem> lista = new List<SelectListItem>();
             foreach (var item in list)
             {

@@ -7,8 +7,8 @@ namespace SchoolApp.Models
     {
         public IEnumerable<Disciplina> DisciplinasDaTurma{ get; set; }
 
-        public Turma Turma { get;set; }
-        public IEnumerable<Turma> Turmas { get; set; }
+        public Curso Curso { get;set; }
+        public IEnumerable<Curso> Cursos { get; set; }
 
     }
 }

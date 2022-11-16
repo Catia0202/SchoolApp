@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,17 +20,20 @@ namespace SchoolApp.Controllers
         private readonly IAlunosRepository _alunosRepository;
         private readonly ITurmasRepository _turmasRepository;
         private readonly IDisciplinasRepository _disciplinasRepository;
+        private readonly ICursoRepository _cursoRepository;
 
-        public FaltasController(DataContext context, IFaltaRepository faltaRepository, IAlunosRepository alunosRepository, ITurmasRepository turmasRepository, IDisciplinasRepository disciplinasRepository)
+        public FaltasController(DataContext context, IFaltaRepository faltaRepository, IAlunosRepository alunosRepository, ITurmasRepository turmasRepository, IDisciplinasRepository disciplinasRepository, ICursoRepository cursoRepository)
         {
             _context = context;
             _faltaRepository = faltaRepository;
             _alunosRepository = alunosRepository;
             _turmasRepository = turmasRepository;
             _disciplinasRepository = disciplinasRepository;
+            _cursoRepository = cursoRepository;
         }
 
         // GET: Faltas
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> Index()
         {
             var alunos = await _faltaRepository.GetFaltasAlunoAsync();
@@ -67,6 +71,7 @@ namespace SchoolApp.Controllers
 
             return View(model);
         }
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> IndexFaltasAluno(int AlunoId, int turmaid)
         {
             if (AlunoId == 0)
@@ -91,7 +96,7 @@ namespace SchoolApp.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Funcionario")]
         public IActionResult CreateTurmaFaltas (int idturma)
         {
             var model = new FaltaTurmaViewModel
@@ -113,7 +118,7 @@ namespace SchoolApp.Controllers
             model.Turmas = _turmasRepository.GetComboTurmas();
             return View(model); 
         }
-
+        [Authorize(Roles = "Funcionario")]
         public async Task<IActionResult> CreateDisciplinaFaltas(int turmaid, int disciplinaid)
         {
             if (turmaid == 0)
@@ -122,24 +127,26 @@ namespace SchoolApp.Controllers
             }
 
             var turma = await _turmasRepository.GetByIdAsync(turmaid);
-
+            var curso = await _cursoRepository.GetByIdAsync(turma.CursoId);
             var model = new FaltaDisciplinaViewModel
             {
+                CursoId= curso.Id,
+                CursoNome=curso.Nome,
                 turmaid = turma.Id,
                 nometurma = turma.Nome,
                 disciplinaid = disciplinaid,
-                Disciplinas = _disciplinasRepository.GetComboDisciplinasporTurmaAsync(turma.Id)
+                Disciplinas = await _disciplinasRepository.GetComboDisciplinasporCursoAsync(curso.Id)
             };
             return View(model);
         }
         [HttpPost]
-        public IActionResult CreateDisciplinaFaltas(FaltaDisciplinaViewModel model)
+        public async Task<IActionResult> CreateDisciplinaFaltas(FaltaDisciplinaViewModel model)
         {
             if (ModelState.IsValid)
             {
                 return RedirectToAction("CreateAlunoFaltas", "Faltas", model);
             }
-            model.Disciplinas = _disciplinasRepository.GetComboDisciplinasporTurmaAsync(model.turmaid);
+            model.Disciplinas = await _disciplinasRepository.GetComboDisciplinasporCursoAsync(model.CursoId);
             return View(model);
         }
 
@@ -151,6 +158,8 @@ namespace SchoolApp.Controllers
 
                 var model = new FaltaAlunoTurmaDisciplinaViewModel
                 {
+                    CursoId =model2.CursoId,
+                    CursoNome=model2.CursoNome,
                     turmaid = model2.turmaid,
                     nometurma = model2.nometurma,
                     disciplinaid = model2.disciplinaid,
@@ -163,7 +172,7 @@ namespace SchoolApp.Controllers
 
             return RedirectToAction("CreateTurmaFaltas", "Faltas");
         }
-
+        [Authorize(Roles = "Funcionario")]
         [HttpPost]
         public async Task<IActionResult> CreateAlunoFaltas(FaltaAlunoTurmaDisciplinaViewModel model)
         {
@@ -221,6 +230,8 @@ namespace SchoolApp.Controllers
 
                 var modelparaview = new FaltaDisciplinaViewModel
                 {
+                    CursoId= model.CursoId,
+                    CursoNome= model.CursoNome,
                     disciplinaid = model.disciplinaid,
                     nometurma = model.nometurma,
                     turmaid = model.turmaid
