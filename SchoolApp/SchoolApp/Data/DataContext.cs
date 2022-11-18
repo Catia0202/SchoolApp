@@ -20,6 +20,8 @@ namespace MyLeasing.Web.Data
 
         public DbSet<CursoDisciplina> CursoDisciplinas { get; set; }
 
+        public DbSet<Alerta> Alertas { get; set; }
+
         public DbSet<Curso> Cursos { get; set; }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

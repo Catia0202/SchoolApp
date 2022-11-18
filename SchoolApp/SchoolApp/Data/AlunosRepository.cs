@@ -38,7 +38,8 @@ namespace SchoolApp.Data
             {
                 Id = aluno.Id,
                 ImageUrl = aluno.ImageUrl,
-                Nome = aluno.Nome,
+                PrimeiroNome = aluno.PrimeiroNome,
+                UltimoNome = aluno.UltimoNome,
                 Data_Nascimento = aluno.Data_Nascimento,
                 Email = aluno.Email,
                 Genero = aluno.Genero,
@@ -146,7 +147,7 @@ namespace SchoolApp.Data
             {
                 lista.Add(new SelectListItem
                 {
-                    Text = item.Nome,
+                    Text = item.PrimeiroNome + " " + item.UltimoNome,
                     Value = item.Id.ToString()
 
                 });

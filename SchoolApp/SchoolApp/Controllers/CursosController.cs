@@ -48,7 +48,7 @@ namespace SchoolApp.Controllers
                 {
                     Nome = model.Nome,
                     Duracao = model.Duracao,
-                    Fotourl = model.Fotourl,
+                    Fotourl = path,
                     Descricao =model.Descricao
 
                 };
@@ -107,7 +107,7 @@ namespace SchoolApp.Controllers
                 var curso = await _cursoRepository.GetByIdAsync(model.Id);
                 curso.Nome = model.Nome;
                 curso.Duracao = model.Duracao;
-                curso.Fotourl=model.Fotourl;
+                curso.Fotourl = path;
                 curso.Descricao = model.Descricao;
                 
                 try

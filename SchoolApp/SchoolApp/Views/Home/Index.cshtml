@@ -1,7 +1,7 @@
 ﻿@model SchoolApp.Models.IndexCursosViewModel
 @{
     ViewData["Title"] = "Home Page";
-   
+    Layout = null;  
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +28,7 @@
     <link href="~/css/stylehome.css" rel="stylesheet">
 </head>
 
-
+<partial name="_Navbar" />
 
  
     <div class="jumbotron jumbotron-fluid position-relative overlay-bottom" style="margin-bottom: 90px;">
@@ -81,7 +81,7 @@
         </div>
     </div>
  
-
+    <partial name="_footer" />
 
     
 

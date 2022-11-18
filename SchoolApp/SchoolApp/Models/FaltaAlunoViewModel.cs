@@ -11,7 +11,9 @@ namespace SchoolApp.Models
         public int alunoId { get; set; }
 
         [Required]
+        [Display(Name ="Nome")]
         public string Nome { get; set; }
+
 
         [Required]
         public string Foto { get; set; }

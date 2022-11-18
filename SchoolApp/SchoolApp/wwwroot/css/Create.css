@@ -1,0 +1,366 @@
+﻿/* Structure */
+img {
+    height: auto;
+    width: 100%;
+}
+
+input[type=submit] {
+    background: #fff;
+    height: 2.75rem;
+    margin: 1em auto auto;
+}
+
+@media (min-width: 768px) {
+    input[type=submit] {
+        background: #fff;
+        bottom: 2.75rem;
+        left: 2.55rem;
+        height: 2.75rem;
+        padding: 0 3rem;
+        position: absolute;
+    }
+}
+
+input[type=email],
+input[type=text] {
+    height: 1.5rem;
+    margin: 0 0 1.15rem;
+    width: 100%;
+}
+
+figure {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    figure {
+        float: left;
+        height: 100%;
+        position: relative;
+        width: 50%;
+    }
+}
+
+.form1 {
+    overflow: hidden;
+    padding: 10%;
+    position: relative;
+    width: 80%;
+  
+}
+
+@media (min-width: 768px) {
+    .form1 {
+        float: left;
+        height: 700px;
+        padding: 6%;
+        width: 50%;
+    }
+}
+
+main {
+   
+    margin: auto;
+    transform: translate(-50%, -50%);
+    height: 700px;
+    width: 73.5rem;
+}
+
+@media (min-width: 768px) {
+    main {
+        height: 700px;
+        width: 73.5rem;
+        left: 50%;
+        margin: auto;
+        transform: translate(-50%, -50%);
+        top: 50%;
+       
+    }
+}
+
+.headline {
+    position: absolute;
+    top: 8vw;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .headline {
+        position: absolute;
+        top: 3.4rem;
+        width: 50%;
+    }
+}
+
+/* Skin */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #f79577;
+    font: 700 16px 'Montserrat', sans-serif;
+}
+
+input[type=email],
+input[type=text] {
+    background: none;
+    border: none;
+    border-bottom: 2px solid #f79577;
+    box-sizing: border-box;
+    outline: none;
+}
+
+    input[type=email]:required,
+    input[type=text]:required {
+        box-shadow: none;
+        outline: none;
+    }
+
+input[type=submit] {
+    background: #f79577;
+    border: none;
+    color: #fff;
+    padding: 0 2rem;
+}
+
+    input[type=submit]:hover,
+    input[type=submit]:focus {
+        background: #f79577;
+        cursor: pointer;
+        outline: none;
+    }
+
+.inputs--filled label {
+    transform: translate(0, 0);
+}
+
+.inputs--invalid input {
+    animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+    background: url(//my-assets.netlify.com/codepen/dailyui-001/ico-invalid.svg) center right no-repeat;
+    border-bottom: 2px solid #f37b56;
+    box-shadow: none;
+    color: #f37b56;
+    transform: translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    33% {
+        transform: translate3d(-6px, 0, 0);
+    }
+
+    66% {
+        transform: translate3d(6px, 0, 0);
+    }
+}
+
+.inputs--invalid label {
+    color: #f37b56;
+}
+
+label {
+    display: inline-block;
+    transform: translate(0, 1.25rem);
+    transition: 0.15s;
+}
+
+main {
+    background: #f0f0f082;
+    border-radius: 1rem;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+}
+
+.text-headline {
+    letter-spacing: 0.4rem;
+    font: 700 4px 'Montserrat';
+    text-align: center;
+    text-transform: uppercase;
+    color: #531b02;
+}
+
+@media (min-width: 768px) {
+    .text-headline {
+        font: 700 1.625rem 'Montserrat';
+    }
+}
+
+.text-body {
+    color: #531b02;
+    font: 700 16px 'Montserrat', sans-serif;
+}
+
+.text-small-uppercase {
+    color: #531b02;
+   
+    font: 700 1.1rem 'Montserrat';
+    letter-spacing: .08rem;
+    text-transform: uppercase;
+}
+
+.text-subheadline {
+    color: #f37b56;
+    left: -.17rem;
+    letter-spacing: .143rem;
+    font: 700 0.652rem 'Montserrat';
+    margin-bottom: 1.5rem;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+    .text-subheadline {
+        font: 700 0.75rem 'Montserrat';
+    }
+}
+.containerform {
+    height: 350px;
+    width: 430px;
+    margin-left: 100px;
+    margin-top: 40px;
+    position: relative;
+}
+
+    .containerform .wrapper {
+        position: relative;
+        height: 300px;
+        width: 100%;
+        border-radius: 10px;
+        background: #fff;
+        border: 2px dashed #c2cdda;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+.wrapper.active {
+    border: none;
+}
+
+.wrapper .image {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.wrapper .icon {
+    font-size: 100px;
+    color: #f79577;
+   
+}
+
+.wrapper .text {
+    font-size: 20px;
+    font-weight: 500;
+    color: #5B5B7B;
+}
+
+.wrapper #cancel-btn i {
+    position: absolute;
+    font-size: 20px;
+    right: 15px;
+    top: 15px;
+    color: #9658fe;
+    cursor: pointer;
+    display: none;
+}
+
+.wrapper.active:hover #cancel-btn i {
+    display: block;
+}
+
+.wrapper #cancel-btn i:hover {
+    color: #e74c3c;
+}
+
+.wrapper .file-name {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    padding: 8px 0;
+    font-size: 18px;
+    color: #fff;
+    display: none;
+    background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+}
+
+.wrapper.active:hover .file-name {
+    display: block;
+}
+
+.containerform #default-btn {
+    margin-top: 30px;
+    display: block;
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    
+}
+.box {
+  position: absolute;
+
+  transform: translate(-50%, -50%);
+}
+
+    .box select {
+        background-color: #f79577;
+        color: white;
+        padding: 12px;
+        width: 250px;
+        border: none;
+        font-size: 20px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        -webkit-appearance: button;
+        appearance: button;
+        outline: none;
+    }
+
+    .box::before {
+        font-family: FontAwesome;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20%;
+        height: 100%;
+        text-align: center;
+        font-size: 28px;
+        line-height: 45px;
+        color: rgba(255, 255, 255, 0.5);
+        background-color: #f79577;
+        pointer-events: none;
+    }
+
+    .box:hover::before {
+        color: #f79577;
+        background-color: #f79577;
+    }
+
+.box select option {
+  padding: 30px;
+}

@@ -90,7 +90,7 @@ namespace SchoolApp.Controllers
 
             var model = new TodasNotasDoAlunoViewModel()
             {
-                Nome = aluno.Nome,
+                Nome = aluno.PrimeiroNome + " " + aluno.UltimoNome,
                 foto = aluno.ImageUrl,
                 Curso = curso.Nome,
                 

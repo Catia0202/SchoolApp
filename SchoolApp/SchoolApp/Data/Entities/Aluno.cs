@@ -8,8 +8,10 @@ namespace SchoolApp.Data.Entities
     public class Aluno : IEntity
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
-
+        [Display(Name ="Primeiro Nome")]
+        public string PrimeiroNome { get; set; }
+        [Display(Name = "Ultimo Nome")]
+        public string UltimoNome { get; set; }
         public string Email { get; set; }
         public int Telemovel { get; set; }
 

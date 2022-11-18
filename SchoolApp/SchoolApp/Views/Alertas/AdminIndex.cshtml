@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SchoolApp.Data.Entities.Alerta>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Assunto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Problema)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th> @Html.DisplayNameFor(model => model.Estado)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assunto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Problema)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FirstName)
+            </td>
+            <td>
+                 @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                
+                <a asp-action="DetailsAlertaAdmin" asp-route-id="@item.Id">Details</a>
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

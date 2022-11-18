@@ -46,10 +46,15 @@ namespace SchoolApp.Controllers
             var model = Enumerable.Empty<AlunoViewModel>();
 
                 var alunos = _alunosRepository.GetAll().Include(p => p.turma);
+               
                 if (alunos.Any())
                 {
-                    model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);
+                
+              
+                    model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.PrimeiroNome);
                 }
+                   
+             
                 else
                 {
                     ViewBag.message = "Não foram encontrados alunos";
@@ -57,9 +62,20 @@ namespace SchoolApp.Controllers
             return View(model);
         
         }
+        //[HttpGet]
+        //public IActionResult Index(string pesquisa)
+        //{
+        //    var model = Enumerable.Empty<AlunoViewModel>();
 
-        // GET: Alunos/Details/5
-        public async Task<IActionResult> Details(int id)
+        //    var alunos = _alunosRepository.GetAll().Include(p => p.turma);
+        //    if (pesquisa != null)
+        //         {
+        //        model = (_converterHelper.AlunosToAlunoViewModels(alunos)).Where(p => p.Nome == pesquisa);
+        //        }
+        //    return View(model);
+        //}
+            // GET: Alunos/Details/5
+            public async Task<IActionResult> Details(int id)
         {
             if (id == 0)
             {
@@ -124,11 +140,11 @@ namespace SchoolApp.Controllers
                         user = new User
                         {
 
-                            FirstName = aluno.Nome,
-                            LastName = aluno.Nome + "Last",
+                            FirstName = aluno.PrimeiroNome,
+                            LastName = aluno.UltimoNome + "Last",
                             Email = aluno.Email,
                             UserName = aluno.Email,
-                            Password = aluno.Id + aluno.Nome
+                            Password = aluno.PrimeiroNome + "123456"
 
                         };
 
@@ -182,7 +198,7 @@ namespace SchoolApp.Controllers
             {
                 Id = model.Id,
                 ImageUrl= path ,
-                Nome = model.Nome,
+                PrimeiroNome = model.PrimeiroNome,
                 Data_Nascimento = model.Data_Nascimento,
                 Email = model.Email,
                 Genero = model.Genero,
@@ -252,7 +268,7 @@ namespace SchoolApp.Controllers
                     }
 
                     if (adminconfig.Result.MaximoAlunosNaTurma > alunosjanaturma)
-                    {
+                    { 
 
                         var aluno = _converterHelper.ToAluno(model, path, false);
 
@@ -261,8 +277,8 @@ namespace SchoolApp.Controllers
                         if (user != null)
                         {
                             user.Email = aluno.Email;
-                            user.FirstName = aluno.Nome;
-                            user.LastName = aluno.Nome + "Last";
+                            user.FirstName = aluno.PrimeiroNome;
+                            user.LastName = aluno.UltimoNome;
                             user.UserName = aluno.Email;
 
                         }
@@ -360,7 +376,7 @@ namespace SchoolApp.Controllers
                 var alunos = _alunosRepository.GetAll().Include(p => p.turma).Where(p => p.turmaid == id);
                 if (alunos.Any())
                 {
-                    model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.Nome);
+                    model = (_converterHelper.AlunosToAlunoViewModels(alunos)).OrderBy(x => x.UltimoNome);
                 }
                 else
                 {

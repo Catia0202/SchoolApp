@@ -21,7 +21,8 @@ namespace SchoolApp.Helpers
             {
                 Id = aluno.Id,
                 ImageUrl = aluno.ImageUrl,
-                Nome = aluno.Nome,
+                PrimeiroNome = aluno.PrimeiroNome,
+                UltimoNome = aluno.UltimoNome,
                 Data_Nascimento = aluno.Data_Nascimento,
                 Email = aluno.Email,
                 Genero = aluno.Genero,
@@ -39,7 +40,8 @@ namespace SchoolApp.Helpers
             {
                 Id = isNew ? 0 : model.Id,
                 ImageUrl = path,
-                Nome = model.Nome,
+                PrimeiroNome = model.PrimeiroNome,
+                UltimoNome= model.UltimoNome,
                 Data_Nascimento =model.Data_Nascimento,
                 Email = model.Email,
                 Genero =model.Genero,
@@ -57,7 +59,7 @@ namespace SchoolApp.Helpers
             {
                 Id = aluno.Id,
                 ImageUrl = aluno.ImageUrl,
-                Nome = aluno.Nome,
+                PrimeiroNome = aluno.PrimeiroNome,
                 Data_Nascimento = aluno.Data_Nascimento,
                 Email = aluno.Email,
                 Genero = aluno.Genero,

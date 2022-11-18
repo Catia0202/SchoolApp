@@ -63,7 +63,7 @@ namespace SchoolApp.Controllers
                 {
                     alunoId = aluno.FirstOrDefault().Id,
                     Foto = aluno.FirstOrDefault().ImageUrl,
-                    Nome = aluno.FirstOrDefault().Nome,
+                    Nome = aluno.FirstOrDefault().PrimeiroNome,
                     TurmaId = turmaid
                 };
                 return RedirectToAction("IndexFaltasAluno", "Faltas", new { AlunoId, turmaid });
@@ -86,7 +86,7 @@ namespace SchoolApp.Controllers
 
             var model = new TodasFaltasdoAlunoViewModel
             {
-                Nome = aluno.Nome,
+                Nome = aluno.PrimeiroNome + " " + aluno.UltimoNome,
                 foto = aluno.ImageUrl,
                 Turma = turma.Nome,
                 Faltas = await _faltaRepository.GetFaltasAlunoDaTurma(aluno.Id, turmaid)

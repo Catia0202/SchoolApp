@@ -31,7 +31,7 @@ namespace SchoolApp.Data
                 alunos = _context.Alunos.Select(p => new FaltaAlunoViewModel
                 {
                     alunoId = p.Id,
-                    Nome = p.Nome,
+                    Nome = p.PrimeiroNome + " "+ p.UltimoNome,
                     Foto = p.ImageUrl
                 }).ToList();
             });
@@ -47,7 +47,7 @@ namespace SchoolApp.Data
 
             list.Insert(0, new SelectListItem
             {
-                Text = turma.Nome,
+                Text = turma.PrimeiroNome,
                 Value = turma.turmaid.ToString()
             }); ;
             return list;
@@ -64,11 +64,11 @@ namespace SchoolApp.Data
             {
                 alunos = (from alunos in _context.Alunos
                           where alunos.Id == alunoid
-                          orderby alunos.Nome
+                          orderby alunos.PrimeiroNome
                           select new
                           {
                               alunoid = alunos.Id,
-                              nome = alunos.Nome,
+                              nome = alunos.PrimeiroNome,
                               foto = alunos.ImageUrl,
                               horasdisciplinas = (
                                   from disciplina in _context.Disciplinas
@@ -122,11 +122,11 @@ namespace SchoolApp.Data
             {   
                 alunos = (from alunos in _context.Alunos
                           where alunos.turmaid == turmaid
-                          orderby alunos.Nome
+                          orderby alunos.PrimeiroNome
                           select new
                           {
                               alunoid = alunos.Id,
-                              nome = alunos.Nome,
+                              nome = alunos.PrimeiroNome + " " + alunos.UltimoNome,
                               foto = alunos.ImageUrl,
                               horasdisciplinas =(
                                   from disciplina in _context.Disciplinas
