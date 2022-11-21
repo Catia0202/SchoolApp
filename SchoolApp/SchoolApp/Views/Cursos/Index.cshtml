@@ -2,54 +2,71 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = null;
 }
 
-<h1>Index</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+      <partial name="_sidebar" />
+</head>
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 680px;margin-top: 30px;padding-right:0px;width: 163px;"> Cursos</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-              <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fotourl);
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duracao)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-             <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-          <td>
-                <img src="@Url.Content(item.Fotourl)" style="width: 44px; height: 44px;  max-height: 100%; width: auto;" />
-          </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duracao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-               
-              
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+     <body        style="
+    padding-top: 70px;
+    margin-left: 200px;
+    width: 1527px;
+">
+  
+   
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Nome</td>
+                         
+                            <td>Duração</td>
+                               <td>Descrição:</td>
+                           
+                            <td></td>
+                              <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(Model.Count() == 0)
+            {
+                <tr><td><h2  style="color:black; text-align:center">@ViewBag.message</h2></td></tr>
+                
+                  
+            }
+            @foreach (var item in Model) {
+                        <tr>
+                            <td class="item">
+                                <img src="@Url.Content(item.Fotourl)" alt="">
+                                    <div class="people-de">
+                                        <h5> @Html.DisplayFor(modelItem => item.Nome)</h5>
+                                    </div>                                
+                            </td>
+                            <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.Duracao) horas</h5>
+                                
+                            </td>
+
+                            <td>
+                                  @Html.DisplayFor(modelItem => item.Descricao)
+                            </td>
+                            
+                          
+                          <td class="edit">  <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> 
+                            <td class="edit">  <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a> 
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+       <p style="text-align: center;"><a class="button-56" role="button" asp-action="Create">Criar Novo Curso</a> </p> 
+
+         </body> 
+
+

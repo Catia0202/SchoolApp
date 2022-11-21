@@ -2,16 +2,128 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_sidebar" />
+   <body style="background-image: url(../../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 302px;">Editar Curso</h1>
+<main style="margin-left: 950px;
+    margin-top: 518px;">
+ 
 
-<h1>Create</h1>
+ <form asp-action="Edit" enctype="multipart/form-data">
+               <input type="hidden" asp-for="Id" />
+               <input type="hidden" asp-for="Fotourl" />
+  <figure style="
+    width: 1170px;
+">
+    <div class="picture" style="
+    margin-left: 251px;">
+    <div class="containerform"  onclick="defaultBtnActive()" id="custom-btn">
+         <div class="wrapper">
+            <div class="image">
+                 <img src="@Url.Content(@Model.Fotourl)" alt="">
+            </div>
+            <div class="content">
+               <div class="icon">
+                  <i class="fas fa-cloud-upload-alt"></i>
+               </div>
+               <div class="text">
+                  Clique aqui para inserir a foto!
+               </div>
+            </div>
+            <div id="cancel-btn">
+               <i class="fas fa-times"></i>
+            </div>
+            <div class="file-name">
+               File name here
+            </div>
+         </div>
+         <input id="default-btn" style="display: none;" asp-for="ImageFile" type="file" hidden >
+         <span asp-validation-for="ImageFile" class="text-danger"></span>
+      </div>
+   
+    </div>
+    <div class="form1" style="padding-top: 0px;margin-left: 213px; height: 190px;">
+        <span class="inputs--filled">
+          <label for="username" class="text-small-uppercase">Nome</label>
+          <input class="text-body" style="color:black;"asp-for="Nome" id="username"type="text" required>
+           <span asp-validation-for="Nome" class="text-danger"></span>
+        </span>
+        <span class="inputs--filled">
+            <label for="username" class="text-small-uppercase">Duração</label>
+            <input class="text-body" style="color:black;"  asp-for="Duracao"  id="username" type="number" required>
+              <span asp-validation-for="Duracao" class="text-danger"></span>
+          </span>
+        <span class="inputs--filled">
+          <label for="email" class="text-small-uppercase">Descrição</label>
+          <input class="text-body"style="color:black;" asp-for="Descricao" id="username"  type="text" required>
+           <span asp-validation-for="Descricao" class="text-danger"></span>
+        </span>
+         <input class="text-small-uppercase" style="left: 288px;
+    bottom: 13px;" id="submit" type="submit" value="Editar">
+    </div>
+  </figure>
+  </form>
+  </main>
+  </body>
 
-<h4>Aluno</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <div class="col-md-4">
-            <form asp-action="Edit" enctype="multipart/form-data">
+  <script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          @*  <form asp-action="Edit" enctype="multipart/form-data">
                <input type="hidden" asp-for="Id" />
               <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
@@ -38,13 +150,5 @@
                 <input type="submit" value="Update" class="btn btn-primary" />
                 /div>
              <h2>@ViewBag.message</h2>
-            </div>
+            </div>*@
 
-        </form>
-        </div>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>

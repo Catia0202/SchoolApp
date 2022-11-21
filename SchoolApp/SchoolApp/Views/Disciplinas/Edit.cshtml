@@ -2,40 +2,88 @@
 
 @{
     ViewData["Title"] = "Edit";
+          Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_sidebar" />
+   <body style=" background-image: url(../../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width:400px;">Editar Disciplina</h1>
+<main style="margin-left: 950px;
+    margin-top: 518px;
+    width: 850px;">
+ 
 
-<h1>Edit</h1>
 
-<h4>Disciplina</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descrição" class="control-label"></label>
-                <input asp-for="Descrição" class="form-control" />
-                <span asp-validation-for="Descrição" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Duracao" class="control-label"></label>
-                <input asp-for="Duracao" class="form-control" />
-                <span asp-validation-for="Duracao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+  <figure style="
+    width: 1170px;
+">
+   
+    <div class="form1" style="padding-top: 182px;
+    margin-left: 81px;
+    height: 262px;">
+        <span class="inputs--filled">
+          <label for="username" class="text-small-uppercase">Nome</label>
+          <input class="text-body" style="color:black;"asp-for="Nome" id="username"type="text" required>
+           <span asp-validation-for="Nome" class="text-danger"></span>
+        </span>
+        <span class="inputs--filled">
+            <label for="username" class="text-small-uppercase">Duração</label>
+            <input class="text-body" style="color:black;"  asp-for="Duracao"  id="username" type="number" required>
+              <span asp-validation-for="Duracao" class="text-danger"></span>
+          </span>
+        <span class="inputs--filled">
+          <label for="email" class="text-small-uppercase">Descrição</label>
+          <input class="text-body"style="color:black;" asp-for="Descrição" id="username"  type="text" required>
+           <span asp-validation-for="Descrição" class="text-danger"></span>
+        </span>
+         <input class="text-small-uppercase" style="left: 288px;
+    bottom: 13px;" id="submit" type="submit" value="Editar">
     </div>
-</div>
+  </figure>
+  </form>
+  </main>
+  </body>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+  <script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
+
+
+         
 

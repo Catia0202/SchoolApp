@@ -1,1 +1,82 @@
-﻿
+﻿@model SchoolApp.Models.HomeAdminViewModel
+@{
+    ViewData["Title"] = "Admin";
+    Layout = null;
+}
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+
+     <link rel="stylesheet" href="~/css/Index.css" />
+     <partial name="_sidebar" />
+
+</head>
+<body    style="
+    padding-top: 70px;
+    margin-left: 200px;
+    width: 1527px;
+">
+ <div class="rowdash">
+        <div class="columndash">
+          <div class="card">
+             <h3><i class="fa-solid fa-graduation-cap" style="color:orange ;"></i></h3>
+            <p>Total de Alunos</p>
+            <p>@Model.TotalAlunos</p></div>
+        </div>
+        <div class="columndash">
+          <div class="card"> 
+              <h3><i class="fa-solid fa-people-group" style="color:orange ;"></i></h3>
+            <p>Total de Turmas</p>
+            <p>@Model.TotalTurmas</p></div>
+        </div>
+        <div class="columndash">
+          <div class="card"> <h3><i class="fa-solid fa-glasses" style="color:orange ;"></i></h3>
+            <p>Total de Cursos</p>
+            <p>@Model.TotalCursos</p></div>
+        </div>
+        <div class="columndash">
+          <div class="card"> <h3><i class="fa-solid fa-book-open" style="color:orange ;"></i></h3>
+            <p>Total de disciplinas</p>
+            <p>@Model.TotalDisciplinas</p></div>
+        </div>
+      </div>
+              <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Nome </td>
+                         
+                            <td> Email</td>
+                               <td>Role</td> 
+                            <td></td>
+                              <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+           
+            @foreach (var item in Model.Users) {
+                        <tr>
+                           <td>
+                                    <div class="people-de">
+                                        <h5> @Html.DisplayFor(modelItem => item.Username)</h5>
+                                        
+                                    </div>                                
+                           </td>
+                            <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.Email)</h5>
+                               
+                            </td>
+                            
+                            <td class="people-des">
+                                       <h5>  @Html.DisplayFor(modelItem => item.Role)</h5>
+                          
+                            </td>
+                            
+                        
+                            <td class="edit">  <a asp-action="Delete" asp-route-id="@item.UserId">Apagar</a> 
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+       <p style="text-align: center;"><a class="button-56" role="button" asp-action="Register" asp-controller="Account">Criar Novos Utilizadores</a> </p> 
+        </body>

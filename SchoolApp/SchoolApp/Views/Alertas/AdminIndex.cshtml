@@ -1,55 +1,81 @@
 ﻿@model IEnumerable<SchoolApp.Data.Entities.Alerta>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Alertas";
+        Layout = null;
 }
 
-<h1>Index</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+      <partial name="_sidebar" />
+</head>
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 680px;margin-top: 30px;padding-right:0px;width: 255px;"> Disciplinas</h1>
 
+     <body        style="
+    padding-top: 70px;
+    margin-left: 200px;
+    width: 1527px;
+">
+  
+   
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                              <td>Funcionário:</td>
+                            <td>Data</td>
+                         
+                          
+                               <td>Assunto</td>
+                           
+                            <td>Problema</td>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Assunto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Problema)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th> @Html.DisplayNameFor(model => model.Estado)</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Assunto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Problema)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
-            </td>
-            <td>
-                 @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
+                                <td>Estado</td>
+                              <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(Model.Count() == 0)
+            {
+                <tr><td><h2  style="color:black; text-align:center">@ViewBag.message</h2></td></tr>
                 
-                <a asp-action="DetailsAlertaAdmin" asp-route-id="@item.Id">Details</a>
-               
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                  
+            }
+            @foreach (var item in Model) {
+                        <tr>
+                                                           
+                                    <td  class="people-de">
+                                        <h5> @Html.DisplayFor(modelItem => item.User.FirstName)</h5>
+                                        <p> @Html.DisplayFor(modelItem => item.User.Email)</p>
+                                    </td>                                
+                             <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.Data.Date)</h5>
+                                
+                            </td>
+                            <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.Assunto)</h5>
+                                
+                            </td>
+
+                            <td>
+                                  @Html.DisplayFor(modelItem => item.Problema)
+                            </td>
+                                <td>
+                                  @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                          
+                          <td class="edit">  <a asp-action="DetailsAlertaAdmin" asp-route-id="@item.Id">Abrir</a> 
+                      
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+    
+
+         </body> 
+
+
+

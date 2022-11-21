@@ -73,16 +73,36 @@ namespace SchoolApp.Controllers
 
 
         [Authorize(Roles="Admin")]
-        public IActionResult HomeAdmin(HomeAdminViewModel model)
+        public IActionResult HomeAdmin()
         {
-            new HomeAdminViewModel
+            HomeAdminViewModel model = new HomeAdminViewModel
             {
                 TotalAlunos = _alunosRepository.GetAll().Count(),
                 TotalDisciplinas = _disciplinasRepository.GetAll().Count(),
                 TotalTurmas=_turmasRepository.GetAll().Count(),
-                
-            };
-            return View();
+                TotalCursos = _cursoRepository.GetAll().Count(),
+                Users = (from userroles in _context.UserRoles
+                        join user in _context.Users
+                        on userroles.UserId equals user.Id
+                        join roles in _context.Roles 
+                        on userroles.RoleId equals roles.Id
+                        select new
+                        {
+                            UserId = user.Id,
+                            Username = user.UserName,
+                            Email = user.Email,
+                            Role = roles.Name
+                        }).Where(p => p.Role == "Funcionario" || p.Role == "Admin").ToList().Select(p => new UsersComRoles
+                        {
+                            UserId = p.UserId,
+                           Username = p.Username,
+                           Email = p.Email,
+                           Role = p.Role
+                        })
+            
+
+        };
+            return View(model);
         }
         [Authorize(Roles = "Admin")]
   

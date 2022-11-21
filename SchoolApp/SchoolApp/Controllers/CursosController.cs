@@ -114,7 +114,7 @@ namespace SchoolApp.Controllers
                 {
                     await _cursoRepository.UpdateAsync(curso);
                     ViewBag.message = "Curso foi atualizado com sucesso!";
-                    return View(model);
+                    return RedirectToAction("Index","Cursos");
                 }
                 catch 
                 {

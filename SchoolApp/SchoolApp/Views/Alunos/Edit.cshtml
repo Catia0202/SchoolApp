@@ -1,20 +1,159 @@
 ﻿@model SchoolApp.Models.AlunoViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Aluno";
+        Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-<h1>Edit</h1>
-
-<h4>Aluno</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit"  enctype="multipart/form-data">
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+<body>
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 295px;"> Editar Aluno</h1>
+       <main style="margin-left: 900px;
+    margin-top: 518px;">
+     
+    <form asp-action="Edit"  enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="turmaid" />
            <input type="hidden" asp-for="Antigoemail" />
-             <div class="form-group">
+           <input type="hidden" asp-for="ImageUrl" />
+    <figure>
+    <div class="picture">
+        
+    <div class="containerform"  onclick="defaultBtnActive()" id="custom-btn">
+         <div class="wrapper">
+            <div class="image">
+               <img src="@Url.Content(@Model.ImageUrl)" alt="">
+            </div>
+            <div class="content">
+               <div class="icon">
+                  <i class="fas fa-cloud-upload-alt"></i>
+               </div>
+               <div class="text">
+                  Clique aqui para inserir a foto!
+               </div>
+            </div>
+            <div id="cancel-btn">
+               <i class="fas fa-times"></i>
+            </div>
+            <div class="file-name">
+               File name here
+            </div>
+         </div>
+        
+         <input id="default-btn" asp-for="ImageFile" type="file" hidden>
+      </div>
+   
+    </div>
+    <div class="form1" style="padding-top:16px; margin-left:156px;">
+        <span class="inputs--filled" >
+          <label for="username" class="text-small-uppercase">Primeiro Nome</label>
+          <input class="text-body"asp-for="PrimeiroNome" id="username"type="text" required>
+           <span asp-validation-for="PrimeiroNome" class="text-danger"></span>
+        </span>
+        <span class="inputs--filled" >
+            <label for="username" class="text-small-uppercase">Ultimo Nome</label>
+            <input class="text-body"  asp-for="UltimoNome"  id="username" type="text" required>
+              <span asp-validation-for="UltimoNome" class="text-danger"></span>
+          </span>
+        <span class="inputs--filled" >
+          <label for="email" class="text-small-uppercase">Email</label>
+          <input class="text-body" asp-for="Email" id="email" name="email" type="email" required>
+           <span asp-validation-for="Email" class="text-danger"></span>
+        </span>
+           <label style="
+    margin-top: -18px;
+"  class="text-small-uppercase">Género</label>
+             <span>
+       
+          <div style="margin-top: 20px;" class="text-body">
+          @Html.RadioButtonFor(m => m.Genero, "Masculino") Masculino
+          @Html.RadioButtonFor(m => m.Genero, "Feminino") Feminino
+          </div>
+           <span asp-validation-for="Genero" class="text-danger"></span>
+        </span>
+    </div>
+  </figure>
+ 
+  <div class="form1" style="padding-top:40px">
+    <span>
+      <label  style="
+    margin-right: 80px;" class="text-small-uppercase">Data de Nascimento</label>
+      <input class="text-body" asp-for="Data_Nascimento" type="date" style="
+    width: 295px;
+    height: 30px;
+    background: #f79577;
+   margin-top: 40px;
+"  required>
+    </span>
+    <span  class="inputs--filled" >
+        <label style="padding-top:70px;" class="text-small-uppercase">Nº Telemóvel</label>
+        <input class="text-body" asp-for="Telemovel"  type="text" required>
+      </span>
+     
+              <span class="inputs--filled" >
+        <label style="padding-top:70px;" class="text-small-uppercase">Morada</label>
+        <input class="text-body"  asp-for="Morada" type="text" required>
+      </span>
+      <span class="inputs--filled" >
+        <label style="padding-top:50px" class="text-small-uppercase">Turma</label>
+      
+        <div style="padding-top: 13px;
+    padding-left: 431px;"class="box">
+             <select asp-for="turmaid" asp-items="Model.Turmas" ></select>
+             <span asp-validation-for="turmaid" class="text-danger"></span>
+             
+          </div>
+      </span>
+
+    <input class="text-small-uppercase" style="left: 165px;
+    bottom:  46px;" id="submit" type="submit" value="Criar">
+  </div>
+  </form>
+  </main>
+   </body>
+   <partial name="_footer" />
+<script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
+
+
+
+@*
+  <div class="form-group">
                 <label asp-for="turmaid" class="control-label"></label>
                 <select asp-for="turmaid" asp-items="Model.Turmas" class="form-control"></select>
              
@@ -62,12 +201,5 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save"   class="btn btn-primary" />
-            </div>
-         </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+*@

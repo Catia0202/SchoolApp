@@ -73,8 +73,8 @@ namespace SchoolApp.Data
                 on curso.Id equals cursodisciplina.CursoId
                 join disciplina in _context.Disciplinas
                 on cursodisciplina.DisciplinaId equals disciplina.Id
-                join falta in _context.Faltas
-                on disciplina.Id equals falta.disciplinaid
+                //join falta in _context.Faltas
+                //on disciplina.Id equals falta.disciplinaid
                 where aluno.Id == alunoid && turma.Id == turmaid
                 select new
                 {

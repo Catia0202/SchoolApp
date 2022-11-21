@@ -167,13 +167,6 @@ namespace SchoolApp.Controllers
                               $"To allow user," +
                               $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email </a>");
 
-
-
-
-
-
-
-
                     }
 
 
@@ -199,6 +192,7 @@ namespace SchoolApp.Controllers
                 Id = model.Id,
                 ImageUrl= path ,
                 PrimeiroNome = model.PrimeiroNome,
+                UltimoNome = model.UltimoNome,
                 Data_Nascimento = model.Data_Nascimento,
                 Email = model.Email,
                 Genero = model.Genero,
@@ -229,6 +223,7 @@ namespace SchoolApp.Controllers
             var model = _converterHelper.ToAlunoViewModel(aluno,user);
             model.Turmas = _turmasRepository.GetComboTurmas();
             model.User = await _userHelper.GetUserByEmailAsync(aluno.Email);
+            model.ImageUrl = aluno.ImageUrl;
             model.Antigoemail = aluno.Email;
             return View(model);
         }
@@ -257,10 +252,11 @@ namespace SchoolApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                int alunosjanaturma = _alunosRepository.GetAll().Where(p => p.turmaid == model.turmaid).Count();
                 try
                 {
                     var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
-                    int alunosjanaturma = _alunosRepository.GetAll().Where(p => p.turmaid == model.turmaid).Count();
+                
                     var path = model.ImageUrl;
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
@@ -324,7 +320,7 @@ namespace SchoolApp.Controllers
             }
 
             var aluno = await _alunosRepository.GetByIdAsync(id.Value);
-            
+            aluno.turma = await _turmasRepository.GetAll().Where(p => p.Id == aluno.turmaid).FirstOrDefaultAsync();
             if (aluno == null)
             {
                 return NotFound();
@@ -394,12 +390,12 @@ namespace SchoolApp.Controllers
 
             var aluno = _alunosRepository.GetAll().Where(p => p.User.Id == user.Id).FirstOrDefault();
 
-            var turma = _turmasRepository.GetByIdAsync(aluno.turmaid);
+            var turma = await _turmasRepository.GetByIdAsync(aluno.turmaid);
 
             var model = new AlunoAvaliacoesViewModel
             {
-                NomeCurso = turma.Result.Nome,
-                AvaliacaoDisciplinas = await _alunosRepository.GetAvaliacaoAlunoEmDisciplinaAsync(aluno.Id, turma.Result.Id)
+                NomeCurso = turma.Nome,
+                AvaliacaoDisciplinas = await _alunosRepository.GetAvaliacaoAlunoEmDisciplinaAsync(aluno.Id, turma.Id)
             };
             return View(model);
         }

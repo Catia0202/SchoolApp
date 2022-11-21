@@ -5,7 +5,7 @@
     Layout = null;
 }
 <partial name="_Navbar" />
-<h1 style="text-align: center;"> Alunos</h1>
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 163px;"> Alunos</h1>
 <head>
     
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
@@ -15,13 +15,6 @@
 
 
     
-
-     <form style="padding-left: 30px;"  id="standard-3" method="get" action="" id="form2">
-    <input type="text" class="search-txt-input" name="q" maxlength="100">
-    <button type="submit" form="form2"  class="search-button">
-      <i class="fa fa-search"></i>
-    </button>
-  </form>
 
 
 
@@ -58,7 +51,7 @@
                                     </div>                                
                             </td>
                             <td class="people-des">
-                                <h5> @Html.DisplayNameFor(model => model.Telemovel)</h5>
+                                <h5> @Html.DisplayFor(modelItem => item.Telemovel)</h5>
                                 <p> @Html.DisplayFor(modelItem => item.Morada)</p>
                             </td>
 

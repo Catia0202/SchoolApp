@@ -89,11 +89,11 @@ namespace SchoolApp.Controllers
                 var disciplinaselecionada = _disciplinasRepository.GetByIdAsync(int.Parse(item.Value));
                 
             }
-            
+            int disciplinasjanaturma = _cursoDisciplinarepository.GetAll().Where(p => p.CursoId == id).Count();
             foreach (var selectListItem in selectListItems)
             {
                 var disciplinasselecionadas = selectListItems.Count();
-                int disciplinasjanaturma = _cursoDisciplinarepository.GetAll().Where(p => p.CursoId == id).Count();
+               
                 selectListItem.Selected = true;
                 ViewBag.message += "\\n" + selectListItem.Text;
                 

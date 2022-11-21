@@ -2,39 +2,73 @@
 
 @{
     ViewData["Title"] = "Delete";
+    Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-<h1>Delete</h1>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_sidebar" />
+<body style="background-image: url(../../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 966px;margin-top: 30px;padding-right:0px;width: 340px;">Apagar Curso</h1>
+       <main style="margin-left: 1100px;
+    margin-top: 518px; height: 800px;">
+  
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           <input type="hidden" asp-for="Id" />
+           <input type="hidden" asp-for="Fotourl" />
+    <figure >
+    <div class="picture" style="
+    padding-top: 24px;">
+        
+    <div class="containerform"   id="custom-btn">
+         <div class="wrapper" style="height: 600px;">
+            <div class="image">
+               <img src="@Url.Content(@Model.Fotourl)" alt="">
+            </div>
+         </div>
+      </div>
 
-<h3>Tem a certeza que pretende apagar?</h3>
-<div>
-    <h4>Disciplina</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descricao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descricao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duracao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duracao)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
+    </div>
+    </figure>
+    <div class="form1" style="    padding-top: 30px;
+    margin-left: 20px;
+    width:420px;
+">         <label style="
+    margin-right: 390px; font-size: 25px; color:black;     width: 525px;
+" class="text-small-uppercase">Tem a certeza que deseja eliminar este curso?</label>
+        <span class="inputs--filled" >
+          <label for="username" style="
+    margin-right: 390px; font-size: 25px; margin-top: 50px;
+" class="text-small-uppercase">Nome:</label>
+          <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;">  @Html.DisplayFor(model => model.Nome)  </a>
+           
+        </span>
+        <span class="inputs--filled" >
+            <label for="username" style="
+    margin-right: 390px; font-size: 25px; margin-top: 20px;" class="text-small-uppercase">Email:</label>
+             <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;"> @Html.DisplayFor(model => model.Duracao)  </a>
+          </span>
+        <span class="inputs--filled" >
+          <label for="email"style="
+    margin-right: 390px;font-size: 25px; margin-top: 20px;
+" class="text-small-uppercase">Telemovél:</label>
+           <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;"> @Html.DisplayFor(model => model.Descricao)  </a>
+        </span>
+
+            <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-        <h2 >@ViewBag.errormessage</h2>
+        <input id="submit" type="submit" value="Delete" style="    margin-left: 70px;
+    margin-bottom: 212px;" class="text-small-uppercase"/> 
+       
     </form>
-</div>
+
+
+         <h2 >@ViewBag.errormessage</h2>
+    </div>
+   
+
+  
+  </main>
+  </body>

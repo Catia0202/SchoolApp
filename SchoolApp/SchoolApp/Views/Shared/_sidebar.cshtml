@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="~/css/sidebar.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+        <link hef="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js">
+       
+    </head>
+    
+    <div class="sidenav">
+        <a  asp-action="HomeAdmin"  asp-controller="Home">Início</a>
+        <a asp-action="AdminIndex" asp-controller="Alertas">Alertas</a>
+         <a asp-action="ConfigAdmin" asp-controller="Home">Configuracões</a>
+        <button class="dropdown-btn">Cursos
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+          <a asp-action="Index" asp-controller="Cursos">Lista</a>
+          <a asp-action="Create" asp-controller="Cursos">Adicionar</a>
+        </div>
+       <button class="dropdown-btn">Disciplinas
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+          <a asp-action="Index" asp-controller="Disciplinas">Lista</a>
+          <a asp-action="Create" asp-controller="Disciplinas">Adicionar</a>
+        </div>
+      </div>
+
+      <script type="text/javascript" src="~/js/sidebar.js"></script>
+</html>

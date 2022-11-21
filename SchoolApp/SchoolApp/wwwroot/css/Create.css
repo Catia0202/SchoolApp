@@ -22,7 +22,8 @@ input[type=submit] {
 }
 
 input[type=email],
-input[type=text] {
+input[type=text],
+input[type=number]{
     height: 1.5rem;
     margin: 0 0 1.15rem;
     width: 100%;
@@ -102,12 +103,13 @@ main {
 }
 
 body {
-    background: #f79577;
+    background-image: url(../images/students.jpg);
     font: 700 16px 'Montserrat', sans-serif;
 }
 
 input[type=email],
-input[type=text] {
+input[type=text],
+input[type=number]{
     background: none;
     border: none;
     border-bottom: 2px solid #f79577;
@@ -116,7 +118,9 @@ input[type=text] {
 }
 
     input[type=email]:required,
-    input[type=text]:required {
+    input[type=text]:required,
+    input[type=number]:required,
+    input[type=file]:required{
         box-shadow: none;
         outline: none;
     }
@@ -144,7 +148,7 @@ input[type=submit] {
     background: url(//my-assets.netlify.com/codepen/dailyui-001/ico-invalid.svg) center right no-repeat;
     border-bottom: 2px solid #f37b56;
     box-shadow: none;
-    color: #f37b56;
+    color: #ff0019;
     transform: translate3d(0, 0, 0);
 }
 
@@ -163,7 +167,8 @@ input[type=submit] {
 }
 
 .inputs--invalid label {
-    color: #f37b56;
+    color: #ff0000;
+    
 }
 
 label {
@@ -299,7 +304,8 @@ main {
     font-size: 18px;
     color: #fff;
     display: none;
-    background: linear-gradient(135deg,#3a8ffe 0%,#9658fe 100%);
+    background: linear-gradient(135deg,#531b02 0%,#f79577 100%);
+}
 }
 
 .wrapper.active:hover .file-name {

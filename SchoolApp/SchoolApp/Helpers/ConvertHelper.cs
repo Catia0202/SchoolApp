@@ -60,6 +60,7 @@ namespace SchoolApp.Helpers
                 Id = aluno.Id,
                 ImageUrl = aluno.ImageUrl,
                 PrimeiroNome = aluno.PrimeiroNome,
+                UltimoNome = aluno.UltimoNome,
                 Data_Nascimento = aluno.Data_Nascimento,
                 Email = aluno.Email,
                 Genero = aluno.Genero,

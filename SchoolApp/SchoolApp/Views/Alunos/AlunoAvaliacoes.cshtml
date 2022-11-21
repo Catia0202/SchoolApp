@@ -1,8 +1,115 @@
 ﻿@model SchoolApp.Models.AlunoAvaliacoesViewModel
 @{
     ViewData["Title"] = "Avaliação do Aluno";
+    Layout = null;
 }
-<br>
+<partial name="_Navbar" />
+<h1 style="font-size: 50px;align-items:center;margin-left: 700px;margin-top: 30px;padding-right:0px;width:500px;">As suas avaliações:</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+</head>
+
+     <form style="padding-left: 30px;"  id="standard-3" method="get" action="" id="form2">
+    <input type="text" class="search-txt-input" name="q" maxlength="100">
+    <button type="submit" form="form2"  class="search-button">
+      <i class="fa fa-search"></i>
+    </button>
+  </form>
+
+
+  <body  >
+
+
+      
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Disciplina</td>
+                         
+                            <td>Horas Faltadas</td>
+                            
+                            <td> Percentagem de  Faltas</td>
+                               <td>Data</td>
+                            <td>Nota</td>
+                            <td>Estado</td>
+                              <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+            
+           @if (Model.AvaliacaoDisciplinas != null)
+            {
+                @foreach (var item in Model.AvaliacaoDisciplinas)
+                {
+                    <tr>
+                        <td>
+                          <div class="people-de">
+                                <h5> @Html.DisplayFor(modelItem => item.Nomedisciplina)</h5>
+                                <p>  @Html.DisplayFor(modelItem => item.Duracaodisciplina) horas totais</p>
+                            </div>                                
+                        </td>
+                        <td class="people-des">
+                            <h5> @Html.DisplayFor(modelItem => item.Horasfalta)</h5>
+                        </td>
+                        <td class="people-des">
+                            <h5> @Html.DisplayFor(modelItem => item.Percentagemfalta)</h5>
+                        </td>
+                        <td class="people-des">
+                            <h5>@Html.DisplayFor(modelItem => item.DataNota)</h5>
+                        </td>
+                        <td class="people-des">
+                            <h5>@Html.DisplayFor(modelItem => item.Nota)</h5>
+                        </td>
+                          <td class="people-des">
+                                    @if (item.ChumbouFaltas == true)
+                                        {
+                                            <a style="color: red;">Chumbou Por Faltas</a>
+                                        }
+                                        else if(item.Chumbounota ==true)
+                                        {
+                                            <a style="color: red;">Chumbou Por Nota Inferior a 10</a>
+                                        }else if (item.ChumbouFaltas == true && item.Chumbounota ==true)
+                                        {
+                                            <a style="color: red;">Chumbou Por Faltas e Nota</a>
+                                        }
+                                        else{
+
+                                            <a style="color: green;">Passou!</a>
+                                            }
+                        </td>
+
+                    </tr>
+                }
+            }
+              </tbody>
+                  </table>
+            </dir>
+      
+            </body>
+
+<partial name="_footer" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<br>
 <br>
 <h3 class="text-center">Evaluations</h3>
 <br>
@@ -91,8 +198,6 @@
             </div>
         </div>
         <br>
-        <div class="col-md-2 offset-md-5 nav-item text-center">
-            <a asp-controller="Evaluations" asp-action="StudentEvaluationsCourses" asp-route-userName="@this.User.Identity.Name" class="nav-link text-dark">Back</a>
-        </div>
+     
     </div>
-</div>
+</div>*@
