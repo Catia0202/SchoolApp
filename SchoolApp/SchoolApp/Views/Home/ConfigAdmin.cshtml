@@ -1,0 +1,57 @@
+﻿@model SchoolApp.Data.Entities.Configuracao
+@{
+    ViewData["Title"] = "Configurações";
+    Layout = null;
+}
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+
+     <link rel="stylesheet" href="~/css/Create.css" />
+     <link rel="stylesheet" href="~/css/Index.css" />
+     <partial name="_sidebar" />
+
+</head>
+    <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3; margin-left: 552px;
+    margin-top: 30px;
+
+    width: 378px;"> Configurações</h1>
+   <form asp-action="ConfigAdmin" style="    padding-top: 220px;">
+         <input type="hidden" asp-for="Id" />
+      
+<body    style="
+    padding-top: 70px;
+    margin-left: 200px;
+    width: 1527px;
+ background-image: url(../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;
+">
+ <div class="rowdash" style="    width: 2034px;">
+        <div class="columndash">
+          <div class="card" style="padding-top: 38px; height: 170px;">
+             <h3><i class="fa-solid fa-graduation-cap" style="color:orange ;"></i></h3>
+            <p>Percentagem de Faltas</p>
+            <input asp-for="PercentagemdeFaltas" type="number" required />
+             <span asp-validation-for="PercentagemdeFaltas" class="text-danger"></span>
+        </div>
+        </div>
+        <div class="columndash" style="padding: 0 63px;">
+          <div class="card" style="padding-top: 38px;height: 170px;"> 
+              <h3><i class="fa-solid fa-people-group" style="color:orange ;"></i></h3>
+            <p>Máximo de Disciplinas na Turma</p>
+                   <input asp-for="MaximoDisciplinasPorTurma" type="number" required />
+             <span asp-validation-for="MaximoDisciplinasPorTurma" class="text-danger"></span>
+        </div>
+         </div>
+        <div class="columndash">
+          <div class="card" style="padding-top: 38px;height: 170px;"> <h3><i class="fa-solid fa-glasses" style="color:orange ;"></i></h3>
+            <p>Maximo Alunos Na Turma</p>
+                 <input asp-for="MaximoAlunosNaTurma" type="number" required />
+             <span asp-validation-for="MaximoAlunosNaTurma" class="text-danger"></span>
+        </div>
+         </div>
+           <input class="text-small-uppercase" style="left: 869px;
+    bottom: 216px;" id="submit" type="submit" value="Atualizar">
+      </div>
+     
+
+      </body>
+       </form>

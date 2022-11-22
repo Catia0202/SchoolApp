@@ -17,6 +17,7 @@
     padding-top: 70px;
     margin-left: 200px;
     width: 1527px;
+ background-image: url(../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;
 ">
   
    
@@ -41,7 +42,8 @@
                   
             }
             @foreach (var item in Model) {
-                        <tr>
+                        <tr style="
+    background-color: #ecc190;">
                             <td class="item">
                                 <img src="@Url.Content(item.Fotourl)" alt="">
                                     <div class="people-de">

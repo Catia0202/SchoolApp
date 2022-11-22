@@ -1,7 +1,6 @@
-﻿@model SchoolApp.Data.Entities.Disciplina
-
+﻿@model SchoolApp.Data.Entities.User
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Delete";
           Layout = null;
 }
 <head>
@@ -9,44 +8,49 @@
      <link rel="stylesheet" href="~/css/Create.css" />
 </head>
 <partial name="_sidebar" />
-   <body style=" background-image: url(../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
-         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width:375px;"> Criar Discpilina</h1>
+   <body style=" background-image: url(../../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width:424px;">Apagar Utilizador</h1>
 <main style="margin-left: 950px;
     margin-top: 518px;
     width: 850px;">
  
 
-<form asp-action="Create" enctype="multipart/form-data">
+
+      
   <figure style="
-    width: 1170px;
+   width: 436px;
+    padding-left: 229px;
 ">
-   
-    <div class="form1" style="padding-top: 182px;
-    margin-left: 81px;
-    height: 262px;">
-        <span>
-          <label for="username" class="text-small-uppercase">Nome</label>
-          <input class="text-body" style="color:black;"asp-for="Nome" id="username"type="text" required>
-           <span asp-validation-for="Nome" class="text-danger"></span>
+       <label style="
+    margin-right: 390px; font-size: 25px; color:black;     width: 525px;
+" class="text-small-uppercase">Tem a certeza que deseja eliminar este utilizador?</label>
+        <span class="inputs--filled" >
+          <label for="username" style="
+    margin-right: 390px; font-size: 25px; margin-top: 100px;
+" class="text-small-uppercase">Nome:</label>
+          <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;">  @Html.DisplayFor(model => model.FirstName)  </a>
+           
         </span>
-        <span>
-            <label for="username" class="text-small-uppercase">Duração</label>
-            <input class="text-body" style="color:black;"  asp-for="Duracao"  id="username" type="number" required>
-              <span asp-validation-for="Duracao" class="text-danger"></span>
+        <span class="inputs--filled" >
+            <label for="username" style="
+    margin-right: 390px; font-size: 25px; margin-top: 20px;" class="text-small-uppercase">Email:</label>
+             <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;"> @Html.DisplayFor(model => model.Email)  </a>
           </span>
-        <span>
-          <label for="email" class="text-small-uppercase">Descrição</label>
-          <input class="text-body"style="color:black;" asp-for="Descrição" id="username"  type="text" required>
-           <span asp-validation-for="Descrição" class="text-danger"></span>
-        </span>
-         <input class="text-small-uppercase" style="left: 288px;
-    bottom: 13px;" id="submit" type="submit" value="Criar">
-    </div>
-  </figure>
-  </form>
+       
+
+            <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input id="submit" type="submit" value="Apagar" style="margin-left: 343px;
+    margin-bottom: 129px;" class="text-small-uppercase"/> 
+       
+    </form>
+
+
+         <h2 >@ViewBag.errormessage</h2>
+         </figure>
   </main>
   </body>
-
+  
   <script src="~/js/create.js"></script>
 <script>
          const wrapper = document.querySelector(".wrapper");
@@ -80,4 +84,3 @@
            }
          });
       </script>
-

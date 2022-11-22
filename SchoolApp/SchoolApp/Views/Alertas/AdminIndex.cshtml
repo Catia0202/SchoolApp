@@ -11,12 +11,14 @@
       <link href="~/css/Index.css" rel="stylesheet">
       <partial name="_sidebar" />
 </head>
-<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 680px;margin-top: 30px;padding-right:0px;width: 255px;"> Disciplinas</h1>
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 680px;margin-top: 30px;padding-right:0px; width: 188px;">Alertas</h1>
 
      <body        style="
     padding-top: 70px;
     margin-left: 200px;
     width: 1527px;
+ background-image: url(../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;
+
 ">
   
    
@@ -44,7 +46,8 @@
                   
             }
             @foreach (var item in Model) {
-                        <tr>
+                        <tr style="
+    background-color: #ecc190;">
                                                            
                                     <td  class="people-de">
                                         <h5> @Html.DisplayFor(modelItem => item.User.FirstName)</h5>

@@ -1,63 +1,102 @@
 ﻿@model SchoolApp.Models.RegisterNewUserViewModel
 @{
     ViewData["Title"] = "Register";
+    Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_sidebar" />
+   <body style=" background-image: url(../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width:380px;"> Criar Utilizador</h1>
+<main style="margin-left: 950px;
+    margin-top: 518px;
+    width: 850px;">
+ 
 
-<h2>Register</h2>
+<form asp-action="Register" enctype="multipart/form-data">
+  <figure style="
+    width: 1170px;
+">
+   
+    <div class="form1" style="padding-top: 55px;
+    margin-left: 59px;
+    height: 541px;">
+        <span>
+          <label for="username" class="text-small-uppercase">Primeiro Nome</label>
+          <input class="text-body" style="color:black;"asp-for="FirstName" id="username"type="text" required>
+           <span asp-validation-for="FirstName" class="text-danger"></span>
+        </span>
+        <span>
+            <label for="username" class="text-small-uppercase">Ultimo Nome</label>
+            <input class="text-body" style="color:black;"  asp-for="LastName"  id="username" type="text" required>
+              <span asp-validation-for="LastName" class="text-danger"></span>
+          </span>
+        <span>
+          <label for="email" class="text-small-uppercase">Email</label>
+          <input class="text-body"style="color:black;" asp-for="Username"id="email" type="email" required>
+           <span asp-validation-for="Username" class="text-danger"></span>
+        </span>
+           <span>
+            <label for="username" class="text-small-uppercase">Password Inicial</label>
+            <input class="text-body" style="color:black;"  asp-for="Password"  id="username" type="text" required>
+              <span asp-validation-for="Password" class="text-danger"></span>
+          </span>
+           <span>
+            <label for="username" class="text-small-uppercase">Confirmar Password Inicial</label>
+            <input class="text-body" style="color:black;"  asp-for="Confirm"  id="username" type="text" required>
+              <span asp-validation-for="Confirm" class="text-danger"></span>
+          </span>
+           <label for="email"style="
+    margin-right: 390px;font-size: 25px; margin-top: 20px;"class="text-small-uppercase">Tipo de Utilizador:</label>
+                  <div style="padding-top: 120px;  padding-left: 256px;"class="box">
+             <select asp-for="Role" >  
+                 <option>Admin</option>
+                 <option>Funcionario</option>
+              </select>
+             <span asp-validation-for="Role" class="text-danger"></span>
+             
+          </div>
+         <input class="text-small-uppercase" style="left: 205px;
+    bottom: 13px;" id="submit" type="submit" value="Criar Novo Utilizador">
+    </div>
+  </figure>
+  </form>
+  </main>
+  </body>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
-                    <div class="form-group">
-                <label class="control-label">Tipo Utilizador:</label>
-                <select asp-for="Role" class="form-control">
-                    <option value="Admin">Admin</option>
-                    <option value="Funcionario">Funcionário</option>
-                   
-                </select>
-               
-              </div>
-            <div class="form-group">
-                <label asp-for="FirstName">First Name</label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-warning"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="LastName">Last Name</label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-warning"></span>
-            </div>
+  <script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
 
-            
-            <div class="form-group">
-                <label asp-for="Username">UserName</label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-warning"></span>
-            </div>
-
-            
-            <div class="form-group">
-                <label asp-for="Password">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-warning"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Confirm">Confirm</label>
-                <input asp-for="Confirm" type="password" class="form-control" />
-                <span asp-validation-for="Confirm" class="text-warning"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Register New User" class="btn btn-primary" />
-            </div>
-          </form>
-        </div>
-       </div>
-       <div class="text-success">
-           <p>
-               @ViewBag.Message
-           </p>
-       </div>

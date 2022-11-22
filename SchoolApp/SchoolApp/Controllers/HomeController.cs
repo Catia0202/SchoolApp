@@ -114,22 +114,23 @@ namespace SchoolApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> EditConfigAdmin(int id)
+        [HttpPost, ActionName("ConfigAdmin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditConfigAdmin(Configuracao configuracao)
         {
-            if (id == 0)
+            if (configuracao.Id == 0)
             {
                 return RedirectToAction("HomeAdmin");
             }
 
-            var config = await _configuracaoRepository.GetByIdAsync(id);
-            if(config == null){
+            if(configuracao == null){
                 ViewBag.errormessage = "Nenhuma Configuração Encontrada";
                 return View("Error");
             }
-   
+              
 
-           await  _configuracaoRepository.UpdateAsync(config);
-            return RedirectToAction("ConfigAdmin");
+           await  _configuracaoRepository.UpdateAsync(configuracao);
+            return View(configuracao);
         }
     }
 }

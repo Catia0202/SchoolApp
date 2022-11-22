@@ -135,7 +135,10 @@ namespace SchoolApp.Controllers
                         $"To allow user," +
                         $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email </a>");
 
-
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("HomeAdmin", "Home");
+                    }
 
                 }
 
@@ -380,6 +383,45 @@ namespace SchoolApp.Controllers
                 return NotFound();
             }
             return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserByIdAsync(id);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+      
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+       
+            var user = await _userHelper.GetUserByIdAsync(id);
+       
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+           
+                await _userManager.DeleteAsync(user);
+
+            return RedirectToAction("HomeAdmin", "Home");
+
+
+
         }
     }
 

@@ -13,9 +13,10 @@
 <body    style="
     padding-top: 70px;
     margin-left: 200px;
-    width: 1527px;
+    width: 1527px; background-image: url(../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;
+
 ">
- <div class="rowdash">
+ <div class="rowdash" style="padding-top: 100px;">
         <div class="columndash">
           <div class="card">
              <h3><i class="fa-solid fa-graduation-cap" style="color:orange ;"></i></h3>
@@ -39,6 +40,7 @@
             <p>@Model.TotalDisciplinas</p></div>
         </div>
       </div>
+      <h1 style="padding-top:30px">Utilizadores:</h1>
               <dir class="board">
                 <table width="100%">
                     <thead>
@@ -54,7 +56,8 @@
                     <tbody>
            
             @foreach (var item in Model.Users) {
-                        <tr>
+                        <tr  style="
+    background-color: #ecc190;">
                            <td>
                                     <div class="people-de">
                                         <h5> @Html.DisplayFor(modelItem => item.Username)</h5>
@@ -72,7 +75,7 @@
                             </td>
                             
                         
-                            <td class="edit">  <a asp-action="Delete" asp-route-id="@item.UserId">Apagar</a> 
+                            <td class="edit">  <a asp-action="Delete" asp-controller="Account" asp-route-id="@item.UserId">Apagar</a> 
                         </tr>
                         }
                     </tbody>
