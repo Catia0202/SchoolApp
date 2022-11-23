@@ -2,54 +2,143 @@
 
 @{
     ViewData["Title"] = "Create";
+   Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-<h1>Create</h1>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+   <body    style=" background-image: url(../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px; width: 275px;"> Criar Turma</h1>
+         <form asp-action="Create" enctype="multipart/form-data">
+<main style="    margin-left:  845px;
+    margin-top: 518px;
+    width: 845px;">
+ 
 
-<h4>Turma</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-              <div class="form-group">
-                <label asp-for="CursoId" class="control-label"></label>
-                <select asp-for="CursoId" asp-items="Model.Cursos" class="form-control"></select>
-                <span asp-validation-for="CursoId" class="text-danger"></span>
-              </div>
 
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="date" asp-for="DataInicio" id="date" class="form-control bg-light" style="height: 3rem;">
-                <span asp-validation-for="DataInicio" class="text-danger small"></span>
-            </div>
-                 <div class="form-group">
-                <input type="date" asp-for="DataFim" id="date" class="form-control bg-light" style="height: 3rem;">
-                <span asp-validation-for="DataFim" class="text-danger small"></span>
-            </div>
+  <figure style="width: 837px;">
+   
+    <div class="form1" style="padding-top:16px;margin-left: 196px;">
+        <span>
+          <label for="username" class="text-small-uppercase">Nome:</label>
+          <input class="text-body"asp-for="Nome" id="username"type="text" required>
+           <span asp-validation-for="Nome" class="text-danger"></span>
+        </span>
+        <span>
+            <label for="username" class="text-small-uppercase">Data Início</label>
+            <input class="text-body"  asp-for="DataInicio"  id="date" type="date" style="
+             width: 350px;
+             height: 30px;
+             background: #f79577;
+             margin-top: 40px;"required>
+              <span asp-validation-for="DataInicio" class="text-danger"></span>
+          </span>
+              <span>
+            <label for="username" class="text-small-uppercase">Data Fim</label>
+            <input class="text-body"  asp-for="DataFim"  id="date1" type="date" style="
+             width: 350px;
+             height: 30px;
+             background: #f79577;
+             margin-top: 40px;"required>
+              <span asp-validation-for="DataFim" class="text-danger"></span>
+          </span>
+             <span>
+        <label style="padding-top:50px" class="text-small-uppercase">Curso:</label>
+      
+        <div style="padding-top: 13px;
+    padding-left: 431px;"class="box">
+             <select asp-for="CursoId" asp-items="Model.Cursos" ></select>
+             <span asp-validation-for="CursoId" class="text-danger"></span>
              
-           
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-             <h2 >@ViewBag.message</h2>
-        </form>
+          </div>
+      </span>
+        
     </div>
-</div>
+    
+    <input class="text-small-uppercase" style="left: 360px;
+    bottom: 135px;
+}" id="submit" type="submit" value="Criar">
+ <h2 style="text-align: right;
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    color: red;
+    font-size: 25px;">@ViewBag.message</h2>
+  </figure>
+ 
+ 
+
+ 
+</main>
+ </form>
+    </body>
+
+
+        
+<partial name="_footer" />
+<script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
+
+
+
+
 
 <script>
     const dateInput = document.getElementById('date');
 
 
 dateInput.value = formatDate();
+
+console.log(formatDate());
+
+function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+}
+
+function formatDate(date = new Date()) {
+    return [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+    ].join('-');
+}
+
+    const dateInput1 = document.getElementById('date1');
+
+
+dateInput1.value = formatDate();
 
 console.log(formatDate());
 

@@ -2,72 +2,80 @@
 
 @{
     ViewData["Title"] = "IndexAlunosDaTurma";
+    Layout = null;
 }
+<partial name="_Navbar" />
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 163px;"> Alunos</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+</head>
 
-<h1>Alunos: </h1>
 
-<table class="table">
-    <thead>
-        <tr>
-     
-            <th>
-                @Html.DisplayNameFor(model => model.PrimeiroNome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telemovel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data_Nascimento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Morada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genero)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-        
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.PrimeiroNome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telemovel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data_Nascimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Morada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genero)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-         
-            
-            <td>
-                @Html.ActionLink("Ver Notas", "Index", "Notas", new { @id1 = @item.Id, @id2 = @item.turmaid, @id3 = @ViewBag.data}, new { @class = "btn btn-xs btn-success" })
+    
 
-                @*<a asp-controller="Notas" asp-action="Index"  asp-route-id1="@item.Id" asp-route-id2="@item.TurmaId"  class="btn btn-secondary btn-sm">Notas</a> *@
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+
+
+      
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Nome  /  @Html.DisplayNameFor(model => model.Email)</td>
+                         
+                            <td> @Html.DisplayNameFor(model => model.Telemovel)/@Html.DisplayNameFor(model => model.Morada)</td>
+                               <td>Turma</td>
+                            <td>@Html.DisplayNameFor(model => model.Data_Nascimento) / @Html.DisplayNameFor(model => model.Genero)</td>
+                            <td></td>
+                              <td></td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(Model.Count() == 0)
+            {
+                <tr><td><h2  style="color:black; text-align:center">@ViewBag.message</h2></td></tr>
+                
+                  
+            }
+            @foreach (var item in Model) {
+                        <tr>
+                            <td class="item">
+                                <img src="@Url.Content(item.ImageUrl)" alt="">
+                                    <div class="people-de">
+                                        <h5> @Html.DisplayFor(modelItem => item.PrimeiroNome)    @Html.DisplayFor(modelItem => item.UltimoNome)</h5>
+                                        <p>  @Html.DisplayFor(modelItem => item.Email)</p>
+                                    </div>                                
+                            </td>
+                            <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.Telemovel)</h5>
+                                <p> @Html.DisplayFor(modelItem => item.Morada)</p>
+                            </td>
+
+                            <td class="active">
+                                  @Html.DisplayFor(modelItem => item.turma.Nome)
+                            </td>
+                            
+                            <td class="people-des">
+                                       <h5>  @Html.DisplayFor(modelItem => item.Data_Nascimento)</h5>
+                              <p> @Html.DisplayFor(modelItem => item.Genero)</p>
+                            </td>
+                            <td class="people-des">
+                                @Html.ActionLink("Ver Notas", "Index", "Notas", new { @id1 = @item.Id, @id2 = @item.turmaid, @id3 = @ViewBag.data}, new { @class = "btn btn-xs btn-success" })
+                          
+                            </td>
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+       <p style="text-align: center;"><a class="button-56" role="button" asp-action="Create">Criar Novo Aluno</a> </p> 
+
+
+<partial name="_footer" />
+    

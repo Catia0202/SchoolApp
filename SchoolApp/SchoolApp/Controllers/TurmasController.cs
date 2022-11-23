@@ -64,7 +64,7 @@ namespace SchoolApp.Controllers
                
                  if(model.DataInicio.Date > model.DataFim.Date)
                 {
-                    ViewBag.message= "A data do Fim do curso deve ser depois da tada do Início do mesmo";
+                    ViewBag.message= "A data do Fim do curso deve ser depois da data do Início do mesmo";
                     model.Cursos = _cursoRepository.GetComboCursos();
                     return View(model);
                 }
@@ -136,7 +136,7 @@ namespace SchoolApp.Controllers
             {
                 if (model.DataInicio.Date > model.DataFim.Date)
                 {
-                    ViewBag.message = "A data do Fim do curso deve ser depois da tada do Início do mesmo";
+                    ViewBag.message = "A data do Fim do curso deve ser depois da data do Início do mesmo";
                     model.Cursos = _cursoRepository.GetComboCursos();
                     return View(model);
                 }
@@ -152,7 +152,7 @@ namespace SchoolApp.Controllers
                     await _turmasRepository.UpdateAsync(turma);
                     model.Cursos = _cursoRepository.GetComboCursos();
                     ViewBag.message = "Turma foi atualizada com sucesso!";
-                    return View(model);
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -175,6 +175,7 @@ namespace SchoolApp.Controllers
             }
 
             var turma = await _turmasRepository.GetByIdAsync(id.Value);
+            turma.Curso = await _cursoRepository.GetAll().Where(p => p.Id == turma.CursoId).FirstOrDefaultAsync();
             if (turma == null)
             {
                 return NotFound();
@@ -188,7 +189,7 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turma = await _turmasRepository.GetByIdAsync(id);
-            
+            turma.Curso = await _cursoRepository.GetAll().Where(p => p.Id == turma.CursoId).FirstOrDefaultAsync();
 
             try
             {
@@ -203,7 +204,7 @@ namespace SchoolApp.Controllers
                     ViewBag.errormessage = "Esta turma não pode ser deletada pois está a ser utilizada";
                 }
 
-                return View();
+                return View(turma);
             }
             
 

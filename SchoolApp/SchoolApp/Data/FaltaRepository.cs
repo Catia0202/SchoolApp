@@ -47,7 +47,7 @@ namespace SchoolApp.Data
 
             list.Insert(0, new SelectListItem
             {
-                Text = turma.PrimeiroNome,
+                Text = turma.turma.Nome,
                 Value = turma.turmaid.ToString()
             }); ;
             return list;
@@ -84,10 +84,10 @@ namespace SchoolApp.Data
                               from disciplina in _context.Disciplinas
                               where disciplina.Id == disciplinaid
                               select disciplina.Nome
-                              )
+                              ).ToList(),
                           }).Select(p => new FaltaViewModel
                           {
-                              
+                              NomeDisciplina = p.nomedisciplina.ToString(),
                               alunoid = p.alunoid,
                               nome = p.nome,
                               foto = p.foto,
@@ -98,18 +98,7 @@ namespace SchoolApp.Data
                           });
 
 
-                //alunos = _context.falta.Include(p => p.disciplina).Where(p => p.alunoid == alunoid).Select(p => new FaltaViewModel
-                //{
-                //    DisciplinaId = p.disciplinaid,
-                //    NomeDisciplina = p.disciplina.Nome,
-                //    Data = p.Data,
-                //    Duracao = p.duracao
-
-                //}).Select(p => new FaltaViewModel
-                //{
-                //    percentagem = Percentagem(p.horasfalta,p.horasdisciplina),
-                //    excluido = Percentagem(p.horasfalta, p.horasdisciplina) >= 10 ? true:false
-                //});
+            
             });
             return alunos;
         }

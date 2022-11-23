@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,13 +24,13 @@ namespace SchoolApp.Controllers
             _userHelper = userHelper;
         }
 
-        // GET: Disciplinas
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View(_disciplinasRepository.GetAll().OrderBy(P => P.Nome));
         }
 
-        // GET: Disciplinas/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +47,7 @@ namespace SchoolApp.Controllers
             return View(disciplina);
         }
 
-        // GET: Disciplinas/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -68,7 +69,7 @@ namespace SchoolApp.Controllers
             return View(disciplina);
         }
 
-        // GET: Disciplinas/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -112,7 +113,7 @@ namespace SchoolApp.Controllers
             return View(disciplina);
         }
 
-        // GET: Disciplinas/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

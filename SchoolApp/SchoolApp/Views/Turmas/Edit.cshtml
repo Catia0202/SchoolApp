@@ -1,51 +1,81 @@
 ﻿@model SchoolApp.Models.TurmaViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit";  Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-<h1>Edit</h1>
-
-<h4>Turma</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+   <body    style=" background-image: url(../../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 702px;margin-top: 30px;padding-right:0px; width: 295px;">Editar Turma</h1>
+         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CursoId" class="control-label"></label>
-                <select asp-for="CursoId" asp-items="Model.Cursos" class="form-control"></select>
-                <span asp-validation-for="CursoId" class="text-danger"></span>
-              </div>
+<main style="    margin-left:  855px;
+    margin-top: 518px;
+    width: 845px;">
+ 
 
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="date" asp-for="DataInicio" id="date" class="form-control bg-light" style="height: 3rem;">
-                <span asp-validation-for="DataInicio" class="text-danger small"></span>
-            </div>
-                 <div class="form-group">
-                <input type="date" asp-for="DataFim" id="date" class="form-control bg-light" style="height: 3rem;">
-                <span asp-validation-for="DataFim" class="text-danger small"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-                         <h2 >@ViewBag.message</h2>
-        </form>
+
+  <figure style="width: 837px;">
+   
+    <div class="form1" style="padding-top:16px;margin-left: 196px;">
+        <span  class="inputs--filled">
+          <label for="username" class="text-small-uppercase">Nome:</label>
+          <input class="text-body"asp-for="Nome" id="username"type="text" required>
+           <span asp-validation-for="Nome" class="text-danger"></span>
+        </span>
+        <span  class="inputs--filled">
+            <label for="username" class="text-small-uppercase">Data Início</label>
+            <input class="text-body"  asp-for="DataInicio"  id="date" type="date" style="
+             width: 350px;
+             height: 30px;
+             background: #f79577;
+             margin-top: 40px;"required>
+              <span asp-validation-for="DataInicio" class="text-danger"></span>
+          </span>
+              <span>
+            <label for="username" class="text-small-uppercase">Data Fim</label>
+            <input class="text-body"  asp-for="DataFim"  id="date1" type="date" style="
+             width: 350px;;
+             height: 30px;
+             background: #f79577;
+             margin-top: 40px;"required>
+              <span asp-validation-for="DataFim" class="text-danger"></span>
+          </span>
+             <span  class="inputs--filled">
+        <label style="padding-top:50px" class="text-small-uppercase">Curso:</label>
+      
+        <div style="padding-top: 13px;
+    padding-left: 431px;"class="box">
+             <select asp-for="CursoId" asp-items="Model.Cursos" ></select>
+             <span asp-validation-for="CursoId" class="text-danger"></span>
+             
+          </div>
+      </span>
+        
     </div>
-</div>
+    
+    <input class="text-small-uppercase" style="left: 360px;
+    bottom: 135px;
+}" id="submit" type="submit" value="Editar">
+ <h2 style="text-align: right;
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    color: red;
+    font-size: 25px;">@ViewBag.message</h2>
+  </figure>
+ 
+ 
 
+ 
+</main>
+ </form>
+    </body>
+
+
+        
+<partial name="_footer" />
+<script src="~/js/create.js"></script>

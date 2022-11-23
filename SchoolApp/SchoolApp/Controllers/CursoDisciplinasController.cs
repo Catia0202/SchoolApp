@@ -19,14 +19,16 @@ namespace SchoolApp.Controllers
         private readonly ITurmasRepository _turmasRepository;
         private readonly ICursoDisciplinarRepository _cursoDisciplinarepository;
         private readonly IConfiguracaoRepository _configuracaoRepository;
+        private readonly ICursoRepository _cursoRepository;
 
-        public CursoDisciplinasController(DataContext context, IDisciplinasRepository disciplinasRepository,ITurmasRepository turmasRepository, ICursoDisciplinarRepository cursoDisciplinaRepository, IConfiguracaoRepository configuracaoRepository)
+        public CursoDisciplinasController(DataContext context, IDisciplinasRepository disciplinasRepository,ITurmasRepository turmasRepository, ICursoDisciplinarRepository cursoDisciplinaRepository, IConfiguracaoRepository configuracaoRepository, ICursoRepository cursoRepository)
         {
             _context = context;
             _disciplinasRepository = disciplinasRepository;
             _turmasRepository = turmasRepository;
             _cursoDisciplinarepository = cursoDisciplinaRepository;
             _configuracaoRepository = configuracaoRepository;
+            _cursoRepository = cursoRepository;
         }
 
         
@@ -64,10 +66,13 @@ namespace SchoolApp.Controllers
         }
 
       
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int id)
         {
+            var infcurso  = await _cursoRepository.GetByIdAsync(id);
+            
            CursoDisciplinaViewModel  disciplinas = new CursoDisciplinaViewModel();
             disciplinas.listdisciplinas = _disciplinasRepository.GetListDisciplinas();
+            disciplinas.Curso = infcurso;
             ViewBag.DataSource = disciplinas;
             return View(disciplinas);
 
@@ -81,7 +86,7 @@ namespace SchoolApp.Controllers
             model.listdisciplinas = _disciplinasRepository.GetListDisciplinas();
          
             var adminconfig = _configuracaoRepository.GetAll().FirstOrDefaultAsync();
-          
+            int disciplinasjanaturma = _cursoDisciplinarepository.GetAll().Where(p => p.CursoId == id).AsNoTracking().Count();
             List<SelectListItem> selectListItems = model.listdisciplinas.Where(p => model.disciplinaids.Contains(int.Parse(p.Value))).ToList();
             
             foreach(var item in selectListItems)
@@ -89,13 +94,13 @@ namespace SchoolApp.Controllers
                 var disciplinaselecionada = _disciplinasRepository.GetByIdAsync(int.Parse(item.Value));
                 
             }
-            int disciplinasjanaturma = _cursoDisciplinarepository.GetAll().Where(p => p.CursoId == id).Count();
+            
             foreach (var selectListItem in selectListItems)
             {
                 var disciplinasselecionadas = selectListItems.Count();
                
                 selectListItem.Selected = true;
-                ViewBag.message += "\\n" + selectListItem.Text;
+                
                 
             
                     var turmadisciplina = await _cursoDisciplinarepository.GetTurmaDisciplinaAsync(id, int.Parse(selectListItem.Value));
@@ -113,8 +118,9 @@ namespace SchoolApp.Controllers
                             });
                         }
 
+                    return RedirectToAction("Index", "Turmas");
                     
-                 
+                    
                 }
                 else
                 {
@@ -129,62 +135,6 @@ namespace SchoolApp.Controllers
         }
     
 
-           
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var turmaDisciplina = await _context.turmaDisciplina.FindAsync(id);
-        //    if (turmaDisciplina == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["DisciplinaId"] = new SelectList(_context.Disciplina, "Id", "Id", turmaDisciplina.DisciplinaId);
-        //    ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "Id", turmaDisciplina.TurmaId);
-        //    return View(turmaDisciplina);
-        //}
-
-        // POST: TurmaDisciplinas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,TurmaId,DisciplinaId")] TurmaDisciplina turmaDisciplina)
-        //{
-        //    if (id != turmaDisciplina.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(turmaDisciplina);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TurmaDisciplinaExists(turmaDisciplina.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["DisciplinaId"] = new SelectList(_context.Disciplina, "Id", "Id", turmaDisciplina.DisciplinaId);
-        //    ViewData["TurmaId"] = new SelectList(_context.turma, "Id", "Id", turmaDisciplina.TurmaId);
-        //    return View(turmaDisciplina);
-        //}
-
-        // GET: TurmaDisciplinas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -200,7 +150,7 @@ namespace SchoolApp.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(turmaDisciplina);
         }
 
@@ -210,9 +160,25 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var turmaDisciplina = await _context.CursoDisciplinas.FindAsync(id);
-            _context.CursoDisciplinas.Remove(turmaDisciplina);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _cursoDisciplinarepository.DeleteAsync(turmaDisciplina);
+              
+                ViewBag.errormessage = "Disciplina retirada do Curso  com sucesso!";
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+
+                    ViewBag.errormessage = "Esta disciplina não pode ser retirada do curso pois está a ser utilizada";
+                }
+
+                return View();
+            }
+
+
+            return RedirectToAction("Index", "Turmas");
         }
 
         

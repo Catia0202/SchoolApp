@@ -1,10 +1,64 @@
 ﻿@model SchoolApp.Models.NotaTurmaViewModel
 @{
     ViewData["Title"] = "Adicionar Nota - Turma";
+    Layout = null;
 }
 
-<br />
-<div class="row">
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+
+   <body    style=" background-image: url(../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 700px;margin-top: 30px;padding-right:0px; width: 360px;">Escolher Turma</h1>
+     <form asp-action="CreateTurmaNota">
+<main style="    margin-left: 845px;
+    margin-top: 229px;
+    width: 616px;
+    height: 355px;">
+ 
+
+
+  <figure style="width: 830px;">
+   
+    <div class="form1" style="padding-top:16px;margin-left: 84px;">
+  
+        <label style="padding-top:50px" class="text-small-uppercase">Curso:</label>
+      
+        <div style="padding-top: 13px;
+    padding-left: 431px;"class="box">
+             <select asp-for="Turmaid" asp-items="Model.Turmas" ></select>
+             <span asp-validation-for="Turmaid" class="text-danger"></span>
+             
+          </div>
+      
+        
+    </div>
+    
+    <input class="text-small-uppercase" style="left: 219px;
+    bottom: 73px;
+" id="submit" type="submit" value="Continuar">
+ <h2 style="text-align: right;
+
+    color: red;
+    font-size: 25px;">@ViewBag.message</h2>
+  </figure>
+ 
+   <div class="form-group text-center">
+   <a asp-controller="Notas" asp-action="Index" class="btn btn-secondary">Voltar</a>
+   </div>
+
+ 
+</main>
+ </form>
+    </body>
+
+
+
+
+@*<div class="row">
       <form asp-action="CreateTurmaNota">
       <div class="form-group text-center">
                 <label asp-for="Turmaid" class="control-label" value="Selecione a turma"></label>
@@ -22,4 +76,4 @@
     </div>
       <div class="form-group text-center">
    <a asp-controller="Notas" asp-action="Index" class="btn btn-secondary">Voltar</a>
-   </div>
+   </div>*@

@@ -2,27 +2,91 @@
 
 @{
     ViewData["Title"] = "Delete";
+    Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-<h1>Delete</h1>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+   <body    style=" background-image: url(../../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 702px;margin-top: 30px;padding-right:0px; width: 450px;">Retirar disciplina</h1>
+         <main style="margin-left:  870px;
+    margin-top: 518px;
+    width: 850px;">
+ 
 
-<h3>Tem a certeza que quer retirar esta disciplina da turma?</h3>
-<div>
-    <h4>TurmaDisciplina</h4>
-    <hr />
-    <dl class="row">
-        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Disciplina)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Disciplina.Nome)
-        </dd class>
-    </dl>
-    
-    <form asp-action="Delete">
+
+      
+  <figure style="
+ width: 659px;
+    padding-left: 242px;
+">
+       <label style="
+    margin-right: 390px; font-size: 25px; color:black;     width: 525px;
+" class="text-small-uppercase">Tem a certeza que deseja eliminar esta disciplina deste curso?</label>
+        <span class="inputs--filled" >
+          <label for="username" style="
+    margin-right: 390px; font-size: 25px; margin-top: 100px;
+" class="text-small-uppercase">Nome:</label>
+          <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;">  @Html.DisplayFor(model => model.Disciplina.Nome)  </a>
+           
+        </span>
+        <span class="inputs--filled" >
+            <label for="username" style="
+    margin-right: 390px; font-size: 25px; margin-top: 20px;" class="text-small-uppercase">Curso:</label>
+             <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;"> @Html.DisplayFor(model => model.Disciplina.Descrição)  </a>
+          </span>
+
+            <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+     
+        <input id="submit"  type="submit" value="Deletar" style="margin-left: 288px;
+    margin-bottom: 129px;" class="text-small-uppercase"/> 
+       
     </form>
-</div>
+
+
+        
+         </figure>
+          <h2  style="text-align: right;
+
+    color: red;
+    font-size: 25px;">@ViewBag.errormessage</h2>
+  </main>
+  </body>
+  
+  <script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>

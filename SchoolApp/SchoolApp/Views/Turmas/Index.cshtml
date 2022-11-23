@@ -2,8 +2,76 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = null;
 }
+<partial name="_Navbar" />
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 163px;">Turma</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+</head>
 
+      
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Nome </td>
+                         
+                            <td>Curso</td>
+                               <td>Data Início</td>
+                            <td>Data Fim</td>
+                            <td></td>
+                              <td></td>
+                              <td></td>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(Model.Count() == 0)
+            {
+                <tr><td><h2  style="color:black; text-align:center">@ViewBag.message</h2></td></tr>
+                
+                  
+            }
+            @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                    <div class="people-de">
+                                        <h5> @Html.DisplayFor(modelItem => item.Nome)</h5>
+                                        
+                                    </div>                                
+                            </td>
+                            <td class="active">
+                                  @Html.DisplayFor(modelItem => item.Curso.Nome)
+                            </td>
+                            
+                            <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.DataInicio)</h5>
+                            
+                            </td>
+
+                       
+                            <td class="people-des">
+                             <h5>  @Html.DisplayFor(modelItem => item.DataFim)</h5>
+                           
+                            </td>
+                            <td>
+                                  <a asp-controller="CursoDisciplinas" asp-action="Index" asp-route-id="@item.CursoId" class="btn btn-secondary btn-sm">Disciplinas</a> 
+                            </td>
+                          <td class="edit">  <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> 
+                            <td class="edit">  <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a> 
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+       <p style="text-align: center;"><a class="button-56" role="button" asp-action="Create">Criar Nova Turma</a> </p> 
+
+
+<partial name="_footer" />
+@*
 <h1>Index</h1>
 
 <p>
@@ -57,3 +125,4 @@
 }
     </tbody>
 </table>
+*@

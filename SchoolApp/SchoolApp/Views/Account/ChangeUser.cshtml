@@ -1,9 +1,111 @@
 ﻿@model SchoolApp.Models.ChangeUserViewModel
 @{
     ViewData["Title"] = "ChangeUser";
+        Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
-<h2>ChangeUser</h2>
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+<body>
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 295px;"> Editar Perfil</h1>
+         <main style="margin-left: 900px;
+         margin-top: 518px;">
+     
+    <form method="post"  enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly"></div>
+    <figure>
+    <div class="picture">
+        
+    <div class="containerform"  onclick="defaultBtnActive()" id="custom-btn">
+         <div class="wrapper" style="height: 576px;">
+            <div class="image">
+               <img src="@Url.Content(@Model.profilepicturepath)" alt="">
+            </div>
+            <div class="content">
+               <div class="icon">
+                  <i class="fas fa-cloud-upload-alt"></i>
+               </div>
+               <div class="text">
+                  Clique aqui para inserir a foto!
+               </div>
+            </div>
+            <div id="cancel-btn">
+               <i class="fas fa-times"></i>
+            </div>
+            <div class="file-name">
+               File name here
+            </div>
+         </div>
+        
+         <input id="default-btn" asp-for="ProfilePictureFile" type="file" hidden>
+      </div>
+   
+    </div>
+    <div class="form1" style="padding-top:16px; margin-left:156px;">
+ 
+
+    </div>
+  </figure>
+ 
+  <div class="form1" style="padding-top: 234px;">
+          <span class="inputs--filled" >
+          <label for="username" class="text-small-uppercase">Primeiro Nome</label>
+          <input class="text-body"asp-for="FirstName" id="username"type="text" required>
+           <span asp-validation-for="FirstName" class="text-danger"></span>
+        </span>
+        <span class="inputs--filled" >
+            <label for="username" class="text-small-uppercase">Ultimo Nome</label>
+            <input class="text-body"  asp-for="LastName"  id="username" type="text" required>
+              <span asp-validation-for="LastName" class="text-danger"></span>
+          </span>
+      
+      
+
+    <input class="text-small-uppercase" style="left: 165px;
+    bottom:  46px;" id="submit" type="submit" value="Atualizar Perfil">
+  </div>
+  </form>
+  </main>
+   </body>
+   <partial name="_footer" />
+<script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
+
+@*<h2>ChangeUser</h2>
 <div class="row">
     <div>
            <img src="@Url.Content(@Model.profilepicturepath)" alt="Image" style="width: 200px; height: 200px;  max-height: 100%; width: auto; padding-left:20px;padding-top:40px;" />
@@ -38,3 +140,4 @@
         </form>
     </div>
 </div>
+*@

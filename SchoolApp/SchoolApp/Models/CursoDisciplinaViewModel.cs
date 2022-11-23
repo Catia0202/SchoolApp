@@ -12,7 +12,6 @@ namespace SchoolApp.Models
 
         public string disciplinax;
 
-        public string turmas;
         public int[] disciplinaids { get; set; }
 
     }

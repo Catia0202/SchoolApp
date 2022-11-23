@@ -7,12 +7,16 @@ namespace SchoolApp.Models
     public class FaltaDisciplinaViewModel
     {
 
-        [Required]
+       
+        [Display(Name = "Curso")]
+        [Range(1, int.MaxValue, ErrorMessage = " Selecione uma turma para continuar")]
         public int turmaid { get; set; }
 
         [Required]
         public string nometurma { get; set; }
-        [Required]
+
+        [Display(Name = "Disciplina")]
+        [Range(1, int.MaxValue, ErrorMessage = " Selecione uma Disciplina para continuar")]
         public int disciplinaid { get; set; }
 
         [Required]

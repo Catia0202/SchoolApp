@@ -37,6 +37,7 @@ namespace SchoolApp.Controllers
         public async Task<IActionResult> Index()
         {
             var alunos = await _faltaRepository.GetFaltasAlunoAsync();
+            
             if (alunos.Any())
             {
                 foreach (var aluno in alunos)
@@ -155,7 +156,7 @@ namespace SchoolApp.Controllers
             if (ModelState.IsValid)
             {
                 var disciplina = await _disciplinasRepository.GetByIdAsync(model2.disciplinaid);
-
+          
                 var model = new FaltaAlunoTurmaDisciplinaViewModel
                 {
                     CursoId =model2.CursoId,

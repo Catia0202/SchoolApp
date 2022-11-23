@@ -57,7 +57,7 @@ namespace SchoolApp.Controllers
         [HttpPost]
         public IActionResult Index(IEnumerable<NotaAlunoViewModel> model, int AlunoId)
         {
-        
+            
             if (ModelState.IsValid)
             {
                 int cursoid = 0;
@@ -82,7 +82,12 @@ namespace SchoolApp.Controllers
             {
                 return RedirectToAction("Index", "Notas");
             }
-
+            if(cursoid == 0)
+            {
+                var model1 = new TodasNotasDoAlunoViewModel();
+                ViewBag.errormessage = "Este aluno ainda não tem notas";
+                return View(model1);
+            }
             var aluno = await _alunosRepository.GetByIdAsync(AlunoId);
             var curso = await _cursoRepository.GetByIdAsync(cursoid);
             

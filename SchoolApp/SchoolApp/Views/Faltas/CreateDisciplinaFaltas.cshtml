@@ -1,34 +1,99 @@
 ﻿@model SchoolApp.Models.FaltaDisciplinaViewModel
 @{
     ViewData["Title"] = "Adicionar Falta - Disciplina";
+    Layout = null;
 }
 
-<br />
-<div class="row">
-      <form asp-action="CreateDisciplinaFaltas">
-            <input type="hidden" asp-for="turmaid" />
-            <input type="hidden" asp-for="nometurma" />
-            <input type="hidden" asp-for="CursoId" />
-            <input type="hidden" asp-for="CursoNome" />
-            <input asp-for="nometurma" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
-             <input asp-for="CursoNome" class="form-control" style="height: 3rem;" disabled="disabled" />
-            <br>
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+
+   <body    style=" background-image: url(../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 560px;margin-top: 30px;padding-right:0px; width: 440px;">Escolher Disciplina</h1>
+ <form asp-action="CreateDisciplinaFaltas">
+           <input type="hidden" asp-for="turmaid" />
+           <input type="hidden" asp-for="nometurma" />
+           <input type="hidden" asp-for="CursoId" />
+           <input type="hidden" asp-for="CursoNome" />
+<main style="margin-left:760px;
+    margin-top: 229px;
+    width: 616px;
+    height: 355px;">
+ 
 
 
-      <div class="form-group text-center">
-                <label asp-for="disciplinaid" class="control-label" ></label>
-                <select asp-for="disciplinaid" asp-items="Model.Disciplinas" class="form-control"></select>
-                <span asp-validation-for="disciplinaid" class="text-danger"></span>
-              </div>
-                 <div class="form-group">
-                <input type="submit" value="Continuar" class="btn btn-primary" />
-            </div>
+  <figure style="width: 830px;">
+      <input asp-for="nometurma" class="form-control font-weight-bold bg-secondary" style="height: 4rem;
+    color: white;
+    width: 186px;
+    margin-bottom: 0px;" disabled="disabled" />
+              <input asp-for="CursoNome" class="form-control" style="    height: 4rem;
+    margin-top: -63px;
+    margin-left: 430px;
+    width: 186px;" disabled="disabled" />
+    <div class="form1" style="padding-top:16px;margin-left: 84px;">
+  
+        <label style="padding-top:50px" class="text-small-uppercase">Curso:</label>
+      
+        <div style="padding-top: 13px;
+    padding-left: 431px;"class="box">
+             <select asp-for="disciplinaid" asp-items="Model.Disciplinas" ></select>
+             <span asp-validation-for="disciplinaid" class="text-danger"></span>
+             
+          </div>
+      
+        
+    </div>
+    
+    <input class="text-small-uppercase" style="left: 219px;
+    bottom: 73px;
+" id="submit" type="submit" value="Continuar">
+ <h2 style="text-align: right;
+
+    color: red;
+    font-size: 25px;">@ViewBag.message</h2>
+  </figure>
+ 
+   <div class="form-group text-center">
+  <a asp-controller="Notas" asp-action=" CreateTurmaNota" asp-route-idturma="@Model.turmaid"class="btn btn-secondary">Voltar</a>
+   </div>
+
+ 
+</main>
+ </form>
+    </body>
+@*//}
+
+//<br />
+//<div class="row">
+//      <form asp-action="CreateDisciplinaFaltas">
+//            <input type="hidden" asp-for="turmaid" />
+//            <input type="hidden" asp-for="nometurma" />
+//            <input type="hidden" asp-for="CursoId" />
+//            <input type="hidden" asp-for="CursoNome" />
+//            <input asp-for="nometurma" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
+//             <input asp-for="CursoNome" class="form-control" style="height: 3rem;" disabled="disabled" />
+//            <br>
 
 
-          </form>
+//      <div class="form-group text-center">
+//                <label asp-for="disciplinaid" class="control-label" ></label>
+//                <select asp-for="disciplinaid" asp-items="Model.Disciplinas" class="form-control"></select>
+//                <span asp-validation-for="disciplinaid" class="text-danger"></span>
+//              </div>
+//                 <div class="form-group">
+//                <input type="submit" value="Continuar" class="btn btn-primary" />
+//            </div>
+
+
+//          </form>
 
        
-    </div>
-      <div class="form-group text-center">
-   <a asp-controller="Notas" asp-action=" CreateTurmaNota" asp-route-idturma="@Model.turmaid"class="btn btn-secondary">Voltar</a>
-   </div>
+//    </div>
+//      <div class="form-group text-center">
+//   <a asp-controller="Notas" asp-action=" CreateTurmaNota" asp-route-idturma="@Model.turmaid"class="btn btn-secondary">Voltar</a>
+//   </div>
+*@

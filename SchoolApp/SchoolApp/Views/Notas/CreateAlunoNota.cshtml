@@ -1,59 +1,119 @@
 ﻿@model SchoolApp.Models.NotaAlunoTurmaDisciplinaViewModel
 @{
     ViewData["Title"] = "Adicionar Nota Todos alunos";
+    Layout = null;
 }
 <head>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" />
     <script src="~/js/site.js"></script>
+    
+     <link rel="stylesheet" href="~/css/Create.css" />
+         <link rel="stylesheet" href="~/css/Index.css" />
 </head>  
-<br>
-<br>
-<h3 class="text-center">New Evaluation</h3>
-<br>
-     <form method="post">
-            <div class="row justify-content-center">
-                <div class="col-auto">
+<partial name="_Navbar" />
+   <body    style=" background-image: url(../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+        <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 560px;margin-top: 30px;padding-right:0px; width: 440px;">Adicionar Nota</h1>
+         <form method="post">
+              
                     <input type="hidden" asp-for="TurmaId" />
                     <input type="hidden" asp-for="disciplinaId" />
                        <input type="hidden" asp-for="Cursoid" />
                         <input type="hidden" asp-for="CursoNome" />
+                        <main style="margin-left: 760px;
+    margin-top: 435px;
+    width: 844px;
+    height: 695px;
+">
+ 
+  <figure style="width: 846px;">
+      <input asp-for="turmaNome" class="form-control font-weight-bold bg-secondary" style="height: 4rem;
+    color: white;
+    width: 197px;
+    margin-bottom: 0px;" disabled="disabled" />
+       <input asp-for="CursoNome" class="form-control" style="height: 4rem;
+   
+    margin-left: -4px;
+   
+    width: 202px;" disabled="disabled" />
+        <input asp-for="disciplinaNome" class="form-control" style="margin-top: -144px;
+    margin-left: 624px;
+    
+    width: 287px;
+    height: 4rem;" disabled="disabled" />
+    <input type="date" asp-for="Data" id="date" class="form-control bg-light" style="    margin-top: -21px;
+    margin-left: 624px;
   
-                    <input asp-for="turmaNome" class="form-control font-weight-bold bg-secondary" style="height: 3rem; color: white;" disabled="disabled" />
-                <input asp-for="CursoNome" class="form-control" style="height: 3rem;" disabled="disabled" />
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-md-8">
-                            <input asp-for="disciplinaNome" class="form-control font-weight-bold" style="height: 3rem;" disabled="disabled" required />
-                        </div>
-                              <div class="form-group col-md-4">
-                                    
-                                     <input type="date" asp-for="Data" id="date" class="form-control bg-light" style="height: 3rem;">
-                                  <span asp-validation-for="Data" class="text-danger small"></span>
-                                 
-                                  </div>
-                  </div>
-                    <br>
-                    <table class="table table-hover table-responsive" >
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().foto)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().nome)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().nota)
-                                </th>
+    width: 222px;
+    height: 4rem;">
+ <span asp-validation-for="Data" class="text-danger small"></span>
+  <dir class="board" style="margin-left: 0px;
+    height: 420px;
+    width: 100%;">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Aluno </td>
+                         
+                            <td>Nota</td>
+                               <td>Nova Nota</td>
                            
-                                    <th>
-                                    @Html.DisplayNameFor(model => model.Alunos.FirstOrDefault().novanota)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.Alunos != null)
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                          @if (Model.Alunos != null)
                             {
+                                @for (int i = 0; i < Model.Alunos.Count(); i++)
+                                {
+                                    <tr style="
+    background-color: #ecc190;">
+                                         <td class="item">
+                                              <input type="hidden" asp-for="@Model.Alunos[i].alunoid" />
+                                <img src="@Url.Content(@Model.Alunos[i].foto)" alt="">
+                                    <div class="people-de">
+                                        <h5>@Html.DisplayFor(modelItem => Model.Alunos[i].nome)</h5>
+                                    
+                                    </div>   
+                                    </td>
+                         
+                            
+                            <td class="people-des">
+                                <input type="hidden" asp-for="@Model.Alunos[i].nota" />
+                                <h5>  @Html.DisplayFor(modelItem => Model.Alunos[i].nota)</h5>
+                            
+                            </td>
+
+                       
+                            <td class="people-des">
+                             <h5>   <input asp-for="@Model.Alunos[i].novanota" class="form-control bg-light" min="0" max="20" /></h5>
+                           
+                            </td>
+                            </tr>
+                                }
+                            }
+                            </tbody>
+                            </table>
+                            
+    <input class="text-small-uppercase" style="left: 294px;
+    bottom: 46px;" id="submit" type="submit" value="Adicionar Notas">
+    <div class="text-danger text-center mr-4" asp-validation-summary="ModelOnly"></div>
+    <div class="text-success text-center">
+    <p>
+        @Html.Raw(ViewBag.Message)
+    </p>
+</div>
+</figure>
+</main>
+</form>
+</body>
+
+@*
+  
+             
+                 
+                       
+                            @if (Model.Alunos != null)
+                            {*
                                 @for (int i = 0; i < Model.Alunos.Count(); i++)
                                 {
                                     <tr>
@@ -85,14 +145,10 @@
                 </div>
             </div>
         </form>
+*@
 
 
-<br>
-<div class="text-success text-center">
-    <p>
-        @Html.Raw(ViewBag.Message)
-    </p>
-</div>
+
 
 
 <script>

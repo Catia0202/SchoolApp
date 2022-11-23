@@ -2,44 +2,74 @@
 
 @{
     ViewData["Title"] = "IndexNotasAluno";
+   Layout = null;
 }
+<partial name="_Navbar" />
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 163px;"> Alunos</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+</head>
 
-<h1>IndexNotasAluno</h1>
 
 
-<table class="table">
-    <thead>
-        <tr>
-          
-            <th>
-                @Html.DisplayNameFor(model => model.Notas.FirstOrDefault().NomeDisciplina)
-            </th>
-             <th>
-                @Html.DisplayNameFor(model => model.Notas.FirstOrDefault().Nota)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notas.FirstOrDefault().Data)
-            </th>
-         
-         
+
+<form method="post">
+    
+
+
+      
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Disciplina </td>
+                         
+                           <td>Data</td>
+                            <td>Nota</td>
+                          
+                              
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(@Model.Notas != null)
+            {
+            @foreach (var item in Model.Notas) {
+                        <tr>
+                            <td class="people-des">
+                                
+                                        <h5> @Html.DisplayFor(modelItem => item.NomeDisciplina) </h5>
+                                        
+                                                                                        
+                            </td>
            
-       
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Notas) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NomeDisciplina)
-            </td>
-               <td>
-                @Html.DisplayFor(modelItem => item.Nota)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                             <td class="people-des">
+                                
+                                        <h5> @Html.DisplayFor(modelItem => item.Data) </h5>                                           
+                            </td>
+                            <td class="people-des">
+                                
+                                        <h5> @Html.DisplayFor(modelItem => item.Nota) </h5>                                           
+                            </td>
+                       
+                       
+
+                        </tr>
+                        }
+            
+                 }else{
+                        <tr><td><h2  style="color:black; text-align:center">@ViewBag.errormessage</h2></td></tr>
+                 }
+
+                         </tbody>
+                </table>
+            </dir>
+       <p style="text-align: center;"><a class="button-56" role="button"asp-action="CreateTurmaNota">Criar Nova Nota</a> </p> 
+
+       </form>
+<partial name="_footer" />
+
+
+
