@@ -11,9 +11,9 @@
 </head>
 <partial name="_sidebar" />
 <body style="background-image: url(../../images/classroom.jpg) ; background-repeat: no-repeat;background-size: cover;">
-         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 966px;margin-top: 30px;padding-right:0px;width: 340px;">Apagar Curso</h1>
-       <main style="margin-left: 1100px;
-    margin-top: 518px; height: 800px;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 828px;margin-top: 30px;padding-right:0px;width: 340px;">Apagar Curso</h1>
+       <main style="    margin-left: 948px;
+    margin-top: 518px; height: 854px;">
   
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            <input type="hidden" asp-for="Id" />
@@ -47,20 +47,20 @@
         </span>
         <span class="inputs--filled" >
             <label for="username" style="
-    margin-right: 390px; font-size: 25px; margin-top: 20px;" class="text-small-uppercase">Email:</label>
+    margin-right: 390px; font-size: 25px; margin-top: 20px;" class="text-small-uppercase">Duração:</label>
              <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;"> @Html.DisplayFor(model => model.Duracao)  </a>
           </span>
         <span class="inputs--filled" >
           <label for="email"style="
     margin-right: 390px;font-size: 25px; margin-top: 20px;
-" class="text-small-uppercase">Telemovél:</label>
+" class="text-small-uppercase">Descrição:</label>
            <a class="text-body" style= "font-size: 25px;color:black; margin-top: 20px;"> @Html.DisplayFor(model => model.Descricao)  </a>
         </span>
 
             <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input id="submit" type="submit" value="Delete" style="    margin-left: 70px;
-    margin-bottom: 212px;" class="text-small-uppercase"/> 
+        <input id="submit" type="submit" value="Delete" style="     margin-left: 179px;
+    margin-bottom: -24px;" class="text-small-uppercase"/> 
        
     </form>
 

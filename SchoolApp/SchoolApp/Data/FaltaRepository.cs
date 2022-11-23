@@ -62,40 +62,24 @@ namespace SchoolApp.Data
 
             await Task.Run(() =>
             {
-                alunos = (from alunos in _context.Alunos
-                          where alunos.Id == alunoid
-                          orderby alunos.PrimeiroNome
+                alunos = (from faltas in _context.Faltas
+                          join disciplina in _context.Disciplinas
+                          on faltas.disciplinaid equals disciplina.Id
+                          where faltas.alunoid == alunoid
                           select new
                           {
-                              alunoid = alunos.Id,
-                              nome = alunos.PrimeiroNome,
-                              foto = alunos.ImageUrl,
-                              horasdisciplinas = (
-                                  from disciplina in _context.Disciplinas
-                                  where disciplina.Id == disciplinaid
-                                  select disciplina.Duracao 
-                             ).FirstOrDefault(),
-                              horasfalta = (
-                              from Falta in _context.Faltas
-                              where
-                                    Falta.alunoid == alunos.Id && Falta.disciplinaid == disciplinaid
-                              select Falta.duracao).Sum(),
-                              nomedisciplina =(
-                              from disciplina in _context.Disciplinas
-                              where disciplina.Id == disciplinaid
-                              select disciplina.Nome
-                              ).ToList(),
-                          }).Select(p => new FaltaViewModel
+                              nomedisciplina = disciplina.Nome,
+                              horasfalta = faltas.duracao,
+                              horasdisciplinas = disciplina.Duracao
+                          }).ToList().Select(p => new FaltaViewModel
                           {
-                              NomeDisciplina = p.nomedisciplina.ToString(),
-                              alunoid = p.alunoid,
-                              nome = p.nome,
-                              foto = p.foto,
+                              NomeDisciplina = p.nomedisciplina,
+                           
                               horasfalta = p.horasfalta,
                               percentagem = Percentagem(p.horasfalta, p.horasdisciplinas),
                               excluido = Percentagem(p.horasfalta, p.horasdisciplinas) >= configuracao.PercentagemdeFaltas /100 ? true : false
 
-                          });
+                          }).ToList();
 
 
             
@@ -106,7 +90,7 @@ namespace SchoolApp.Data
         public async Task<IQueryable<FaltaAluno>> GetFaltasTurmaAluno(int turmaid, int disciplinaid)
         {
             var alunos = Enumerable.Empty<FaltaAluno>().AsQueryable();
-
+            var configuracao = await _configuracaoRepository.GetAll().FirstOrDefaultAsync();
             await Task.Run(() =>
             {   
                 alunos = (from alunos in _context.Alunos
@@ -134,7 +118,7 @@ namespace SchoolApp.Data
                               foto = p.foto,
                               horasfalta = p.horasfalta,
                               percentagem = Percentagem(p.horasfalta, p.horasdisciplinas),
-                              excluido = Percentagem(p.horasfalta,p.horasdisciplinas) >= 10 ? true:false
+                              excluido = Percentagem(p.horasfalta,p.horasdisciplinas) >= configuracao.PercentagemdeFaltas /100 ? true:false
 
                           });
 

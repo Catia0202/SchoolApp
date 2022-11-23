@@ -6,27 +6,25 @@
   
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- Icon Escola -->
-    <link href="img/favicon.ico" rel="icon">
+ <link rel="shortcut icon" type="image/ico" href="~/favicon.ico">
 
-    <!-- Google Web Fonts -->
+ 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
 
-    <!-- Font Awesome -->
+  
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
+   
     <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/stylehome.css" rel="stylesheet">
 </head>
 
     <div>
         <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg navbar-light py-3 py-lg-0 px-lg-5" style="background-color: coral;">
-            <a href="index.html" class="navbar-brand ml-lg-3">
+            <a asp-area="" asp-controller="Home" asp-action ="Index" class="nav-item nav-link " class="navbar-brand ml-lg-3">
                 <h1 class="m-0 text-uppercase " ><i class="fa fa-book-reader mr-3"></i>Escola</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -34,21 +32,38 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav mx-auto py-0">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="course.html" class="nav-item nav-link">Courses</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                    <a asp-area="" asp-controller="Home" asp-action ="Index" class="nav-item nav-link ">Home</a>
+
+                    @if(this.User.Identity.IsAuthenticated && this.User.IsInRole("Funcionario")){
+                            <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Gerir</a>
                         <div class="dropdown-menu m-0">
-                            <a href="detail.html" class="dropdown-item">Course Detail</a>
-                            <a href="feature.html" class="dropdown-item">Our Features</a>
-                            <a href="team.html" class="dropdown-item">Instructors</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                            <a asp-area="" asp-controller="Turmas" asp-action ="Index" class="dropdown-item">Turmas</a>
+                            <a asp-area="" asp-controller="Alunos" asp-action ="Index" class="dropdown-item">Alunos</a>
+                            <a asp-area="" asp-controller="Notas" asp-action ="Index" class="dropdown-item">Notas</a>
+                            <a asp-area="" asp-controller="Faltas" asp-action ="Index" class="dropdown-item">Faltas</a>
+                            <a asp-area="" asp-controller="Alertas" asp-action ="IndexAlertasFunc" class="dropdown-item">Alertas</a>
                         </div>
                     </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    }
+                    @if(this.User.Identity.IsAuthenticated && this.User.IsInRole("Aluno"))
+                    {
+                        <a asp-area="" asp-controller="Alunos" asp-action ="AlunoAvaliacoes" class="nav-item nav-link">Avaliação</a>
+                    }
+           
+                  
                 </div>
-                <a href="" class="btn btn-primary py-2 px-4 d-none d-lg-block">Login</a>
+             <ul class="nav navbar-nav navbar-right">
+                                @if (this.User.Identity.IsAuthenticated)
+                {
+                 <a asp-area="" asp-controller="Account" asp-action ="ChangeUser" class="nav-item nav-link ">@this.User.Identity.Name</a>
+                     <a asp-area="" asp-controller="Account" asp-action ="Logout" class="nav-item nav-link ">Logout</a>
+                }
+                else
+                {
+                  <a  class="nav-item nav-link active" asp-controller="Account" asp-action="Login">Login</a>
+                }
+              </ul>
             </div>
         </nav>
     </div>

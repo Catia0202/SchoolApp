@@ -2,8 +2,103 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
+<head>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
+     <link rel="stylesheet" href="~/css/Create.css" />
+</head>
+<partial name="_Navbar" />
+   <body    style=" background-image: url(../images/students.jpg) ; background-repeat: no-repeat;background-size: cover;">
+         <h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px; width: 275px;"> Criar Alerta</h1>
+          <form asp-action="Create">
+             <input type="hidden" asp-for="UserId" />
+             <input type="hidden" asp-for="Estado" />
+              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<main style="    margin-left: 885px;
+    margin-top: 370px;
+    width: 784px;
+    height: 502px;">
+ 
+
+
+  <figure style="width: 837px;">
+   
+    <div class="form1" style="padding-top:16px;margin-left: 196px;">
+        <span>
+          <label for="username" class="text-small-uppercase">Assunto:</label>
+          <input class="text-body"asp-for="Assunto" id="username"type="text" required>
+           <span asp-validation-for="Assunto" class="text-danger"></span>
+        </span>
+            <span>
+          <label for="username" class="text-small-uppercase">Problema:</label>
+          <input class="text-body"asp-for="Problema" id="username"type="text" required>
+           <span asp-validation-for="Problema" class="text-danger"></span>
+        </span>
+      
+      
+        
+    </div>
+    
+    <input class="text-small-uppercase" style="left: 329px;
+    bottom: 135px;" id="submit" type="submit" value="Enviar">
+ <h2 style="text-align: right;
+
+    color: red;
+    font-size: 25px;">@ViewBag.message</h2>
+  </figure>
+ 
+ 
+
+ 
+</main>
+ </form>
+    </body>
+
+
+        
+<partial name="_footer" />
+<script src="~/js/create.js"></script>
+<script>
+         const wrapper = document.querySelector(".wrapper");
+         const fileName = document.querySelector(".file-name");
+         const defaultBtn = document.querySelector("#default-btn");
+         const customBtn = document.querySelector("#custom-btn");
+         const cancelBtn = document.querySelector("#cancel-btn i");
+         const img = document.querySelector("img");
+         let regExp = /[0-9a-zA-Z\^\&\'\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
+         function defaultBtnActive(){
+           defaultBtn.click();
+         }
+         defaultBtn.addEventListener("change", function(){
+           const file = this.files[0];
+           if(file){
+             const reader = new FileReader();
+             reader.onload = function(){
+               const result = reader.result;
+               img.src = result;
+               wrapper.classList.add("active");
+             }
+             cancelBtn.addEventListener("click", function(){
+               img.src = "";
+               wrapper.classList.remove("active");
+             })
+             reader.readAsDataURL(file);
+           }
+           if(this.value){
+             let valueStore = this.value.match(regExp);
+             fileName.textContent = valueStore;
+           }
+         });
+      </script>
+
+
+
+
+
+
+@*
 <h1>Create</h1>
 
 <h4>Alerta</h4>
@@ -44,3 +139,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+*@

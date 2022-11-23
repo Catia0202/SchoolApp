@@ -62,31 +62,24 @@ namespace SchoolApp.Controllers
             return View(model);
         
         }
-        //[HttpGet]
-        //public IActionResult Index(string pesquisa)
-        //{
-        //    var model = Enumerable.Empty<AlunoViewModel>();
-
-        //    var alunos = _alunosRepository.GetAll().Include(p => p.turma);
-        //    if (pesquisa != null)
-        //         {
-        //        model = (_converterHelper.AlunosToAlunoViewModels(alunos)).Where(p => p.Nome == pesquisa);
-        //        }
-        //    return View(model);
-        //}
-            // GET: Alunos/Details/5
+ 
             public async Task<IActionResult> Details(int id)
         {
             if (id == 0)
             {
-                return NotFound();
+
+                ViewBag.TituloErro = "Aluno não encontrado";
+                ViewBag.MensagemErro = "O aluno que pretende não foi encontrado";
+                return View("Error");
             }
 
             var aluno = await _alunosRepository.GetAlunoByIdWithTurmaAsync(id);
   
             if (aluno == null)
             {
-                return NotFound();
+                ViewBag.TituloErro = "Aluno não encontrado";
+                ViewBag.MensagemErro = "O aluno que pretende não foi encontrado";
+                return View("Error");
             }
 
            
@@ -97,8 +90,8 @@ namespace SchoolApp.Controllers
             return View(aluno);
         }
 
-        // GET: Alunos/Create
-        [Authorize(Roles ="Funcionario")] //para varios role's fica  [Authorize(Roles ="Admin,Customer,SuperUser")]
+   
+        [Authorize(Roles ="Funcionario")] 
         public IActionResult Create()
         {
             var model = new AlunoViewModel
@@ -109,9 +102,6 @@ namespace SchoolApp.Controllers
             return View(model);
         }
 
-        // POST: Alunos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AlunoViewModel model)
@@ -127,7 +117,7 @@ namespace SchoolApp.Controllers
                     path = await _imagehelper.UploadImageAsync(model.ImageFile, "alunos");
                 }
                 int alunosjanaturma = _alunosRepository.GetAll().Where(p => p.turmaid == model.turmaid).Count();
-                //TODO:Modificar para o user que tiver logado
+            
          
                 if(adminconfig.Result.MaximoAlunosNaTurma > alunosjanaturma)
                 {
@@ -152,7 +142,8 @@ namespace SchoolApp.Controllers
                         aluno.User = user;
                         if (result != IdentityResult.Success)
                         {
-                            throw new InvalidOperationException("Could not create the user in seeder");
+                           
+                            return View("Error");
                         }
                         await _userHelper.AddUserToRoleAsync(user, "Aluno");
 
@@ -162,10 +153,10 @@ namespace SchoolApp.Controllers
 
                         }, protocol: HttpContext.Request.Scheme);
 
-                        Response response = _mailHelper.SendEmail(aluno.Email, "Passoword Change",
-                              $"<h1>Password Confirmation </h1" +
-                              $"To allow user," +
-                              $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email </a>");
+                        Response response = _mailHelper.SendEmail(aluno.Email, "Mudar Palavra-Passe",
+                              $"<h1>Mudar a sua Palavra-Passe </h1" +
+                              $"Para concluir os passos para que seja possível fazer o seu login na nossa plantaforma," +
+                              $"por favor clique aqui:</br></br><a href = \"{tokenLink}\">Mudar Password </a>");
 
                     }
 
@@ -211,13 +202,13 @@ namespace SchoolApp.Controllers
         {
             if (id == 0)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var aluno = await _alunosRepository.GetAlunoByIdWithTurmaAsync(id);
             if (aluno == null)
             {
-                return NotFound();
+                return View("Error");
             }
             var user = await _userHelper.GetUserByEmailAsync(aluno.Email);
             var model = _converterHelper.ToAlunoViewModel(aluno,user);
@@ -227,25 +218,7 @@ namespace SchoolApp.Controllers
             model.Antigoemail = aluno.Email;
             return View(model);
         }
-        //private AlunoViewModel ToAlunoViewModel(Aluno aluno)
-        //{
-        //    return new AlunoViewModel
-        //    {
-        //        Id = aluno.Id,
-        //        ImageUrl = aluno.ImageUrl,
-        //        Nome = aluno.Nome,
-        //        Data_Nascimento = aluno.Data_Nascimento,
-        //        Email = aluno.Email,
-        //        Genero = aluno.Genero,
-        //        Morada = aluno.Morada,
-        //        Telemovel = aluno.Telemovel,
-        //        User = aluno.User,
-        //        turmaid =aluno.turmaid
-        //    };
-        //}
-        // POST: Alunos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(AlunoViewModel model)
@@ -296,7 +269,7 @@ namespace SchoolApp.Controllers
                 {
                     if (!await _alunosRepository.ExistAsync(model.Id))
                     {
-                        return NotFound();
+                        return View("Error");
                     }
                     else
                     {
@@ -316,15 +289,17 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var aluno = await _alunosRepository.GetByIdAsync(id.Value);
             aluno.turma = await _turmasRepository.GetAll().Where(p => p.Id == aluno.turmaid).FirstOrDefaultAsync();
             if (aluno == null)
             {
-                return NotFound();
-                          }
+                ViewBag.TituloErro = "Erro ao encontrar Aluno";
+                ViewBag.MensagemErro = "Ocorreu um erro ao encontrar aluno";
+                return View("Error");
+            }
                 return View(aluno);
         }
 
@@ -349,14 +324,16 @@ namespace SchoolApp.Controllers
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
 
-                    ViewBag.errormessage = "Esta Aluno não pode ser deletada pois está a ser utilizada";
+                    ViewBag.TituloErro = "Erro ao Eliminar este Aluno";
+                    ViewBag.MensagemErro = "Não pode eliminar este aluno pois o mesmo está a ser utilizado";
+                    return View("Error");
                 }
 
-                return View();
+                
             }
 
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
 
      
     

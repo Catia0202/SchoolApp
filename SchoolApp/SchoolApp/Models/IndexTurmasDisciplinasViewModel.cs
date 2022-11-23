@@ -10,5 +10,6 @@ namespace SchoolApp.Models
         public Curso Curso { get;set; }
         public IEnumerable<Curso> Cursos { get; set; }
 
+        public IEnumerable<Turma> Turmas { get; set; }
     }
 }

@@ -139,7 +139,7 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var turmaDisciplina = await _context.CursoDisciplinas

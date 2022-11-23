@@ -61,7 +61,10 @@ namespace SchoolApp.Controllers
                 }
                 catch
                 {
-                    ViewBag.message = "Ocurreu um erro";
+
+                    ViewBag.TituloErro = "Erro ao Criar Curso";
+                    ViewBag.MensagemErro = "Ocurreu um erro ao criar o seu curso";
+                    return View("Error");
                 }
             
             }
@@ -118,8 +121,9 @@ namespace SchoolApp.Controllers
                 }
                 catch 
                 {
-                    ViewBag.message = "Ocurreu um Erro ";
-                    return View(model);
+                    ViewBag.TituloErro = "Erro ao Atualizar o seu Curso";
+                    ViewBag.MensagemErro = "Ocurreu um erro ao atualizar o seu Curso";
+                    return View("Error");
                 }
                 
             }
@@ -159,11 +163,14 @@ namespace SchoolApp.Controllers
             {
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
-
-                    ViewBag.errormessage = "Esta curso não pode ser deletado pois está a ser utilizado";
+                    ViewBag.TituloErro = "Erro ao apagar o seu Curso";
+                    ViewBag.MensagemErro = "Não pode apagar o curso pois o mesmo está a ser utilizado";
+                    return View("Error");
                 }
+                ViewBag.TituloErro = "Erro ao apagar o seu Curso";
+                ViewBag.MensagemErro = "Não pode apagar o curso pois o mesmo está a ser utilizado";
+                return View("Error");
 
-                return View();
             }
 
 

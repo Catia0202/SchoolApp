@@ -2,8 +2,80 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = null;
 }
+<partial name="_Navbar" />
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 163px;">Alertas</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+</head>
 
+
+
+    
+
+
+
+
+
+      
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td>Assunto</td>
+                         
+                            <td> Problema</td>
+                               <td>Data</td>
+                            <td>Estado</td>
+                         
+                              <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(Model.Count() == 0)
+            {
+                <tr><td><h2  style="color:black; text-align:center">Ainda não enviou alertas</h2></td></tr>
+                
+                  
+            }
+            @foreach (var item in Model) {
+                        <tr>
+                           
+                               
+                                    <td class="people-de">
+                                        <h5> @Html.DisplayFor(modelItem => item.Assunto)</h5>
+                                      
+                                    </td>                                
+                        
+                            <td class="people-des">
+                                <h5> @Html.DisplayFor(modelItem => item.Problema)</h5>
+                               
+                            </td>
+
+                            <td class="active">
+                                  @Html.DisplayFor(modelItem => item.Data)
+                            </td>
+                            
+                            <td class="people-des">
+                                       <h5>  @Html.DisplayFor(modelItem => item.Estado)</h5>
+                             
+                            </td>
+                          
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+       <p style="text-align: center;"><a class="button-56" role="button" asp-action="Create">Criar Novo Alerta</a> </p> 
+
+
+<partial name="_footer" />
+
+
+@*
 <h1>Index</h1>
 
 
@@ -48,4 +120,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@

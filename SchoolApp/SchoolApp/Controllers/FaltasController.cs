@@ -92,7 +92,7 @@ namespace SchoolApp.Controllers
                 Turma = turma.Nome,
                 Faltas = await _faltaRepository.GetFaltasAlunoDaTurma(aluno.Id, turmaid)
             };
-            ///resolver depoisss
+            
 
 
             return View(model);
@@ -124,7 +124,9 @@ namespace SchoolApp.Controllers
         {
             if (turmaid == 0)
             {
-                return RedirectToAction("CreateTurmaFaltas", "Faltas");
+                ViewBag.TituloErro = "Erro ao encontrar turma";
+                ViewBag.MensagemErro = "Não foi possível encontrar a respectiva turma";
+                return View("Error");
             }
 
             var turma = await _turmasRepository.GetByIdAsync(turmaid);
@@ -236,6 +238,7 @@ namespace SchoolApp.Controllers
                     disciplinaid = model.disciplinaid,
                     nometurma = model.nometurma,
                     turmaid = model.turmaid
+                  
                 };
 
 

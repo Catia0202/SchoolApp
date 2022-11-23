@@ -6,7 +6,7 @@ namespace SchoolApp.Models
 {
     public class NotaDisciplinaViewModel
     {
-        [Required]
+   
         public int Turmaid { get; set; }
 
         [Required]
@@ -14,8 +14,9 @@ namespace SchoolApp.Models
         [Required]
         public int CursoId { get; set; }
         [Required]
-        public string CursonNome { get; set; } 
-        [Required]
+        public string CursonNome { get; set; }
+        [Required(ErrorMessage = "{0} é necessário")]
+        [Range(1, int.MaxValue, ErrorMessage = "Selecione uma disciplina para continuar")]
         public int Disciplinaid { get; set; }
 
         public IList<NotaAlunoCreateViewModel> Alunos { get; set; }

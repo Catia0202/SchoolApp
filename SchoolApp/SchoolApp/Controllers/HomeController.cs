@@ -51,8 +51,9 @@ namespace SchoolApp.Controllers
             var model = new IndexTurmasDisciplinasViewModel
             {
                 DisciplinasDaTurma = await _disciplinasRepository.GetIndexTurmasDisciplinasAsync(idcurso),
-                Curso= curso,
-                Cursos = await _cursoRepository.GetIndexCursoAsync()
+                Curso = curso,
+                Cursos = await _cursoRepository.GetIndexCursoAsync(),
+                Turmas = _turmasRepository.GetAll().Where(p => p.CursoId == idcurso).ToList()
             };
 
 

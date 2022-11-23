@@ -35,13 +35,13 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var disciplina = await _disciplinasRepository.GetByIdAsync(id.Value);
             if (disciplina == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(disciplina);
@@ -74,12 +74,12 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
             var turma = await _disciplinasRepository.GetByIdAsync(id.Value);
             if (turma == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(turma);
         }
@@ -93,7 +93,7 @@ namespace SchoolApp.Controllers
         {
             if (id != disciplina.Id)
             {
-                return NotFound();
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -118,13 +118,13 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var disciplina = await _disciplinasRepository.GetByIdAsync(id.Value);
             if (disciplina == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(disciplina);
         }
@@ -145,8 +145,9 @@ namespace SchoolApp.Controllers
             {
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
-
-                    ViewBag.errormessage = "Esta disciplina não pode ser deletada pois está a ser utilizada";
+                    ViewBag.TituloErro = "Erro ao apagar este disciplina";
+                    ViewBag.MensagemErro = "Não pode apagar a disciplina pois a mesma está a ser utilizada";
+                    return View("Error");
                 }
 
                 return View();

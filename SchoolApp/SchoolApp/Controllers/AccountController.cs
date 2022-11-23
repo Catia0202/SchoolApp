@@ -77,7 +77,7 @@ namespace SchoolApp.Controllers
                 }
             }
 
-            this.ModelState.AddModelError(string.Empty, "Failed to login");
+            this.ModelState.AddModelError(string.Empty, "Dados Incorretos");
             return View(model);
         }
 
@@ -158,6 +158,12 @@ namespace SchoolApp.Controllers
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
             var model = new ChangeUserViewModel();
            
+              if(user == null)
+            {
+                ViewBag.TituloErro = "Erro ao atualizar User";
+                ViewBag.MensagemErro = "Ocurreu um erro ao atualizar o user";
+                return View("Error");
+            }
             if (user != null)
             {
                 model.FirstName = user.FirstName;
@@ -165,6 +171,7 @@ namespace SchoolApp.Controllers
                 model.profilepicturepath = user.ProfilePicture;
                 
             }
+
             return View(model);
         }
 
@@ -192,7 +199,9 @@ namespace SchoolApp.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                        ViewBag.TituloErro = "Erro ao atualizar User";
+                        ViewBag.MensagemErro = "Ocurreu um erro ao atualizar o user";
+                        return View("Error");
                     }
                 }
             }
@@ -208,23 +217,34 @@ namespace SchoolApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-
-                if (user != null)
+                if(this.User.Identity.Name != null)
                 {
-                    var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (result.Succeeded)
+                    var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                    if (user != null)
                     {
-                        return this.RedirectToAction("ChangeUser");
+                        var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            return this.RedirectToAction("ChangeUser");
+                        }
+                        else
+                        {
+                            ViewBag.TituloErro = "Erro ao mudar Password";
+                            ViewBag.MensagemErro = "Ocurreu um erro ao mudar Password";
+                            return View("Error");
+                        }
                     }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
-                    }
+                else
+                {
+                    ViewBag.TituloErro = "Utilizador";
+                    ViewBag.MensagemErro = "Utilizador não encontrado";
+                    return View("Error");
+                }
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "User not found.");
+                 
+                    return View("Error");
                 }
             }
 
@@ -255,12 +275,16 @@ namespace SchoolApp.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                        ViewBag.TituloErro = "Erro ao mudar Password";
+                        ViewBag.MensagemErro = "Ocurreu um erro ao mudar Password";
+                        return View("Error");
                     }
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "User not found.");
+                    ViewBag.TituloErro = "Utilizador";
+                    ViewBag.MensagemErro = "Utilizador não encontrado";
+                    return View("Error");
                 }
             }
 
@@ -283,8 +307,10 @@ namespace SchoolApp.Controllers
 
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Email não registrado ");
-                    return View(model);
+                    ViewBag.TituloErro = "Utilizador";
+                    ViewBag.MensagemErro = "Utilizador não encontrado";
+                    return View("Error");
+                   
                 }
 
                 var myToken = await  _userManager.GeneratePasswordResetTokenAsync(user);
@@ -366,13 +392,17 @@ namespace SchoolApp.Controllers
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
             {
-                return NotFound();
+                ViewBag.TituloErro = "Utilizador";
+                ViewBag.MensagemErro = "Utilizador não encontrado";
+                return View("Error");
             }
 
             var user = await _userHelper.GetUserByIdAsync(userId);
             if (user == null)
             {
-                return NotFound();
+                ViewBag.TituloErro = "Utilizador";
+                ViewBag.MensagemErro = "Utilizador não encontrado";
+                return View("Error");
             }
 
           
@@ -380,7 +410,7 @@ namespace SchoolApp.Controllers
 
             if (!result.Succeeded)
             {
-                return NotFound();
+                return View("Error");
             }
             return View();
         }
@@ -390,14 +420,16 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+             
+                return View("Error");
             }
 
             var user = await _userHelper.GetUserByIdAsync(id);
             
             if (user == null)
             {
-                return NotFound();
+              
+                return View("Error");
             }
             return View(user);
         }
@@ -412,7 +444,8 @@ namespace SchoolApp.Controllers
        
             if(user == null)
             {
-                return NotFound();
+             
+                return View("Error");
             }
 
            

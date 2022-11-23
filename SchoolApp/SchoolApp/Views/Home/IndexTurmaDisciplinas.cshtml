@@ -1,4 +1,9 @@
 ﻿@model SchoolApp.Models.IndexTurmasDisciplinasViewModel
+@{
+    ViewData["Title"] = "Detalhes Curso";
+    Layout = null;  
+}
+<partial name="_Navbar" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +28,7 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/css/stylehome.css" rel="stylesheet">
+    
 </head>
 
 <body>
@@ -71,14 +77,27 @@
                         <img class="position-absolute w-100 h-100" src="@Url.Content(@Model.Curso.Fotourl)" style="object-fit: cover;">
                     </div>
                 </div>
-
-                  <h2 class="mb-3">Mais Cursos</h2>
+                 <h2 class="mb-3" style="margin-right: 613px;">Turmas que têm este curso:</h2>
+                @if(Model.Turmas != null)
+                {
+                       @foreach(var item in Model.Turmas)
+                      {
+                          <div class="d-flex mb-3" style="    margin-right: 772px;">
+                             <div class="mt-n1">
+                            <h4>@Html.DisplayFor(modelItem => item.Nome)</h4>
+                            <p class="m-0"> @Html.DisplayFor(modelItem => item.DataInicio) - @Html.DisplayFor(modelItem => item.DataFim)</p>
+                        </div>
+                        </div>
+                      }
+                }
+             
+                <h2 class="mb-3">Mais Cursos</h2>
                    <div class="owl-carousel related-carousel position-relative" style="padding: 0 30px;">
                     @foreach(var item in Model.Cursos)
                     {
 
                           
-                        <a class="courses-list-item position-relative d-block overflow-hidden mb-2" asp-action="IndexTurmaDisciplinas" asp-route-idturma="@item.Id">
+                        <a class="courses-list-item position-relative d-block overflow-hidden mb-2" asp-action="IndexTurmaDisciplinas" asp-route-idcurso="@item.Id">
                             <img class="img-flu id" src="@Url.Content(item.Fotourl)" alt="">
                             <div class="courses-text">
                                 <h4 class="text-center text-white px-3">@Html.DisplayFor(modelItem => item.Nome)</h4>
@@ -93,7 +112,7 @@
         </div>
     </div>
 </body>
-
+<partial name="_footer" />
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="/lib/easing/easing.min.js"></script>

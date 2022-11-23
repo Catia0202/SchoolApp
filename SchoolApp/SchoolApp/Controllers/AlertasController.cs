@@ -39,7 +39,8 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                  
+                return View("Error");
             }
 
             var alerta = await _alertaRepository.GetAll()
@@ -47,7 +48,7 @@ namespace SchoolApp.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (alerta == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             return View(alerta);
@@ -66,7 +67,7 @@ namespace SchoolApp.Controllers
             alerta.Estado = estado;
             if (alerta == null)
             {
-                return NotFound();
+                return View("Error");
             }
             try
             {
@@ -126,7 +127,10 @@ namespace SchoolApp.Controllers
                     ViewBag.message = "O seu Alerta foi criado com Sucesso, o Admin poderá vê-lo a qualquer momento";
                     return RedirectToAction("IndexAlertasFunc", "Alertas");
                 }catch{
-                    ViewBag.message = "Ocurreu um erro ao criar o seu Alerta. Tente novamente";
+
+                    ViewBag.TituloErro = "Erro ao Criar Alerta";
+                    ViewBag.MensagemErro = "Ocurreu um erro ao criar o seu alerta";
+                    return View("Error");
                 }
    
             }

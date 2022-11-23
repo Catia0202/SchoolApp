@@ -134,7 +134,7 @@ namespace SchoolApp.Controllers
         {
             if(turmaid== 0)
             {
-                return RedirectToAction("CreateTurmaNota", "Notas");
+                return View("Error");
             }
 
             var turma = await _turmasRepository.GetByIdAsync(turmaid);
@@ -252,30 +252,6 @@ namespace SchoolApp.Controllers
             }
             return View(model);
         }
-        //[Authorize(Roles = "Aluno")]
-        //public async Task<IActionResult> ViewNotaAlunoLogado()
-        //{
-        //    var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-
-        //    var aluno = _alunosRepository.GetAll().Where(p => p.User.Id == user.Id).FirstOrDefault();
-
-        //    var turma = _turmasRepository.GetByIdAsync(aluno.turmaid);
-
-        //    if(aluno != null)
-        //    {
-        //        var model = new TodasNotasDoAlunoViewModel
-        //        {
-        //            Nome = aluno.Nome,
-        //            foto = aluno.ImageUrl,
-        //            Turma = turma.Result.Nome,
-        //            Notas = await _notaRepository.GetNotasAlunoDaTurma(aluno.Id, turma.Result.Id)
-        //        };
-        //        return View(model);
-        //    }
-        //    return View();
-
-            
-        //}
-
+   
     }
 }

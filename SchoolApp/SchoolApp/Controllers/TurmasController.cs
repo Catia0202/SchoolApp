@@ -102,7 +102,9 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                ViewBag.TituloErro = "Erro ao encontrar turma";
+                ViewBag.MensagemErro = "Ocurreu um erro ao encontrar a respectiva turma";
+                return View("Error");
             }
 
             var turma = await _turmasRepository.GetByIdAsync(id.Value);
@@ -171,14 +173,14 @@ namespace SchoolApp.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("Error");
             }
 
             var turma = await _turmasRepository.GetByIdAsync(id.Value);
             turma.Curso = await _cursoRepository.GetAll().Where(p => p.Id == turma.CursoId).FirstOrDefaultAsync();
             if (turma == null)
             {
-                return NotFound();
+                return View("Error");
             }
             return View(turma);
         }
@@ -200,8 +202,10 @@ namespace SchoolApp.Controllers
             {
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
-                    
-                    ViewBag.errormessage = "Esta turma não pode ser deletada pois está a ser utilizada";
+
+                    ViewBag.TituloErro = "Erro ao deletar turma";
+                    ViewBag.MensagemErro = "Não foi possível deletar esta turma pois a mesma está a ser utilizada";
+                    return View("Error");
                 }
 
                 return View(turma);
@@ -211,9 +215,6 @@ namespace SchoolApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //private bool TurmaExists(int id)
-        //{
-        //    return _context.turma.Any(e => e.Id == id);
-        //}
+  
     }
 }

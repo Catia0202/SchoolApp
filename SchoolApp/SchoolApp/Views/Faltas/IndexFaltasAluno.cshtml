@@ -2,9 +2,81 @@
 
 @{
     ViewData["Title"] = "IndexFaltasAluno";
+   Layout = null;
 }
+<partial name="_Navbar" />
+<h1 style="font-size: 50px;align-items:center;background: #ecf4ffa3;margin-left: 766px;margin-top: 30px;padding-right:0px;width: 330px;">Falta do aluno</h1>
+<head>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+      <link href="~/css/Index.css" rel="stylesheet">
+</head>
 
-<h1>IndexNotasAluno</h1>
+
+
+
+<form method="post">
+    
+
+
+      
+            <dir class="board">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td> Disciplina </td>
+                         
+                           
+                            <td>Horas Faltadas</td>
+                          
+                              <td>Percentagem de Faltas</td>
+                              <td>Situação</td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+            @if(Model.Faltas.Count() == 0)
+            {
+                <tr><td><h2  style="color:black; text-align:center">O aluno não tem faltas</h2></td></tr>
+                
+                  
+            }
+            @foreach (var item in Model.Faltas) {
+                        <tr>
+                            <td class="people-des">
+                                   <h5> @Html.DisplayFor(modelItem => item.NomeDisciplina) </h5>                                      
+                            </td>
+           
+                            <td class="people-des">
+                                <h5>   @Html.DisplayFor(modelItem => item.horasfalta) </h5>
+                            </td>
+                       
+                            <td class="people-des">
+                                  
+                              <h5>   @Html.DisplayFor(modelItem => item.percentagem)% </h5>
+                            </td>
+                             <td class="people-des">
+                                <h5>  @if (item.excluido == true)
+                                            {
+                                                <a>Excluído por faltas</a>
+                                            }else
+
+                                            {
+                                                <a>-</a>
+                                            }</h5>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </dir>
+ 
+
+       </form>
+<partial name="_footer" />
+
+
+@*<h1>IndexNotasAluno</h1>
 
 
 <table class="table">
@@ -47,4 +119,4 @@
 }
     </tbody>
 </table>
-
+*@
