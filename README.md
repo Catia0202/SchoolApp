@@ -28,11 +28,11 @@ This is the principal page of the whole website, in this page the user can see a
 This page can only be accessed by the admin. It's in here that the admin can see the alerts, do the CRUD of the courses and disciplines.
 ![Admin Page](https://user-images.githubusercontent.com/73889708/210181762-72df6ce9-2b77-4527-be6c-402ca8d9ead4.png)
 ## Employee page
-If the Employee enter with his account, he will have access at the dropdown below where he can manage the students, the classes, the absences and send alets to the admin.
+If the Employee enter with his account, he will have access at the dropdown below where he can manage the students, the classes, the absences and send alerts to the admin.
 ![Employee Page 1](https://user-images.githubusercontent.com/73889708/210181900-1dbc20e0-861f-4393-9527-d3be7d8fa14c.png)
 For example:
 ![Employee Page 2](https://user-images.githubusercontent.com/73889708/210181946-6c8300a5-a3b2-4149-b31d-43e5f96b4dea.png)
-## Employee page
+## Student page
 If the Students enter with their account, they will have access at their avaluations!
 ![Employee Page 1](https://user-images.githubusercontent.com/73889708/210182114-be69e874-ffea-4d84-8428-11ae953cb76e.png)
 
