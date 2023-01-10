@@ -56,6 +56,6 @@ If the Students enter with their account, they will have access at their avaluat
 
 
 
-#Credits
+# Credits
 
 Cátia Santos
