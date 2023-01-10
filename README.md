@@ -5,7 +5,7 @@
 
 https://schoolappsnt.azurewebsites.net
 
-SchoolApp is a full stack web project builted during of the my journey at **Cinel**. 
+SchoolApp is a full stack web project builted during of  my journey at **Cinel**. 
 
 
 
